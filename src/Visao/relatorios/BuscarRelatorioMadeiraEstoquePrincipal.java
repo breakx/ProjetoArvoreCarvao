@@ -9,7 +9,8 @@ import Visao.relatorios.GerarRelatorioEstoquePrincipal;
 import Controle.ControlePrincipal;
 import Visao.carvao.GerenciarCarvaoForno;
 import Visao.login.Login;
-import Visao.madeira.GerenciarMadeiraTalhaoPraca;
+import Visao.madeira.GerenciarMadeiraPraca;
+import Visao.usuario.GerenciarUsuarios;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,8 +63,14 @@ public class BuscarRelatorioMadeiraEstoquePrincipal extends javax.swing.JFrame {
             }
         }else if(ControlePrincipal.tipo_u.equals("op_m")){
             try {
-                //GerenciarMadeiraTalhaoPraca gmtp = new GerenciarMadeiraTalhaoPraca();
-                new GerenciarMadeiraTalhaoPraca().setVisible(true);
+                //GerenciarMadeiraTalhaoPraca gmtp = new GerenciarMadeiraPraca();
+                new GerenciarMadeiraPraca().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(BuscarRelatorioMadeiraEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else if(ControlePrincipal.tipo_u.equals("op_s")){
+            try {
+                new GerenciarUsuarios().setVisible(true);
             } catch (SQLException ex) {
                 Logger.getLogger(BuscarRelatorioMadeiraEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }

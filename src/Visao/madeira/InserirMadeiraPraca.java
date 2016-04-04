@@ -20,70 +20,107 @@ import javax.swing.JOptionPane;
  *
  * @author Cristiano GD
  */
-public class InserirMadeiraSaidaTalhao extends javax.swing.JFrame {
-
+public class InserirMadeiraPraca extends javax.swing.JFrame {
+   
+    float volumeMadeiraMStereo = 0;
+    float volumeMadeiraM3 = 0;
+    float fator_emp = 0;
+    
     /**
      * Creates new form CadastrarSaidaMadeiraTalhao
      */
-    public InserirMadeiraSaidaTalhao() {
+    public InserirMadeiraPraca() {
         initComponents();
         CarregarNome();
     }
     
-    float volumeTalhao = 0;
     public void CalcularVolumeTalhao(){
-        if(!jTextFieldTalhaoH1.getText().equals("0") && !jTextFieldTalhaoH2.getText().equals("0") && !jTextFieldTalhaoH3.getText().equals("0") && !jTextFieldTalhaoLargura.getText().equals("0")&& !jTextFieldTalhaoComprimento.getText().equals("0")){
-            //if(jComboBoxTalhaoComprimento.getSelectedIndex() > 0 && jComboBoxTalhaoLargura.getSelectedIndex() > 0){
-                volumeTalhao = ((Float.parseFloat(jTextFieldTalhaoH1.getText()) * Float.parseFloat(jTextFieldTalhaoH2.getText()) * Float.parseFloat(jTextFieldTalhaoH3.getText()))/3)
-                        //* (Float.parseFloat(jComboBoxTalhaoComprimento.getSelectedItem().toString()))  * (Float.parseFloat(jComboBoxTalhaoLargura.getSelectedItem().toString()));
-                        *(Float.parseFloat(jTextFieldTalhaoLargura.getText()) * Float.parseFloat(jTextFieldTalhaoComprimento.getText()));
-                //JOptionPane.showMessageDialog(null, "Dados ok: "+volumePraca);      
-                jLabelVolumeTalhao.setText("Volume: "+volumeTalhao+" m³");
-            //}               
+        if(jCheckBoxBT.isSelected()){
+            if(!jTextFieldTranporteA_H1.getText().equals("0") && !jTextFieldTranporteA_H2.getText().equals("0") && !jTextFieldTranporteA_H3.getText().equals("0") && !jTextFieldTranporteA_Largura.getText().equals("0")&& !jTextFieldTranporteA_Comprimento.getText().equals("0") && 
+                    !jTextFieldTranporteA_H1.getText().equals("0") && !jTextFieldTranporteA_H2.getText().equals("0") && !jTextFieldTranporteA_H3.getText().equals("0") && !jTextFieldTranporteA_Largura.getText().equals("0")&& !jTextFieldTranporteA_Comprimento.getText().equals("0")){
+                volumeMadeiraMStereo = (((Float.parseFloat(jTextFieldTranporteA_H1.getText()) * Float.parseFloat(jTextFieldTranporteA_H2.getText()) * Float.parseFloat(jTextFieldTranporteA_H3.getText()))/3)
+                    *(Float.parseFloat(jTextFieldTranporteA_Largura.getText()) * Float.parseFloat(jTextFieldTranporteA_Comprimento.getText())) +
+                        ((Float.parseFloat(jTextFieldTranporteBT_H1.getText()) * Float.parseFloat(jTextFieldTranporteBT_H2.getText()) * Float.parseFloat(jTextFieldTranporteBT_H3.getText()))/3)
+                    *(Float.parseFloat(jTextFieldTranporteBT_Largura.getText()) * Float.parseFloat(jTextFieldTranporteBT_Comprimento.getText())));
+                    //JOptionPane.showMessageDialog(null, "Dados ok: "+volumePraca);   
+            }
+        }else{
+            if(!jTextFieldTranporteA_H1.getText().equals("0") && !jTextFieldTranporteA_H2.getText().equals("0") && !jTextFieldTranporteA_H3.getText().equals("0") && !jTextFieldTranporteA_Largura.getText().equals("0")&& !jTextFieldTranporteA_Comprimento.getText().equals("0")){
+                volumeMadeiraMStereo = ((Float.parseFloat(jTextFieldTranporteA_H1.getText()) * Float.parseFloat(jTextFieldTranporteA_H2.getText()) * Float.parseFloat(jTextFieldTranporteA_H3.getText()))/3)
+                    *(Float.parseFloat(jTextFieldTranporteA_Largura.getText()) * Float.parseFloat(jTextFieldTranporteA_Comprimento.getText()));
+                    //JOptionPane.showMessageDialog(null, "Dados ok: "+volumePraca);   
+            }else{
+                JOptionPane.showMessageDialog(null, "Campo em branco ou 0!");
+                jCheckBoxBT.setSelected(false);
+                //CalcularVolumeTalhao();
+            }
         }
-        RegistrarCargaTalhao();
+        jLabelVolumeMadeiraMSt.setText("Volume madeira: "+volumeMadeiraMStereo+" mst"); 
+        /*if(ControlePrincipal.fator_emp > 0){
+            volumeMadeiraM3 = volumeMadeiraMStereo / ControlePrincipal.fator_emp;
+        }else{
+            JOptionPane.showMessageDialog(null, "Fator = 0, volume incorreto! " + ControlePrincipal.fator_emp);
+        }*/    
+        volumeMadeiraM3 = volumeMadeiraMStereo / ControlePrincipal.fator_emp;
+        jLabelVolumeMadeiraM3.setText("Volume madeira: "+volumeMadeiraM3+" m³");   
+        AtualizarDadosMadeira();
+    }   
+    
+    private void AtualizarDadosMadeira(){                
+        ControlePrincipal.vol_mad_real += volumeMadeiraM3;
+        ControlePrincipal.vol_mad_balanco = ControlePrincipal.vol_mad_real - ControlePrincipal.vol_mad_estimado;
+        
+        ControlePrincipal.mad_ton_real = ControlePrincipal.vol_mad_real * ControlePrincipal.densidade_madeira;
+        ControlePrincipal.mad_ton_balanco = ControlePrincipal.mad_ton_real - ControlePrincipal.mad_ton_estimado;
+        
+        ControlePrincipal.madeira_praca += volumeMadeiraM3;
+        
+        ControlePrincipal.mad_ton_tot += ControlePrincipal.mad_ton_real;
+        
+        ControlePrincipal.atualizarDados = "madeira";
+        RegistarCargaPraca();
     }
     
-    private void RegistrarCargaTalhao(){
-        DateFormat data_talhao = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
+    private void RegistarCargaPraca(){
+        DateFormat data_entrega = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
         Date date = new Date();
         
         ControleMadeira madeira = new ControleMadeira();
         madeira.setId_operario(ControlePrincipal.id_op);
         madeira.setTalhao(ControlePrincipal.talhao);//selecionar talhao
-        madeira.setSaida_volume_talhao(volumeTalhao);
-        madeira.setData_talhao(data_talhao.format(date));
-        madeira.setAltura1_t(Float.parseFloat(jTextFieldTalhaoH1.getText()));
-        madeira.setAltura2_t(Float.parseFloat(jTextFieldTalhaoH2.getText()));
-        madeira.setAltura3_t(Float.parseFloat(jTextFieldTalhaoH3.getText()));
-        madeira.setComprimento_t(Float.parseFloat(jTextFieldTalhaoComprimento.getText()));
-        madeira.setLargura_t(Float.parseFloat(jTextFieldTalhaoLargura.getText()));
-        madeira.setPeso_t(Float.parseFloat(jTextFieldTalhaoPeso.getText()));
-        //madeira.setComprimento_t(jComboBoxTalhaoComprimento.getSelectedIndex());
-        //madeira.setLargura_t(jComboBoxTalhaoLargura.getSelectedIndex());
+        madeira.setData_entrega(data_entrega.format(date));
+        madeira.setMad_volume_m_stereo(volumeMadeiraMStereo);
+        madeira.setMad_volume_m3(volumeMadeiraM3);
+        madeira.setAltura1_t(Float.parseFloat(jTextFieldTranporteA_H1.getText()));
+        madeira.setAltura2_t(Float.parseFloat(jTextFieldTranporteA_H2.getText()));
+        madeira.setAltura3_t(Float.parseFloat(jTextFieldTranporteA_H3.getText()));
+        madeira.setComprimento_t(Float.parseFloat(jTextFieldTranporteA_Comprimento.getText()));
+        madeira.setLargura_t(Float.parseFloat(jTextFieldTranporteA_Largura.getText()));
+        madeira.setPeso_t(Float.parseFloat(jTextFieldTranporteA_Peso.getText()));
         
-        //madeira.setComprimento_t(Float.parseFloat(jComboBoxTalhaoComprimento.getSelectedItem().toString()));
-        //madeira.setLargura_t(Float.parseFloat(jComboBoxTalhaoLargura.getSelectedItem().toString()));
+        if(jCheckBoxBT.isSelected()){
+            madeira.setAltura1_bt(Float.parseFloat(jTextFieldTranporteBT_H1.getText()));
+            madeira.setAltura2_bt(Float.parseFloat(jTextFieldTranporteBT_H2.getText()));
+            madeira.setAltura3_bt(Float.parseFloat(jTextFieldTranporteBT_H3.getText()));
+            madeira.setComprimento_bt(Float.parseFloat(jTextFieldTranporteBT_Comprimento.getText()));
+            madeira.setLargura_bt(Float.parseFloat(jTextFieldTranporteBT_Largura.getText()));
+            madeira.setPeso_bt(Float.parseFloat(jTextFieldTranporteBT_Peso.getText()));
+        }    
         
         madeira.setId_estoque(ControlePrincipal.id_estoque_principal);
         
-        //JOptionPane.showMessageDialog(null, "Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_total+" carv: "+ControlePrincipal.volume_carvao_total);
-        
-        if(ControlePrincipal.volume_madeira_talhao > volumeTalhao){
-            ControlePrincipal.volume_madeira_talhao -= volumeTalhao;
-            InserirMadeiraCtrl inserir = new InserirMadeiraCtrl(madeira);
+        //JOptionPane.showMessageDialog(null, "Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_real+" carv: "+ControlePrincipal.volume_carvao_real);
+                        
+        InserirMadeiraCtrl inserir = new InserirMadeiraCtrl(madeira);
 
-            try {
-                new GerenciarMadeiraTalhaoPraca().setVisible(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(InserirMadeiraSaidaTalhao.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }else{
-            JOptionPane.showMessageDialog(null, "O Volume deve ser menor que !"+ControlePrincipal.volume_madeira_talhao);
-        }
-        
+        try {
+            new GerenciarMadeiraPraca().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(InserirMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        this.setVisible(false);
         dispose();
-    }
+    }   
     
     private void CarregarNome(){
         jLabelNome.setText(ControlePrincipal.nome);
@@ -92,10 +129,11 @@ public class InserirMadeiraSaidaTalhao extends javax.swing.JFrame {
     
     private void VoltarMenu(){
         try {   
-            new GerenciarMadeiraTalhaoPraca().setVisible(true);
+            new GerenciarMadeiraPraca().setVisible(true);
         } catch (SQLException ex) {
-            Logger.getLogger(InserirMadeiraSaidaTalhao.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InserirMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.setVisible(false);
         dispose();
     }
 
@@ -117,26 +155,34 @@ public class InserirMadeiraSaidaTalhao extends javax.swing.JFrame {
         jButtonLogout = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextFieldTalhaoH1 = new javax.swing.JTextField();
-        jTextFieldTalhaoH2 = new javax.swing.JTextField();
+        jTextFieldTranporteA_H1 = new javax.swing.JTextField();
+        jTextFieldTranporteA_H2 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextFieldTalhaoH3 = new javax.swing.JTextField();
+        jTextFieldTranporteA_H3 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabelVolumeTalhao = new javax.swing.JLabel();
+        jLabelVolumeMadeiraMSt = new javax.swing.JLabel();
         jButtonCargaTalhao = new javax.swing.JButton();
-        jTextFieldTalhaoPeso = new javax.swing.JTextField();
+        jTextFieldTranporteA_Peso = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextFieldTalhaoComprimento = new javax.swing.JTextField();
-        jTextFieldTalhaoLargura = new javax.swing.JTextField();
+        jTextFieldTranporteA_Comprimento = new javax.swing.JTextField();
+        jTextFieldTranporteA_Largura = new javax.swing.JTextField();
         jButtonVoltar = new javax.swing.JButton();
+        jCheckBoxBT = new javax.swing.JCheckBox();
+        jTextFieldTranporteBT_H3 = new javax.swing.JTextField();
+        jTextFieldTranporteBT_Peso = new javax.swing.JTextField();
+        jTextFieldTranporteBT_H1 = new javax.swing.JTextField();
+        jTextFieldTranporteBT_Comprimento = new javax.swing.JTextField();
+        jTextFieldTranporteBT_H2 = new javax.swing.JTextField();
+        jTextFieldTranporteBT_Largura = new javax.swing.JTextField();
+        jLabelVolumeMadeiraM3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabelName1.setFont(new java.awt.Font("Serif", 1, 36)); // NOI18N
         jLabelName1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelName1.setText("Saida de Madeira do Talhao");
+        jLabelName1.setText("Tranportar Madeira Praça");
         jLabelName1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabelName1.setPreferredSize(new java.awt.Dimension(275, 70));
 
@@ -216,130 +262,235 @@ public class InserirMadeiraSaidaTalhao extends javax.swing.JFrame {
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jLabel1.setText("Altura-1");
+        jLabel1.setPreferredSize(new java.awt.Dimension(100, 15));
 
-        jTextFieldTalhaoH1.setText("0");
-        jTextFieldTalhaoH1.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldTranporteA_H1.setText("0");
+        jTextFieldTranporteA_H1.setPreferredSize(new java.awt.Dimension(100, 20));
+        jTextFieldTranporteA_H1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldTalhaoH1ActionPerformed(evt);
+                jTextFieldTranporteA_H1ActionPerformed(evt);
             }
         });
 
-        jTextFieldTalhaoH2.setText("0");
+        jTextFieldTranporteA_H2.setText("0");
+        jTextFieldTranporteA_H2.setPreferredSize(new java.awt.Dimension(100, 20));
 
         jLabel2.setText("Altura-2");
+        jLabel2.setPreferredSize(new java.awt.Dimension(100, 15));
 
         jLabel3.setText("Altura-3");
+        jLabel3.setPreferredSize(new java.awt.Dimension(100, 15));
 
-        jTextFieldTalhaoH3.setText("0");
+        jTextFieldTranporteA_H3.setText("0");
+        jTextFieldTranporteA_H3.setPreferredSize(new java.awt.Dimension(100, 20));
 
         jLabel4.setText("Comprimento");
+        jLabel4.setPreferredSize(new java.awt.Dimension(100, 15));
 
         jLabel5.setText("Largura");
+        jLabel5.setPreferredSize(new java.awt.Dimension(100, 15));
 
-        jLabelVolumeTalhao.setText("Volume: 0m³");
+        jLabelVolumeMadeiraMSt.setText("Volume madeira: 0 mst");
 
         jButtonCargaTalhao.setText("Registrar");
+        jButtonCargaTalhao.setPreferredSize(new java.awt.Dimension(100, 50));
         jButtonCargaTalhao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCargaTalhaoActionPerformed(evt);
             }
         });
 
-        jTextFieldTalhaoPeso.setText("0");
-        jTextFieldTalhaoPeso.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldTranporteA_Peso.setText("0");
+        jTextFieldTranporteA_Peso.setPreferredSize(new java.awt.Dimension(100, 20));
+        jTextFieldTranporteA_Peso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldTalhaoPesoActionPerformed(evt);
+                jTextFieldTranporteA_PesoActionPerformed(evt);
             }
         });
 
         jLabel7.setText("Peso");
+        jLabel7.setPreferredSize(new java.awt.Dimension(100, 15));
 
-        jTextFieldTalhaoComprimento.setText("0");
+        jTextFieldTranporteA_Comprimento.setText("0");
+        jTextFieldTranporteA_Comprimento.setPreferredSize(new java.awt.Dimension(100, 20));
 
-        jTextFieldTalhaoLargura.setText("0");
+        jTextFieldTranporteA_Largura.setText("0");
+        jTextFieldTranporteA_Largura.setPreferredSize(new java.awt.Dimension(100, 20));
 
         jButtonVoltar.setText("Voltar");
+        jButtonVoltar.setPreferredSize(new java.awt.Dimension(100, 50));
         jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonVoltarActionPerformed(evt);
             }
         });
 
+        jCheckBoxBT.setText("bitrem");
+        jCheckBoxBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxBTActionPerformed(evt);
+            }
+        });
+
+        jTextFieldTranporteBT_H3.setText("0");
+        jTextFieldTranporteBT_H3.setEnabled(false);
+        jTextFieldTranporteBT_H3.setPreferredSize(new java.awt.Dimension(100, 20));
+
+        jTextFieldTranporteBT_Peso.setText("0");
+        jTextFieldTranporteBT_Peso.setEnabled(false);
+        jTextFieldTranporteBT_Peso.setPreferredSize(new java.awt.Dimension(100, 20));
+        jTextFieldTranporteBT_Peso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldTranporteBT_PesoActionPerformed(evt);
+            }
+        });
+
+        jTextFieldTranporteBT_H1.setText("0");
+        jTextFieldTranporteBT_H1.setEnabled(false);
+        jTextFieldTranporteBT_H1.setPreferredSize(new java.awt.Dimension(100, 20));
+        jTextFieldTranporteBT_H1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldTranporteBT_H1ActionPerformed(evt);
+            }
+        });
+
+        jTextFieldTranporteBT_Comprimento.setText("0");
+        jTextFieldTranporteBT_Comprimento.setEnabled(false);
+        jTextFieldTranporteBT_Comprimento.setPreferredSize(new java.awt.Dimension(100, 20));
+
+        jTextFieldTranporteBT_H2.setText("0");
+        jTextFieldTranporteBT_H2.setEnabled(false);
+        jTextFieldTranporteBT_H2.setPreferredSize(new java.awt.Dimension(100, 20));
+
+        jTextFieldTranporteBT_Largura.setText("0");
+        jTextFieldTranporteBT_Largura.setEnabled(false);
+        jTextFieldTranporteBT_Largura.setPreferredSize(new java.awt.Dimension(100, 20));
+
+        jLabelVolumeMadeiraM3.setText("Volume madeira: 0m³");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(66, 66, 66)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(183, 183, 183)
-                        .addComponent(jLabelVolumeTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(49, 49, 49)
-                                .addComponent(jTextFieldTalhaoH3, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldTranporteA_Peso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldTranporteA_Largura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldTranporteA_Comprimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel1))
-                                .addGap(49, 49, 49)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextFieldTalhaoH1, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldTalhaoH2)))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel7))
-                                .addGap(25, 25, 25)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextFieldTalhaoPeso)
-                                    .addComponent(jTextFieldTalhaoComprimento)
-                                    .addComponent(jTextFieldTalhaoLargura, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jButtonCargaTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(67, 136, Short.MAX_VALUE))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextFieldTranporteA_H3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldTranporteA_H1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldTranporteA_H2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jButtonCargaTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jCheckBoxBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jTextFieldTranporteBT_H3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jTextFieldTranporteBT_Peso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jTextFieldTranporteBT_Comprimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jTextFieldTranporteBT_Largura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jTextFieldTranporteBT_H1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldTranporteBT_H2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jLabelVolumeMadeiraM3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelVolumeMadeiraMSt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(94, Short.MAX_VALUE))
         );
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextFieldTranporteA_Comprimento, jTextFieldTranporteA_H1, jTextFieldTranporteA_H2, jTextFieldTranporteA_H3, jTextFieldTranporteA_Largura, jTextFieldTranporteA_Peso});
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel7});
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonCargaTalhao, jButtonVoltar});
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextFieldTranporteBT_Comprimento, jTextFieldTranporteBT_H1, jTextFieldTranporteBT_H2, jTextFieldTranporteBT_H3, jTextFieldTranporteBT_Largura, jTextFieldTranporteBT_Peso});
+
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextFieldTalhaoH1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextFieldTalhaoH2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextFieldTalhaoH3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextFieldTalhaoComprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextFieldTalhaoLargura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldTalhaoPeso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(16, 16, 16)
-                .addComponent(jLabelVolumeTalhao)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonCargaTalhao)
-                    .addComponent(jButtonVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addGap(22, 22, 22)
+                .addComponent(jCheckBoxBT)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldTranporteA_H1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldTranporteA_H2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldTranporteA_H3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldTranporteA_Comprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldTranporteA_Largura, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jTextFieldTranporteA_Peso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jTextFieldTranporteBT_H1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldTranporteBT_H2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldTranporteBT_H3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldTranporteBT_Comprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldTranporteBT_Largura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldTranporteBT_Peso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelVolumeMadeiraMSt)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelVolumeMadeiraM3)
+                        .addContainerGap(155, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonCargaTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(67, 67, 67))))
         );
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jTextFieldTranporteA_Comprimento, jTextFieldTranporteA_H1, jTextFieldTranporteA_H2, jTextFieldTranporteA_H3, jTextFieldTranporteA_Largura, jTextFieldTranporteA_Peso});
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel7});
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonCargaTalhao, jButtonVoltar});
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jTextFieldTranporteBT_Comprimento, jTextFieldTranporteBT_H1, jTextFieldTranporteBT_H2, jTextFieldTranporteBT_H3, jTextFieldTranporteBT_Largura, jTextFieldTranporteBT_Peso});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -381,9 +532,9 @@ public class InserirMadeiraSaidaTalhao extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldTalhaoH1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTalhaoH1ActionPerformed
+    private void jTextFieldTranporteA_H1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTranporteA_H1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTalhaoH1ActionPerformed
+    }//GEN-LAST:event_jTextFieldTranporteA_H1ActionPerformed
 
     private void jButtonCargaTalhaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargaTalhaoActionPerformed
         CalcularVolumeTalhao();
@@ -395,13 +546,39 @@ public class InserirMadeiraSaidaTalhao extends javax.swing.JFrame {
         //dispose();
     }//GEN-LAST:event_jButtonLogoutActionPerformed
 
-    private void jTextFieldTalhaoPesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTalhaoPesoActionPerformed
+    private void jTextFieldTranporteA_PesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTranporteA_PesoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTalhaoPesoActionPerformed
+    }//GEN-LAST:event_jTextFieldTranporteA_PesoActionPerformed
 
     private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
         VoltarMenu();
     }//GEN-LAST:event_jButtonVoltarActionPerformed
+
+    private void jTextFieldTranporteBT_PesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTranporteBT_PesoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldTranporteBT_PesoActionPerformed
+
+    private void jTextFieldTranporteBT_H1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTranporteBT_H1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldTranporteBT_H1ActionPerformed
+
+    private void jCheckBoxBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxBTActionPerformed
+        if(jCheckBoxBT.isSelected()){
+            jTextFieldTranporteBT_H1.setEnabled(true);
+            jTextFieldTranporteBT_H2.setEnabled(true);
+            jTextFieldTranporteBT_H3.setEnabled(true);
+            jTextFieldTranporteBT_Comprimento.setEnabled(true);
+            jTextFieldTranporteBT_Largura.setEnabled(true);
+            jTextFieldTranporteBT_Peso.setEnabled(true);
+        }else{
+            jTextFieldTranporteBT_H1.setEnabled(false);
+            jTextFieldTranporteBT_H2.setEnabled(false);
+            jTextFieldTranporteBT_H3.setEnabled(false);
+            jTextFieldTranporteBT_Comprimento.setEnabled(false);
+            jTextFieldTranporteBT_Largura.setEnabled(false);
+            jTextFieldTranporteBT_Peso.setEnabled(false);
+        }
+    }//GEN-LAST:event_jCheckBoxBTActionPerformed
 
     /**
      * @param args the command line arguments
@@ -420,14 +597,18 @@ public class InserirMadeiraSaidaTalhao extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InserirMadeiraSaidaTalhao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InserirMadeiraPraca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InserirMadeiraSaidaTalhao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InserirMadeiraPraca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InserirMadeiraSaidaTalhao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InserirMadeiraPraca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InserirMadeiraSaidaTalhao.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InserirMadeiraPraca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -436,7 +617,7 @@ public class InserirMadeiraSaidaTalhao extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InserirMadeiraSaidaTalhao().setVisible(true);
+                new InserirMadeiraPraca().setVisible(true);
             }
         });
     }
@@ -445,6 +626,7 @@ public class InserirMadeiraSaidaTalhao extends javax.swing.JFrame {
     private javax.swing.JButton jButtonCargaTalhao;
     private javax.swing.JButton jButtonLogout;
     private javax.swing.JButton jButtonVoltar;
+    private javax.swing.JCheckBox jCheckBoxBT;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -455,15 +637,22 @@ public class InserirMadeiraSaidaTalhao extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelIdTipo;
     private javax.swing.JLabel jLabelName1;
     private javax.swing.JLabel jLabelNome;
-    private javax.swing.JLabel jLabelVolumeTalhao;
+    private javax.swing.JLabel jLabelVolumeMadeiraM3;
+    private javax.swing.JLabel jLabelVolumeMadeiraMSt;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextFieldTalhaoComprimento;
-    private javax.swing.JTextField jTextFieldTalhaoH1;
-    private javax.swing.JTextField jTextFieldTalhaoH2;
-    private javax.swing.JTextField jTextFieldTalhaoH3;
-    private javax.swing.JTextField jTextFieldTalhaoLargura;
-    private javax.swing.JTextField jTextFieldTalhaoPeso;
+    private javax.swing.JTextField jTextFieldTranporteA_Comprimento;
+    private javax.swing.JTextField jTextFieldTranporteA_H1;
+    private javax.swing.JTextField jTextFieldTranporteA_H2;
+    private javax.swing.JTextField jTextFieldTranporteA_H3;
+    private javax.swing.JTextField jTextFieldTranporteA_Largura;
+    private javax.swing.JTextField jTextFieldTranporteA_Peso;
+    private javax.swing.JTextField jTextFieldTranporteBT_Comprimento;
+    private javax.swing.JTextField jTextFieldTranporteBT_H1;
+    private javax.swing.JTextField jTextFieldTranporteBT_H2;
+    private javax.swing.JTextField jTextFieldTranporteBT_H3;
+    private javax.swing.JTextField jTextFieldTranporteBT_Largura;
+    private javax.swing.JTextField jTextFieldTranporteBT_Peso;
     // End of variables declaration//GEN-END:variables
 }

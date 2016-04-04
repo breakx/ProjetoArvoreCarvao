@@ -28,7 +28,7 @@ public class AlterarMadeiraCtrl {
                 //+"', comprimento_t = '"+madeira.getComprimento_t()
                 //+"', largura_t = '"+madeira.getLargura_t()
                 //+"', peso_t = '"+madeira.getPeso_t()
-                +"entrada_volume_praca = '"+madeira.getEntrada_volume_praca()
+                /*+"entrada_volume_praca = '"+madeira.getEntrada_volume_praca()
                 +"', data_praca = '"+madeira.getData_praca()
                 +"', altura1_p = '"+madeira.getAltura1_p()
                 +"', altura2_p = '"+madeira.getAltura2_p()
@@ -36,7 +36,7 @@ public class AlterarMadeiraCtrl {
                 +"', comprimento_p = '"+madeira.getComprimento_p()
                 +"', largura_p = '"+madeira.getLargura_p()
                 +"', peso_p = '"+madeira.getPeso_p()
-                +"', fator = '"+madeira.getFator()
+                +"', fator = '"+madeira.getFator()*/
                 +"' WHERE id_controle_madeira = "+madeira.getId_controle_madeira();
         //String query = "Update controle_madeira set id_operario = '" + usuario.getLogin_usuario()+ "', senha_usuario='" + usuario.getSenha_usuario()+ "', tipo_usuario='" + usuario.getTipo_usuario()+ "', nome_usuario='" + usuario.getNome_usuario()+"'where id_usuario='"+ usuario.getId_usuario()+"'";
         ExecutarSql execut = new ExecutarSql();

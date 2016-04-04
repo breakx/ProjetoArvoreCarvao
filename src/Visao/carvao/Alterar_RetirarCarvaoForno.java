@@ -27,9 +27,13 @@ import javax.swing.table.DefaultTableModel;
 public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
 
     private String id;
-    private float fator = 0;
+    private float rend_grav_forno = 0;
     private float madeira;
     ControleUsuario usuario = new ControleUsuario();
+    
+    Alterar_RetirarCarvaoForno() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     /**
      * Creates new form Alterar_RetirarCarvaoForno
@@ -45,31 +49,64 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         CarregarNome();
         this.id = id_controle_carvao;
         ControlePrincipal.id_estoque_principal = id_estoque;
-        this.madeira = Float.parseFloat(madeira_forno);
-        jTextFieldVolumeCarvao.setText(volume_carvao);
+        this.madeira = Float.parseFloat(madeira_forno);   
+        jTextFieldVolumeCarvao.setText(volume_carvao);     
         CarregarEstoque();
     }
     
     private void CarregarEstoque() throws SQLException{
-        String query = "Select madeira_talhao, madeira_praca, madeira_forno, mad_ton_tot, carv_ton_tot from estoque_principal where id_estoque_p = "+ControlePrincipal.id_estoque_principal;
+        String query = "Select municipio, fazenda, talhao, upc, densidade_carvao, mdc_estimado, mdc_real, mdc_balanco, carv_ton_estimado, carv_ton_real, carv_ton_balanco, madeira_praca, madeira_forno, carv_ton_tot, mad_ton_tot, rend_grav_real "
+                + "from estoque_principal where id_estoque_p = "+ControlePrincipal.id_estoque_principal;
         ConexaoBD con = ConexaoBD.getConexao();
         
         ResultSet rs = con.consultaSql(query);
         JOptionPane.showMessageDialog(null, "CarregarEstoque: "+query);
-        while(rs.next()){
-            ControlePrincipal.volume_madeira_talhao = Float.parseFloat(rs.getString("madeira_talhao")); 
-            ControlePrincipal.volume_madeira_praca = Float.parseFloat(rs.getString("madeira_praca")); 
-            ControlePrincipal.volume_madeira_forno = Float.parseFloat(rs.getString("madeira_forno")); 
-            ControlePrincipal.volume_madeira_total = Float.parseFloat(rs.getString("mad_ton_tot")); 
-            ControlePrincipal.volume_carvao_total = Float.parseFloat(rs.getString("carv_ton_tot"));       
-        }
+        while(rs.next()){ 
+            ControlePrincipal.densidade_carvao = Float.parseFloat(rs.getString("densidade_carvao"));
+            ControlePrincipal.mdc_estimado = Float.parseFloat(rs.getString("mdc_estimado"));
+            ControlePrincipal.mdc_real = Float.parseFloat(rs.getString("mdc_real"));
+            ControlePrincipal.mdc_balanco = Float.parseFloat(rs.getString("mdc_balanco"));
+            ControlePrincipal.carv_ton_estimado = Float.parseFloat(rs.getString("carv_ton_estimado"));
+            ControlePrincipal.carv_ton_real = Float.parseFloat(rs.getString("carv_ton_real"));
+            ControlePrincipal.carv_ton_balanco = Float.parseFloat(rs.getString("carv_ton_balanco"));
+            ControlePrincipal.madeira_praca = Float.parseFloat(rs.getString("madeira_praca"));
+            ControlePrincipal.madeira_forno = Float.parseFloat(rs.getString("madeira_forno"));
+            ControlePrincipal.carv_ton_tot = Float.parseFloat(rs.getString("carv_ton_tot"));
+            
+            ControlePrincipal.mad_ton_tot = Float.parseFloat(rs.getString("mad_ton_tot"));
+            ControlePrincipal.rend_grav_real = Float.parseFloat(rs.getString("rend_grav_real"));
+            
+            ControlePrincipal.municipio = rs.getString("municipio");
+            ControlePrincipal.fazenda = rs.getString("fazenda");
+            ControlePrincipal.talhao = rs.getString("talhao");
+            ControlePrincipal.upcAtual = rs.getString("upc");
+        }        
+        jLabelMunicipio.setText("Municipio: "+ControlePrincipal.municipio);
+        jLabelFazenda.setText("Fazenda: "+ControlePrincipal.fazenda);        
+        jLabelTalhao.setText("Talhao: "+ControlePrincipal.talhao);        
+        jLabelUPC.setText("UPC: "+ControlePrincipal.upcAtual);
+        jLabelVolumeMadeiraForno.setText("Volume de madeira forno: "+madeira+" m³");
         con.fecharConexao();
     }   
-
-    Alterar_RetirarCarvaoForno() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
+    private void AtualizarDadosCarvao(){                
+        ControlePrincipal.mdc_real += Float.parseFloat(jTextFieldVolumeCarvao.getText());
+        ControlePrincipal.mdc_balanco = ControlePrincipal.mdc_real - ControlePrincipal.mdc_estimado;
+        
+        ControlePrincipal.carv_ton_real = ControlePrincipal.mdc_real * ControlePrincipal.densidade_carvao;
+        ControlePrincipal.carv_ton_balanco = ControlePrincipal.carv_ton_real - ControlePrincipal.carv_ton_estimado;
+        
+        ControlePrincipal.madeira_forno -= madeira;
+        
+        ControlePrincipal.carv_ton_tot += ControlePrincipal.carv_ton_real;
+        
+        ControlePrincipal.rend_grav_real = ControlePrincipal.carv_ton_tot/ControlePrincipal.mad_ton_tot;
+        
+        rend_grav_forno = Float.parseFloat(jTextFieldVolumeCarvao.getText())/madeira;
+        jLabelRendimentoForno.setText("Rendimento forno: "+rend_grav_forno);  
+        ControlePrincipal.atualizarDados = "carvao";
+        RegistrarCarvaoForno();
+    }    
     
     private void RegistrarCarvaoForno(){
         DateFormat data_forno = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -78,17 +115,12 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         ControleCarvao carvao = new ControleCarvao();
         carvao.setId_controle_carvao(id);
         carvao.setId_estoque(ControlePrincipal.id_estoque_principal);
-        //carvao.setTalhao("t001");
-        //carvao.setForno("f100");
         carvao.setId_operario(ControlePrincipal.id_op);
         carvao.setVolume_carvao(Float.parseFloat(jTextFieldVolumeCarvao.getText()));
         carvao.setData_saida_carvao(data_forno.format(date));
-        carvao.setFator(fator);
-
-        ControlePrincipal.volume_carvao_total += Float.parseFloat(jTextFieldVolumeCarvao.getText());
-        ControlePrincipal.volume_madeira_forno -= madeira;
+        carvao.setRend_grav_forno(rend_grav_forno);
         
-        //JOptionPane.showMessageDialog(null, "id: "+ControlePrincipal.id_estoque_principal+"Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_total+" carv: "+ControlePrincipal.volume_carvao_total);
+        //JOptionPane.showMessageDialog(null, "id: "+ControlePrincipal.id_estoque_principal+"Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_real+" carv: "+ControlePrincipal.volume_carvao_real);
         
         AlterarCarvaoCtrl alterar = new AlterarCarvaoCtrl(carvao);
 
@@ -97,7 +129,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Alterar_RetirarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        this.setVisible(false);
         dispose();
     }
     
@@ -107,7 +139,6 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Alterar_RetirarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         this.setVisible(false);
         dispose();
     }
@@ -116,13 +147,6 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         jLabelNome.setText(ControlePrincipal.nome);
         jLabelIdTipo.setText(ControlePrincipal.id_op);
     }  
-    
-    private void CalculaFator(){
-        //fator = Float.parseFloat(jTextFieldVolumeCarvao.getText())/ControlePrincipal.volume_madeira_praca;
-        fator = Float.parseFloat(jTextFieldVolumeCarvao.getText())/madeira;
-        jLabelFatorCarvao.setText("Fator: "+fator);
-        RegistrarCarvaoForno();
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -138,7 +162,12 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButtonRegistrarCarvaoForno = new javax.swing.JButton();
         jButtonVoltar = new javax.swing.JButton();
-        jLabelFatorCarvao = new javax.swing.JLabel();
+        jLabelRendimentoForno = new javax.swing.JLabel();
+        jLabelMunicipio = new javax.swing.JLabel();
+        jLabelFazenda = new javax.swing.JLabel();
+        jLabelTalhao = new javax.swing.JLabel();
+        jLabelUPC = new javax.swing.JLabel();
+        jLabelVolumeMadeiraForno = new javax.swing.JLabel();
         jLabelTitulo = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -159,6 +188,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(jLabel1.getFont().deriveFont(jLabel1.getFont().getSize()+1f));
         jLabel1.setText("Volume: ");
 
         jButtonRegistrarCarvaoForno.setText("Registrar");
@@ -175,7 +205,22 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
             }
         });
 
-        jLabelFatorCarvao.setText("Fator:");
+        jLabelRendimentoForno.setText("Rendimento forno:");
+
+        jLabelMunicipio.setFont(jLabelMunicipio.getFont().deriveFont(jLabelMunicipio.getFont().getSize()+4f));
+        jLabelMunicipio.setText("Municipio: ");
+
+        jLabelFazenda.setFont(jLabelFazenda.getFont().deriveFont(jLabelFazenda.getFont().getSize()+4f));
+        jLabelFazenda.setText("Fazenda: ");
+
+        jLabelTalhao.setFont(jLabelTalhao.getFont().deriveFont(jLabelTalhao.getFont().getSize()+4f));
+        jLabelTalhao.setText("Talhao:");
+
+        jLabelUPC.setFont(jLabelUPC.getFont().deriveFont(jLabelUPC.getFont().getSize()+4f));
+        jLabelUPC.setText("UPC:");
+
+        jLabelVolumeMadeiraForno.setFont(jLabelVolumeMadeiraForno.getFont().deriveFont(jLabelVolumeMadeiraForno.getFont().getSize()+1f));
+        jLabelVolumeMadeiraForno.setText("Volume de madeira forno: 0.00 m³");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -185,28 +230,50 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
                 .addGap(95, 95, 95)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
+                        .addComponent(jLabelVolumeMadeiraForno)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelUPC)
+                            .addComponent(jLabelMunicipio)
+                            .addComponent(jLabelFazenda)
+                            .addComponent(jLabelTalhao))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabelFatorCarvao)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jTextFieldVolumeCarvao)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButtonRegistrarCarvaoForno, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(164, 164, 164))
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabelRendimentoForno)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(jTextFieldVolumeCarvao)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButtonRegistrarCarvaoForno, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(164, 164, 164))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(223, 223, 223)
+                .addGap(26, 26, 26)
+                .addComponent(jLabelMunicipio)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelFazenda)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelTalhao)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelUPC)
+                .addGap(30, 30, 30)
+                .addComponent(jLabelVolumeMadeiraForno)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldVolumeCarvao)
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
-                .addComponent(jLabelFatorCarvao)
+                .addComponent(jLabelRendimentoForno)
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonRegistrarCarvaoForno)
@@ -339,7 +406,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
 
     private void jButtonRegistrarCarvaoFornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarCarvaoFornoActionPerformed
         //RegistrarCarvaoForno();
-        CalculaFator();
+        AtualizarDadosCarvao();
     }//GEN-LAST:event_jButtonRegistrarCarvaoFornoActionPerformed
 
     private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
@@ -392,10 +459,15 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
     private javax.swing.JButton jButtonVoltar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabelFatorCarvao;
+    private javax.swing.JLabel jLabelFazenda;
     private javax.swing.JLabel jLabelIdTipo;
+    private javax.swing.JLabel jLabelMunicipio;
     private javax.swing.JLabel jLabelNome;
+    private javax.swing.JLabel jLabelRendimentoForno;
+    private javax.swing.JLabel jLabelTalhao;
     private javax.swing.JLabel jLabelTitulo;
+    private javax.swing.JLabel jLabelUPC;
+    private javax.swing.JLabel jLabelVolumeMadeiraForno;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

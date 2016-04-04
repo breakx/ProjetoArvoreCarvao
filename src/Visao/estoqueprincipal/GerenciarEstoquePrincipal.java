@@ -8,6 +8,7 @@ package Visao.estoqueprincipal;
 import Controle.ControlePrincipal;
 import Modelo.ConexaoBD;
 import Visao.login.Login;
+import Visao.usuario.GerenciarUsuarios;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -27,6 +28,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
      */
     public GerenciarEstoquePrincipal() throws SQLException {
         initComponents();
+        jButtonExcluir.setVisible(false);
         CarregarNome();
         DefaultTableModel dtm = (DefaultTableModel) jTableEstoquePrincipal.getModel();
         String query = "Select * from estoque_principal";
@@ -57,11 +59,11 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                 rs.getString("categoria"),
                 rs.getString("situacao"),
                 rs.getString("ima"),
-                rs.getString("mad_ton_tot"),
-                rs.getString("carv_ton_tot"),
                 rs.getString("mdc_ha"),
-                rs.getString("densidade_carvao"),
                 rs.getString("densidade_madeira"),
+                rs.getString("densidade_carvao"),
+                rs.getString("mad_ton_ha"),
+                rs.getString("carv_ton_ha"),
                 rs.getString("id_operario"),
                 rs.getString("data_estoque"),
                 rs.getString("vol_mad_estimado"),
@@ -76,9 +78,10 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                 rs.getString("carv_ton_estimado"),
                 rs.getString("carv_ton_real"),
                 rs.getString("carv_ton_balanco"),
-                rs.getString("madeira_talhao"),
                 rs.getString("madeira_praca"),
                 rs.getString("madeira_forno"),
+                rs.getString("mad_ton_tot"),
+                rs.getString("carv_ton_tot"),
                 rs.getString("rend_grav_estimado"),
                 rs.getString("rend_grav_real"),
                 rs.getString("fator_empilalhemto")
@@ -94,46 +97,60 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             int linha = jTableEstoquePrincipal.getSelectedRow();
             String id_estoque = jTableEstoquePrincipal.getValueAt(linha, 0).toString();
             String estado = jTableEstoquePrincipal.getValueAt(linha, 1).toString();
-            String upc = jTableEstoquePrincipal.getValueAt(linha, 2).toString();
-            String bloco = jTableEstoquePrincipal.getValueAt(linha, 3).toString();
-            String municipio = jTableEstoquePrincipal.getValueAt(linha, 4).toString();
-            String fazenda = jTableEstoquePrincipal.getValueAt(linha, 5).toString();
-            String projeto = jTableEstoquePrincipal.getValueAt(linha, 6).toString();
-            String ano_rotacao = jTableEstoquePrincipal.getValueAt(linha, 7).toString();
-            String talhao = jTableEstoquePrincipal.getValueAt(linha, 8).toString();
-            String area = jTableEstoquePrincipal.getValueAt(linha, 9).toString();
-            String m3_ha = jTableEstoquePrincipal.getValueAt(linha, 10).toString();
-            String data_plantio = jTableEstoquePrincipal.getValueAt(linha, 11).toString();
-            String material_genetico = jTableEstoquePrincipal.getValueAt(linha, 12).toString();
-            String talhadia = jTableEstoquePrincipal.getValueAt(linha, 13).toString();
+            String bloco = jTableEstoquePrincipal.getValueAt(linha, 2).toString();
+            String municipio = jTableEstoquePrincipal.getValueAt(linha, 3).toString();
+            String fazenda = jTableEstoquePrincipal.getValueAt(linha, 4).toString();
+            String projeto = jTableEstoquePrincipal.getValueAt(linha, 5).toString();
+            String upc = jTableEstoquePrincipal.getValueAt(linha, 6).toString();
+            String talhao = jTableEstoquePrincipal.getValueAt(linha, 7).toString();
+            String area = jTableEstoquePrincipal.getValueAt(linha, 8).toString();
+            String m3_ha = jTableEstoquePrincipal.getValueAt(linha, 9).toString();
+            String material_genetico = jTableEstoquePrincipal.getValueAt(linha, 10).toString();
+            String talhadia = jTableEstoquePrincipal.getValueAt(linha, 11).toString();
+            String ano_rotacao = jTableEstoquePrincipal.getValueAt(linha, 12).toString();
+            String data_plantio = jTableEstoquePrincipal.getValueAt(linha, 13).toString();
             String data_rotacao_1 = jTableEstoquePrincipal.getValueAt(linha, 14).toString();
             String data_rotacao_2 = jTableEstoquePrincipal.getValueAt(linha, 15).toString();
-            String idade = jTableEstoquePrincipal.getValueAt(linha, 16).toString();
-            String categoria = jTableEstoquePrincipal.getValueAt(linha, 17).toString();
-            String situacao = jTableEstoquePrincipal.getValueAt(linha, 18).toString();
-            String ima = jTableEstoquePrincipal.getValueAt(linha, 19).toString();
-            String mdc_ha = jTableEstoquePrincipal.getValueAt(linha, 20).toString();
-            String mdc = jTableEstoquePrincipal.getValueAt(linha, 21).toString();
-            String densidade_carvao = jTableEstoquePrincipal.getValueAt(linha, 22).toString();
-            String densidade_madeira = jTableEstoquePrincipal.getValueAt(linha, 23).toString();
-            String id_operario = jTableEstoquePrincipal.getValueAt(linha, 24).toString();
-            String data_estoque	= jTableEstoquePrincipal.getValueAt(linha, 25).toString();
-            String volume_estimado = jTableEstoquePrincipal.getValueAt(linha, 26).toString();
-            String madeira_talhao = jTableEstoquePrincipal.getValueAt(linha, 27).toString();
-            String madeira_praca = jTableEstoquePrincipal.getValueAt(linha, 28).toString();
-            String madeira_forno = jTableEstoquePrincipal.getValueAt(linha, 29).toString();
-            String mad_ton_tot = jTableEstoquePrincipal.getValueAt(linha, 30).toString();
-            String carv_ton_tot = jTableEstoquePrincipal.getValueAt(linha, 31).toString();
+            String data_rotacao_3 = jTableEstoquePrincipal.getValueAt(linha, 16).toString();
+            String idade = jTableEstoquePrincipal.getValueAt(linha, 17).toString();
+            String categoria = jTableEstoquePrincipal.getValueAt(linha, 18).toString();
+            String situacao = jTableEstoquePrincipal.getValueAt(linha, 19).toString();
+            String ima = jTableEstoquePrincipal.getValueAt(linha, 20).toString();            
+            String mdc_ha = jTableEstoquePrincipal.getValueAt(linha, 21).toString();
+            String densidade_madeira = jTableEstoquePrincipal.getValueAt(linha, 22).toString();
+            String densidade_carvao = jTableEstoquePrincipal.getValueAt(linha, 23).toString();
+            String mad_ton_ha = jTableEstoquePrincipal.getValueAt(linha, 24).toString();
+            String carv_ton_ha = jTableEstoquePrincipal.getValueAt(linha, 25).toString();
+            String id_operario = jTableEstoquePrincipal.getValueAt(linha, 26).toString();
+            String data_estoque	= jTableEstoquePrincipal.getValueAt(linha, 27).toString();
+            String vol_mad_estimado = jTableEstoquePrincipal.getValueAt(linha, 28).toString();
+            String vol_mad_real = jTableEstoquePrincipal.getValueAt(linha, 29).toString();
+            String vol_mad_balanco = jTableEstoquePrincipal.getValueAt(linha, 30).toString();
+            String mdc_estimado = jTableEstoquePrincipal.getValueAt(linha, 31).toString();
+            String mdc_real = jTableEstoquePrincipal.getValueAt(linha, 32).toString();
+            String mdc_balanco = jTableEstoquePrincipal.getValueAt(linha, 33).toString();
+            String mad_ton_estimado = jTableEstoquePrincipal.getValueAt(linha, 34).toString();
+            String mad_ton_real = jTableEstoquePrincipal.getValueAt(linha, 35).toString();
+            String mad_ton_balanco = jTableEstoquePrincipal.getValueAt(linha, 36).toString();
+            String carv_ton_estimado = jTableEstoquePrincipal.getValueAt(linha, 37).toString();
+            String carv_ton_real = jTableEstoquePrincipal.getValueAt(linha, 38).toString();
+            String carv_ton_balanco = jTableEstoquePrincipal.getValueAt(linha, 39).toString();
+            String madeira_praca = jTableEstoquePrincipal.getValueAt(linha, 40).toString();
+            String madeira_forno = jTableEstoquePrincipal.getValueAt(linha, 41).toString();
+            String mad_ton_tot = jTableEstoquePrincipal.getValueAt(linha, 42).toString();
+            String carv_ton_tot = jTableEstoquePrincipal.getValueAt(linha, 43).toString();
+            String rend_grav_estimado = jTableEstoquePrincipal.getValueAt(linha, 44).toString();
+            String rend_grav_real = jTableEstoquePrincipal.getValueAt(linha, 45).toString();
+            String fator_empilalhemto = jTableEstoquePrincipal.getValueAt(linha, 46).toString();
             
             //String data_estoque = jTableEstoque.getValueAt(linha, 28).toString();
             //String id_operario = jTableEstoque.getValueAt(linha, 29).toString();
  
-            new AlterarEstoquePrincipal(id_estoque, estado, upc, bloco, municipio,
-            fazenda, projeto, ano_rotacao, talhao, area, m3_ha, data_plantio,
-            material_genetico, talhadia, data_rotacao_1, data_rotacao_2, idade, 
-            categoria, situacao, ima, mdc_ha, mdc, densidade_carvao, 
-            densidade_madeira, id_operario, data_estoque, volume_estimado, 
-            madeira_talhao, madeira_praca, madeira_forno, mad_ton_tot, carv_ton_tot).setVisible(true);
+            new AlterarEstoquePrincipal(id_estoque, upc, talhao, area, m3_ha, data_plantio,
+            material_genetico, talhadia, ano_rotacao, data_rotacao_1, data_rotacao_2, data_rotacao_3, idade, 
+            categoria, situacao, ima, mdc_ha, mdc_estimado, densidade_carvao, densidade_madeira, mdc_balanco,
+            rend_grav_estimado, fator_empilalhemto).setVisible(true);
+            this.setVisible(false);
             dispose();
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
     }
@@ -142,12 +159,14 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         if(jTableEstoquePrincipal.getSelectedRow()>=0) {
             int linha = jTableEstoquePrincipal.getSelectedRow();
             String id_estoque = jTableEstoquePrincipal.getValueAt(linha, 0).toString();
+            this.setVisible(false);
             dispose();
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
     }
     
     private void InserirInfo(){
         new InserirEstoquePrincipal().setVisible(true);
+        this.setVisible(false);
         dispose();
     } 
     
@@ -155,6 +174,16 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         jLabelNome.setText(ControlePrincipal.nome);
         jLabelIdTipo.setText(ControlePrincipal.id_op);
     } 
+    
+    private void VoltarMenu(){        
+        try {
+            new GerenciarUsuarios().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GerenciarEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        dispose();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -171,10 +200,10 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         jLabelNome = new javax.swing.JLabel();
         jLabelIdTipo = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jButtonInserir = new javax.swing.JButton();
-        jButtonAlterar = new javax.swing.JButton();
+        jButtonAtualizar = new javax.swing.JButton();
         jButtonExcluir = new javax.swing.JButton();
         jButtonLogout = new javax.swing.JButton();
+        jButtonVoltar2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableEstoquePrincipal = new javax.swing.JTable();
@@ -234,19 +263,11 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         jPanel2.setBorder(new javax.swing.border.MatteBorder(null));
         jPanel2.setPreferredSize(new java.awt.Dimension(270, 350));
 
-        jButtonInserir.setFont(jButtonInserir.getFont().deriveFont(jButtonInserir.getFont().getSize()+1f));
-        jButtonInserir.setText("Inserir");
-        jButtonInserir.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAtualizar.setFont(jButtonAtualizar.getFont().deriveFont(jButtonAtualizar.getFont().getSize()+1f));
+        jButtonAtualizar.setText("Atualizar");
+        jButtonAtualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonInserirActionPerformed(evt);
-            }
-        });
-
-        jButtonAlterar.setFont(jButtonAlterar.getFont().deriveFont(jButtonAlterar.getFont().getSize()+1f));
-        jButtonAlterar.setText("Alterar");
-        jButtonAlterar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAlterarActionPerformed(evt);
+                jButtonAtualizarActionPerformed(evt);
             }
         });
 
@@ -266,6 +287,13 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButtonVoltar2.setText("Voltar");
+        jButtonVoltar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVoltar2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -275,26 +303,31 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonInserir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButtonExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .addComponent(jButtonAtualizar, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .addComponent(jButtonVoltar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonAtualizar, jButtonExcluir, jButtonVoltar2});
+
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
-                .addComponent(jButtonInserir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jButtonAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButtonAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonVoltar2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonAtualizar, jButtonExcluir, jButtonVoltar2});
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
@@ -311,11 +344,11 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id_estoque", "estado", "bloco", "municipio", "fazenda", "projeto", "upc", "talhao", "area", "m3/ha", "mat_gen", "talhadia", "ano_rotacao", "data_plantio", "data_rotacao_1", "data_rotacao_2", "idade", "categoria", "situacao", "ima", "mad_ton_tot", "carv_ton_tot", "mdc_ha", "dens_mad", "dens_carv", "id_oper", "data_estoque", "vol_mad_est", "vol_mad_real", "vol_mad_bal", "mdc_est", "mdc_real", "mdc_bal", "mad_ton_est", "mad_ton_real", "mad_ton_bal", "carv_ton_est", "carv_ton_real", "carv_ton_bal", "mad_talhao", "mad_praca", "mad_forno", "rend_grav_est", "rend_grav_real", "fator_emp"
+                "id_estoque", "estado", "bloco", "municipio", "fazenda", "projeto", "upc", "talhao", "area", "m3/ha", "mat_gen", "talhadia", "ano_rotacao", "data_plantio", "data_rotacao_1", "data_rotacao_2", "data_rotacao_3", "idade", "categoria", "situacao", "ima", "mdc_ha", "dens_mad", "dens_carv", "mad_ton_ha", "carv_ton_ha", "id_oper", "data_estoque", "vol_mad_est", "vol_mad_real", "vol_mad_bal", "mdc_est", "mdc_real", "mdc_bal", "mad_ton_est", "mad_ton_real", "mad_ton_bal", "carv_ton_est", "carv_ton_real", "carv_ton_bal", "mad_praca", "mad_forno", "mad_ton_tot", "carv_ton_tot", "rend_grav_est", "rend_grav_real", "fator_emp"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -327,7 +360,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         jTableEstoquePrincipal.setFillsViewportHeight(true);
         jTableEstoquePrincipal.setMaximumSize(new java.awt.Dimension(1000, 1000));
         jTableEstoquePrincipal.setMinimumSize(new java.awt.Dimension(450, 450));
-        jTableEstoquePrincipal.setPreferredSize(new java.awt.Dimension(3000, 0));
+        jTableEstoquePrincipal.setPreferredSize(new java.awt.Dimension(3200, 0));
         jTableEstoquePrincipal.setRequestFocusEnabled(false);
         jTableEstoquePrincipal.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableEstoquePrincipal);
@@ -378,13 +411,9 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInserirActionPerformed
-        InserirInfo();
-    }//GEN-LAST:event_jButtonInserirActionPerformed
-
-    private void jButtonAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlterarActionPerformed
+    private void jButtonAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarActionPerformed
         AlterarInfo();
-    }//GEN-LAST:event_jButtonAlterarActionPerformed
+    }//GEN-LAST:event_jButtonAtualizarActionPerformed
 
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
         ExcluirInfo();
@@ -394,6 +423,10 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         new Login().setVisible(true);
         dispose();
     }//GEN-LAST:event_jButtonLogoutActionPerformed
+
+    private void jButtonVoltar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltar2ActionPerformed
+        VoltarMenu();
+    }//GEN-LAST:event_jButtonVoltar2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -438,10 +471,10 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonAlterar;
+    private javax.swing.JButton jButtonAtualizar;
     private javax.swing.JButton jButtonExcluir;
-    private javax.swing.JButton jButtonInserir;
     private javax.swing.JButton jButtonLogout;
+    private javax.swing.JButton jButtonVoltar2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelIdTipo;
     private javax.swing.JLabel jLabelNome;

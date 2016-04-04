@@ -8,72 +8,161 @@ package Visao.estoqueprincipal;
 import Controle.ControleEstoquePrincipal;
 import Controle.ControlePrincipal;
 import Controle.estoqueprincipal.InserirEstoquePrincipalCtrl;
+import Modelo.ConexaoBD;
+import Visao.fazenda.GerenciarFazenda;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Cristiano GD
  */
 public class InserirEstoquePrincipal extends javax.swing.JFrame {
-
-    private float volume_estimado;
-    //private float area;
-    //private float m3_ha;
+   
+    ControleEstoquePrincipal estoque_principal = new ControleEstoquePrincipal();
+    private int talhao = 1;
     /**
      * Creates new form InserirEstoque
      */
     public InserirEstoquePrincipal() {
         initComponents();
          CarregarNome();
-    }   
+         BuscarTalhao();
+    }    
     
-    private void VolumeEstimado(float area, float m3_ha){
-        //float volume_estimado;
-        volume_estimado = area*m3_ha;
-        jLabelVolumeEstimado.setText("Volume Estimado:"+volume_estimado);
-        //return volume_estimado;
+    private void BuscarTalhao(){
+    //
+        String query = "SELECT `talhao` FROM `estoque_principal` WHERE `fazenda` = '"+ControlePrincipal.fazenda+"' and `projeto` = "+ControlePrincipal.projeto;
+        ConexaoBD con = ConexaoBD.getConexao();
+
+        ResultSet rs = con.consultaSql(query);
+
+        if(rs != null){
+            try {
+                while(rs.next()){
+                    talhao ++;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(InserirEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        jLabelTalhao.setText("Talhão: "+talhao);
+        jLabelFazenda.setText("Fazenda "+ControlePrincipal.fazenda);
+        jLabelProjeto.setText("Projeto "+ControlePrincipal.projeto);
+        jTextFieldUpc.setText(ControlePrincipal.upcAtual);
+        jTextFieldMaterialGenetico.setText(ControlePrincipal.materialGeneticoAtual);
+        //JOptionPane.showMessageDialog(null, "Talhao: "+talhao);  
+        con.fecharConexao();
+    }
+    
+    private void GerarDensidadeMadeira(String codigo){
+        JOptionPane.showMessageDialog(null, "Material Genetico: "+codigo); 
+        if(codigo.equals("1270")){
+            estoque_principal.setDensidade_madeira(0.486f);
+        }else if(codigo.equals("2486")){
+            estoque_principal.setDensidade_madeira(0.483f);
+        }else if(codigo.equals("3281")){
+            estoque_principal.setDensidade_madeira(0.446f);
+        }else if(codigo.equals("3334")){
+            estoque_principal.setDensidade_madeira(0.504f);
+        }else if(codigo.equals("3335")){
+            estoque_principal.setDensidade_madeira(0.477f);
+        }else if(codigo.equals("3336")){
+            estoque_principal.setDensidade_madeira(0.459f);
+        }else if(codigo.equals("3486")){
+            estoque_principal.setDensidade_madeira(0.463f);
+        /*}else if(codigo.equals("3487")){
+            estoque_principal.setDensidade_madeira(0.476f);
+        }else if(codigo.equals("-")){
+            estoque_principal.setDensidade_madeira(0.476f);
+        }else if(codigo.equals("6")){
+            estoque_principal.setDensidade_madeira(0.476f);
+        }else if(codigo.equals("8")){
+            estoque_principal.setDensidade_madeira(0.476f);
+        }else if(codigo.equals("1288")){
+            estoque_principal.setDensidade_madeira(0.476f);
+        }else if(codigo.equals("1528")){
+            estoque_principal.setDensidade_madeira(0.476f);
+        }else if(codigo.equals("16")){
+            estoque_principal.setDensidade_madeira(0.476f);*/
+        }else if(codigo.equals("3016")){
+            estoque_principal.setDensidade_madeira(0.455f);
+        }else if(codigo.equals("3025")){
+            estoque_principal.setDensidade_madeira(0.499f);
+        }else if(codigo.equals("3203")){
+            estoque_principal.setDensidade_madeira(0.464f);
+        //}else if(codigo.equals("3676")){
+            //estoque_principal.setDensidade_madeira(0.476f);
+        }else if(codigo.equals("6382")){
+            estoque_principal.setDensidade_madeira(0.52f);
+        /*}else if(codigo.equals("Citriodora")){
+            estoque_principal.setDensidade_madeira(0.476f);
+        }else if(codigo.equals("Cloeziana")){
+            estoque_principal.setDensidade_madeira(0.476f);
+        }else if(codigo.equals("nd")){
+            estoque_principal.setDensidade_madeira(0.476f);
+        }else if(codigo.equals("semente")){
+            estoque_principal.setDensidade_madeira(0.476f);
+        }else if(codigo.equals("Urophylla")){
+            estoque_principal.setDensidade_madeira(0.476f);*/
+        }else if(codigo.equals("VM-01")){
+            estoque_principal.setDensidade_madeira(0.53f); 
+        }else{
+            estoque_principal.setDensidade_madeira(0.476f);
+        }
+        GerarDensidadeCarvao(jTextFieldMaterialGenetico.getText());
+    }
+    
+    private void GerarDensidadeCarvao(String codigo){
+        if(codigo.equals("3334")){
+            estoque_principal.setDensidade_carvao(0.24f);
+        }else if(codigo.equals("3281") || codigo.equals("3335")){
+            estoque_principal.setDensidade_carvao(0.232f);
+        }else if(codigo.equals("3336")){
+            estoque_principal.setDensidade_carvao(0.224f);
+        }else if(codigo.equals("3487")){
+            estoque_principal.setDensidade_carvao(0.237f);
+        }else{
+            estoque_principal.setDensidade_carvao(0.233f);
+        }
+        RegistrarEstoque(); 
     }
     
     private void RegistrarEstoque(){
         DateFormat data_estoque_principal = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
-        Date date = new Date();
+        Date date = new Date();        
         
-        ControleEstoquePrincipal estoque_principal = new ControleEstoquePrincipal();
         estoque_principal.setUpc(jTextFieldUpc.getText());
-        estoque_principal.setTalhao(jTextFieldTalhao.getText());
-        estoque_principal.setArea(Float.parseFloat(jTextFieldArea.getText()));
-        estoque_principal.setM3_ha(Float.parseFloat(jTextFieldM3_ha.getText()));
+        estoque_principal.setTalhao(talhao);
+        estoque_principal.setMaterial_genetico(Integer.parseInt(jTextFieldMaterialGenetico.getText())); 
         
-        VolumeEstimado(Float.parseFloat(jTextFieldArea.getText()),Float.parseFloat(jTextFieldM3_ha.getText()));
-        
-        estoque_principal.setVolume_estimado(volume_estimado);
         estoque_principal.setData_estoque(data_estoque_principal.format(date));
         estoque_principal.setId_operario(ControlePrincipal.id_op);
         
+        ControlePrincipal.upcAtual = jTextFieldUpc.getText();
+        ControlePrincipal.materialGeneticoAtual = jTextFieldMaterialGenetico.getText();
+        
         InserirEstoquePrincipalCtrl inserir = new InserirEstoquePrincipalCtrl(estoque_principal);      
         
-        try {
-            new GerenciarEstoquePrincipal().setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(InserirEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        new InserirEstoquePrincipal().setVisible(true);
         this.setVisible(false);
         dispose();
     }
     
     private void VoltarMenu(){
+        ControlePrincipal.upcAtual = "";
+        ControlePrincipal.materialGeneticoAtual = "";
         try {
-            new GerenciarEstoquePrincipal().setVisible(true);
+            new GerenciarFazenda().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(InserirEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        }        
         this.setVisible(false);
         dispose();
     }
@@ -103,14 +192,12 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabelTalhao = new javax.swing.JLabel();
         jButtonCargaTalhao = new javax.swing.JButton();
-        jLabelVolumeEstimado = new javax.swing.JLabel();
         jTextFieldUpc = new javax.swing.JTextField();
-        jTextFieldM3_ha = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        jTextFieldArea = new javax.swing.JTextField();
         jButtonVoltar = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        jTextFieldTalhao = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jTextFieldMaterialGenetico = new javax.swing.JTextField();
+        jLabelFazenda = new javax.swing.JLabel();
+        jLabelProjeto = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -200,11 +287,11 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
         jLabel2.setPreferredSize(new java.awt.Dimension(100, 16));
 
         jLabelTalhao.setFont(jLabelTalhao.getFont().deriveFont(jLabelTalhao.getFont().getSize()+1f));
-        jLabelTalhao.setText("Talhao");
+        jLabelTalhao.setText("Talhao : 1");
         jLabelTalhao.setPreferredSize(new java.awt.Dimension(100, 16));
 
         jButtonCargaTalhao.setFont(jButtonCargaTalhao.getFont().deriveFont(jButtonCargaTalhao.getFont().getSize()+1f));
-        jButtonCargaTalhao.setText("Registrar");
+        jButtonCargaTalhao.setText("Inserir Talhão");
         jButtonCargaTalhao.setPreferredSize(new java.awt.Dimension(200, 40));
         jButtonCargaTalhao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,19 +299,7 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
             }
         });
 
-        jLabelVolumeEstimado.setFont(jLabelVolumeEstimado.getFont().deriveFont(jLabelVolumeEstimado.getFont().getSize()+1f));
-        jLabelVolumeEstimado.setText("Volume Estimado:");
-        jLabelVolumeEstimado.setPreferredSize(new java.awt.Dimension(100, 16));
-
         jTextFieldUpc.setPreferredSize(new java.awt.Dimension(200, 25));
-
-        jTextFieldM3_ha.setPreferredSize(new java.awt.Dimension(200, 25));
-
-        jLabel16.setFont(jLabel16.getFont().deriveFont(jLabel16.getFont().getSize()+1f));
-        jLabel16.setText("Area");
-        jLabel16.setPreferredSize(new java.awt.Dimension(100, 16));
-
-        jTextFieldArea.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jButtonVoltar.setText("Voltar");
         jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -233,11 +308,19 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
             }
         });
 
-        jLabel10.setFont(jLabel10.getFont().deriveFont(jLabel10.getFont().getSize()+1f));
-        jLabel10.setText("M³ por hectare");
-        jLabel10.setPreferredSize(new java.awt.Dimension(100, 16));
+        jLabel3.setFont(jLabel3.getFont().deriveFont(jLabel3.getFont().getSize()+1f));
+        jLabel3.setText("Material Genetico");
+        jLabel3.setPreferredSize(new java.awt.Dimension(100, 16));
 
-        jTextFieldTalhao.setPreferredSize(new java.awt.Dimension(200, 25));
+        jTextFieldMaterialGenetico.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        jLabelFazenda.setFont(jLabelFazenda.getFont().deriveFont((jLabelFazenda.getFont().getStyle() | java.awt.Font.ITALIC) | java.awt.Font.BOLD, jLabelFazenda.getFont().getSize()+4));
+        jLabelFazenda.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabelFazenda.setText("Fazenda --- ");
+
+        jLabelProjeto.setFont(jLabelProjeto.getFont().deriveFont((jLabelProjeto.getFont().getStyle() | java.awt.Font.ITALIC) | java.awt.Font.BOLD, jLabelProjeto.getFont().getSize()+4));
+        jLabelProjeto.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabelProjeto.setText("Projeto ---");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -251,50 +334,39 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
                 .addGap(63, 63, 63))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(78, 78, 78)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldM3_ha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelFazenda, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(jTextFieldMaterialGenetico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(32, 32, 32)
-                            .addComponent(jTextFieldArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jLabelVolumeEstimado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(32, 32, 32)
                             .addComponent(jTextFieldUpc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabelTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabelTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(148, 148, 148)
+                .addGap(49, 49, 49)
+                .addComponent(jLabelFazenda, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldUpc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldM3_ha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addComponent(jLabelVolumeEstimado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldMaterialGenetico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
+                .addComponent(jLabelTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCargaTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -341,7 +413,7 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonLogoutActionPerformed
 
     private void jButtonCargaTalhaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargaTalhaoActionPerformed
-        RegistrarEstoque();
+        GerarDensidadeMadeira(jTextFieldMaterialGenetico.getText());
     }//GEN-LAST:event_jButtonCargaTalhaoActionPerformed
 
     private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
@@ -388,21 +460,19 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButtonCargaTalhao;
     private javax.swing.JButton jButtonLogout;
     private javax.swing.JButton jButtonVoltar;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabelFazenda;
     private javax.swing.JLabel jLabelIdTipo;
     private javax.swing.JLabel jLabelNome;
+    private javax.swing.JLabel jLabelProjeto;
     private javax.swing.JLabel jLabelTalhao;
     private javax.swing.JLabel jLabelTitulo;
-    private javax.swing.JLabel jLabelVolumeEstimado;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextFieldArea;
-    private javax.swing.JTextField jTextFieldM3_ha;
-    private javax.swing.JTextField jTextFieldTalhao;
+    private javax.swing.JTextField jTextFieldMaterialGenetico;
     private javax.swing.JTextField jTextFieldUpc;
     // End of variables declaration//GEN-END:variables
 }

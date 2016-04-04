@@ -11,26 +11,24 @@ package Controle;
  */
 public class ControleMadeira {
     private String id_controle_madeira;
+    private String id_estoque;
     private String id_operario;
     private String talhao;
-    private float saida_volume_talhao;
-    private String data_talhao;
+    private String data_entrega;
+    private float mad_volume_m_stereo;
+    private float mad_volume_m3;
     private float altura1_t;
     private float altura2_t;
     private float altura3_t;
     private float comprimento_t;
     private float largura_t;
     private float peso_t;
-    private float entrada_volume_praca;
-    private String data_praca;
-    private float altura1_p;
-    private float altura2_p;
-    private float altura3_p;
-    private float comprimento_p;
-    private float largura_p;
-    private float peso_p;
-    private float fator;
-    private String id_estoque;
+    private float altura1_bt;
+    private float altura2_bt;
+    private float altura3_bt;
+    private float comprimento_bt;
+    private float largura_bt;
+    private float peso_bt;   
 
     /**
      * @return the id_controle_madeira
@@ -44,6 +42,20 @@ public class ControleMadeira {
      */
     public void setId_controle_madeira(String id_controle_madeira) {
         this.id_controle_madeira = id_controle_madeira;
+    }
+
+    /**
+     * @return the id_estoque
+     */
+    public String getId_estoque() {
+        return id_estoque;
+    }
+
+    /**
+     * @param id_estoque the id_estoque to set
+     */
+    public void setId_estoque(String id_estoque) {
+        this.id_estoque = id_estoque;
     }
 
     /**
@@ -75,31 +87,45 @@ public class ControleMadeira {
     }
 
     /**
-     * @return the saida_volume_talhao
+     * @return the data_entrega
      */
-    public float getSaida_volume_talhao() {
-        return saida_volume_talhao;
+    public String getData_entrega() {
+        return data_entrega;
     }
 
     /**
-     * @param saida_volume_talhao the saida_volume_talhao to set
+     * @param data_entrega the data_entrega to set
      */
-    public void setSaida_volume_talhao(float saida_volume_talhao) {
-        this.saida_volume_talhao = saida_volume_talhao;
+    public void setData_entrega(String data_entrega) {
+        this.data_entrega = data_entrega;
     }
 
     /**
-     * @return the data_talhao
+     * @return the mad_volume_m_stereo
      */
-    public String getData_talhao() {
-        return data_talhao;
+    public float getMad_volume_m_stereo() {
+        return mad_volume_m_stereo;
     }
 
     /**
-     * @param data_talhao the data_talhao to set
+     * @param mad_volume_m_stereo the mad_volume_m_stereo to set
      */
-    public void setData_talhao(String data_talhao) {
-        this.data_talhao = data_talhao;
+    public void setMad_volume_m_stereo(float mad_volume_m_stereo) {
+        this.mad_volume_m_stereo = mad_volume_m_stereo;
+    }
+
+    /**
+     * @return the mad_volume_m3
+     */
+    public float getMad_volume_m3() {
+        return mad_volume_m3;
+    }
+
+    /**
+     * @param mad_volume_m3 the mad_volume_m3 to set
+     */
+    public void setMad_volume_m3(float mad_volume_m3) {
+        this.mad_volume_m3 = mad_volume_m3;
     }
 
     /**
@@ -173,118 +199,6 @@ public class ControleMadeira {
     }
 
     /**
-     * @return the entrada_volume_praca
-     */
-    public float getEntrada_volume_praca() {
-        return entrada_volume_praca;
-    }
-
-    /**
-     * @param entrada_volume_praca the entrada_volume_praca to set
-     */
-    public void setEntrada_volume_praca(float entrada_volume_praca) {
-        this.entrada_volume_praca = entrada_volume_praca;
-    }
-
-    /**
-     * @return the data_praca
-     */
-    public String getData_praca() {
-        return data_praca;
-    }
-
-    /**
-     * @param data_praca the data_praca to set
-     */
-    public void setData_praca(String data_praca) {
-        this.data_praca = data_praca;
-    }
-
-    /**
-     * @return the altura1_p
-     */
-    public float getAltura1_p() {
-        return altura1_p;
-    }
-
-    /**
-     * @param altura1_p the altura1_p to set
-     */
-    public void setAltura1_p(float altura1_p) {
-        this.altura1_p = altura1_p;
-    }
-
-    /**
-     * @return the altura2_p
-     */
-    public float getAltura2_p() {
-        return altura2_p;
-    }
-
-    /**
-     * @param altura2_p the altura2_p to set
-     */
-    public void setAltura2_p(float altura2_p) {
-        this.altura2_p = altura2_p;
-    }
-
-    /**
-     * @return the altura3_p
-     */
-    public float getAltura3_p() {
-        return altura3_p;
-    }
-
-    /**
-     * @param altura3_p the altura3_p to set
-     */
-    public void setAltura3_p(float altura3_p) {
-        this.altura3_p = altura3_p;
-    }
-
-    /**
-     * @return the comprimento_p
-     */
-    public float getComprimento_p() {
-        return comprimento_p;
-    }
-
-    /**
-     * @param comprimento_p the comprimento_p to set
-     */
-    public void setComprimento_p(float comprimento_p) {
-        this.comprimento_p = comprimento_p;
-    }
-
-    /**
-     * @return the largura_p
-     */
-    public float getLargura_p() {
-        return largura_p;
-    }
-
-    /**
-     * @param largura_p the largura_p to set
-     */
-    public void setLargura_p(float largura_p) {
-        this.largura_p = largura_p;
-    }
-
-    /**
-     * @return the fator
-     */
-    public float getFator() {
-        return fator;
-    }
-
-    /**
-     * @param fator the fator to set
-     */
-    public void setFator(float fator) {
-        this.fator = fator;
-    }
-
-    /**
      * @return the peso_t
      */
     public float getPeso_t() {
@@ -299,30 +213,86 @@ public class ControleMadeira {
     }
 
     /**
-     * @return the peso_p
+     * @return the altura1_bt
      */
-    public float getPeso_p() {
-        return peso_p;
+    public float getAltura1_bt() {
+        return altura1_bt;
     }
 
     /**
-     * @param peso_p the peso_p to set
+     * @param altura1_bt the altura1_bt to set
      */
-    public void setPeso_p(float peso_p) {
-        this.peso_p = peso_p;
+    public void setAltura1_bt(float altura1_bt) {
+        this.altura1_bt = altura1_bt;
     }
 
     /**
-     * @return the id_estoque
+     * @return the altura2_bt
      */
-    public String getId_estoque() {
-        return id_estoque;
+    public float getAltura2_bt() {
+        return altura2_bt;
     }
 
     /**
-     * @param id_estoque the id_estoque to set
+     * @param altura2_bt the altura2_bt to set
      */
-    public void setId_estoque(String id_estoque) {
-        this.id_estoque = id_estoque;
+    public void setAltura2_bt(float altura2_bt) {
+        this.altura2_bt = altura2_bt;
+    }
+
+    /**
+     * @return the altura3_bt
+     */
+    public float getAltura3_bt() {
+        return altura3_bt;
+    }
+
+    /**
+     * @param altura3_bt the altura3_bt to set
+     */
+    public void setAltura3_bt(float altura3_bt) {
+        this.altura3_bt = altura3_bt;
+    }
+
+    /**
+     * @return the comprimento_bt
+     */
+    public float getComprimento_bt() {
+        return comprimento_bt;
+    }
+
+    /**
+     * @param comprimento_bt the comprimento_bt to set
+     */
+    public void setComprimento_bt(float comprimento_bt) {
+        this.comprimento_bt = comprimento_bt;
+    }
+
+    /**
+     * @return the largura_bt
+     */
+    public float getLargura_bt() {
+        return largura_bt;
+    }
+
+    /**
+     * @param largura_bt the largura_bt to set
+     */
+    public void setLargura_bt(float largura_bt) {
+        this.largura_bt = largura_bt;
+    }
+
+    /**
+     * @return the peso_bt
+     */
+    public float getPeso_bt() {
+        return peso_bt;
+    }
+
+    /**
+     * @param peso_bt the peso_bt to set
+     */
+    public void setPeso_bt(float peso_bt) {
+        this.peso_bt = peso_bt;
     }
 }

@@ -113,7 +113,6 @@ public class AlterarFazenda extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InserirFazenda.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         this.setVisible(false);
         dispose();
     }
@@ -124,7 +123,6 @@ public class AlterarFazenda extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InserirFazenda.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         this.setVisible(false);
         dispose();
     }

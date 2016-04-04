@@ -98,19 +98,21 @@ public class ExcluirMadeiraInfo extends javax.swing.JFrame {
         ExcluirMadeiraCtrl excluir = new ExcluirMadeiraCtrl(madeira);
 
         try {
-            new GerenciarMadeiraTalhaoPraca().setVisible(true);
+            new GerenciarMadeiraPraca().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(ExcluirMadeiraInfo.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.setVisible(false);
         dispose();
     }//GEN-LAST:event_jButtonSim2ActionPerformed
 
     private void jButtonnaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonnaoActionPerformed
         try {
-            new GerenciarMadeiraTalhaoPraca().setVisible(true);
+            new GerenciarMadeiraPraca().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(ExcluirMadeiraInfo.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.setVisible(false);
         dispose();
     }//GEN-LAST:event_jButtonnaoActionPerformed
 

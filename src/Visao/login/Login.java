@@ -15,9 +15,13 @@ import Controle.ControleUsuario;
 import Modelo.ConexaoBD;
 import Visao.usuario.GerenciarUsuarios;
 import Visao.carvao.GerenciarCarvaoForno;
-import Visao.madeira.GerenciarMadeiraTalhaoPraca;
+import Visao.estoqueprincipal.AlterarEstoquePrincipal;
+import Visao.madeira.GerenciarMadeiraPraca;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -33,7 +37,7 @@ public class Login extends javax.swing.JFrame {
     
     /** Creates new form Login */
     public Login() {
-        initComponents();       
+        initComponents();          
     }
     
     public void SystemIn(){
@@ -77,11 +81,11 @@ public class Login extends javax.swing.JFrame {
         }else if(tipo.equals("op_m")){
             try
             {
-                GerenciarMadeiraTalhaoPraca gmtp = new GerenciarMadeiraTalhaoPraca();
+                GerenciarMadeiraPraca gmtp = new GerenciarMadeiraPraca();
                 gmtp.setVisible(true);
                 //gmtp.ChangeName(nome, id_op);
             } catch (SQLException ex) {
-                Logger.getLogger(GerenciarMadeiraTalhaoPraca.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GerenciarMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else if(tipo.equals("op_s")){
             try
@@ -94,6 +98,7 @@ public class Login extends javax.swing.JFrame {
             }
         }
         this.setVisible(false);
+        dispose();
     }
 
     /** This method is called from within the constructor to
@@ -199,7 +204,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogarActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:        
         SystemIn();
     }//GEN-LAST:event_jButtonLogarActionPerformed
 

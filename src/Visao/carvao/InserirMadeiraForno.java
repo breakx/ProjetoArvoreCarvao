@@ -27,11 +27,16 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
      * Creates new form InserirMadeiraForno
      */
     public InserirMadeiraForno() {
-        initComponents();
-        jLabelVolumePraca.setText(ControlePrincipal.volume_madeira_praca+" m³");
-        jLabelTalhao.setText("Talhao: "+ControlePrincipal.talhao);
+        initComponents();        
+        jLabelMunicipio.setText("Municipio: "+ControlePrincipal.municipio);
+        jLabelFazenda.setText("Fazenda: "+ControlePrincipal.fazenda);        
+        jLabelTalhao.setText("Talhao: "+ControlePrincipal.talhao);        
+        jLabelUPC.setText("UPC: "+ControlePrincipal.upcAtual);
+        
+        jLabelVolumeMadeiraPraca.setText("Volume atual de madeira: "+ControlePrincipal.madeira_praca+" m³");
         CarregarNome();
-    }
+        //RegistrarMadeiraForno();
+    }   
     
     private void RegistrarMadeiraForno(){
         DateFormat data_forno = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -45,8 +50,9 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         carvao.setVolume_madeira(Float.parseFloat(jTextFieldVolume_madeira.getText()));
         carvao.setData_entrada_madeira_forno(data_forno.format(date));
 
-        ControlePrincipal.volume_madeira_forno += Float.parseFloat(jTextFieldVolume_madeira.getText());
-        ControlePrincipal.volume_madeira_praca -= Float.parseFloat(jTextFieldVolume_madeira.getText());
+        ControlePrincipal.madeira_forno += Float.parseFloat(jTextFieldVolume_madeira.getText());
+        ControlePrincipal.madeira_praca -= Float.parseFloat(jTextFieldVolume_madeira.getText());
+        ControlePrincipal.atualizarDados = "carvao";
         InserirCarvaoCtrl inserir = new InserirCarvaoCtrl(carvao);
 
         try {
@@ -54,7 +60,7 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InserirMadeiraForno.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        this.setVisible(false);
         dispose();
     }
     
@@ -97,8 +103,10 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jTextFieldForno = new javax.swing.JTextField();
         jButtonVoltar = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        jLabelVolumePraca = new javax.swing.JLabel();
+        jLabelFazenda = new javax.swing.JLabel();
+        jLabelVolumeMadeiraPraca = new javax.swing.JLabel();
+        jLabelMunicipio = new javax.swing.JLabel();
+        jLabelUPC = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -201,7 +209,7 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         });
 
         jLabelTalhao.setFont(jLabelTalhao.getFont().deriveFont(jLabelTalhao.getFont().getSize()+4f));
-        jLabelTalhao.setText("Talhão: ");
+        jLabelTalhao.setText("Talhao:");
 
         jLabel4.setText("Forno");
 
@@ -219,51 +227,59 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setFont(jLabel5.getFont().deriveFont(jLabel5.getFont().getSize()+4f));
-        jLabel5.setText("Volume atual de madeira na praça: ");
+        jLabelFazenda.setFont(jLabelFazenda.getFont().deriveFont(jLabelFazenda.getFont().getSize()+4f));
+        jLabelFazenda.setText("Fazenda: ");
 
-        jLabelVolumePraca.setFont(jLabelVolumePraca.getFont().deriveFont(jLabelVolumePraca.getFont().getSize()+4f));
-        jLabelVolumePraca.setText("0.00 m³");
+        jLabelVolumeMadeiraPraca.setFont(jLabelVolumeMadeiraPraca.getFont().deriveFont(jLabelVolumeMadeiraPraca.getFont().getSize()+4f));
+        jLabelVolumeMadeiraPraca.setText("Volume atual de madeira: 0.00 m³");
+
+        jLabelMunicipio.setFont(jLabelMunicipio.getFont().deriveFont(jLabelMunicipio.getFont().getSize()+4f));
+        jLabelMunicipio.setText("Municipio: ");
+
+        jLabelUPC.setFont(jLabelUPC.getFont().deriveFont(jLabelUPC.getFont().getSize()+4f));
+        jLabelUPC.setText("UPC:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(96, 96, 96)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(60, 60, 60)
-                                .addComponent(jTextFieldForno, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextFieldVolume_madeira, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButtonRegistrarMadeiraForno, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(111, 111, 111)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelVolumePraca)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabelTalhao))))
+                    .addComponent(jLabelUPC)
+                    .addComponent(jLabelVolumeMadeiraPraca)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel4)
+                            .addGap(60, 60, 60)
+                            .addComponent(jTextFieldForno, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextFieldVolume_madeira, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jButtonRegistrarMadeiraForno, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabelMunicipio)
+                    .addComponent(jLabelFazenda)
+                    .addComponent(jLabelTalhao))
                 .addContainerGap(100, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(79, 79, 79)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelVolumePraca)
-                .addGap(54, 54, 54)
+                .addGap(22, 22, 22)
+                .addComponent(jLabelMunicipio)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelFazenda)
+                .addGap(18, 18, 18)
                 .addComponent(jLabelTalhao)
-                .addGap(50, 50, 50)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelUPC)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelVolumeMadeiraPraca)
+                .addGap(57, 57, 57)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTextFieldVolume_madeira, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -381,12 +397,14 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabelFazenda;
     private javax.swing.JLabel jLabelIdTipo;
+    private javax.swing.JLabel jLabelMunicipio;
     private javax.swing.JLabel jLabelNome;
     private javax.swing.JLabel jLabelTalhao;
     private javax.swing.JLabel jLabelTitulo;
-    private javax.swing.JLabel jLabelVolumePraca;
+    private javax.swing.JLabel jLabelUPC;
+    private javax.swing.JLabel jLabelVolumeMadeiraPraca;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

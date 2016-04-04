@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  */
 public class InserirFazenda extends javax.swing.JFrame {
 
+    private int projeto = 0;
     /**
      * Creates new form InserirFazenda
      */
@@ -82,6 +83,7 @@ public class InserirFazenda extends javax.swing.JFrame {
     private void RegistrarFazenda(){
         //DateFormat data_estoque_principal = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
         //Date date = new Date();
+        projeto++;
         
         ControleFazenda fazenda = new ControleFazenda();
         fazenda.setCod_estado(jComboBoxEstado.getSelectedIndex());
@@ -91,7 +93,7 @@ public class InserirFazenda extends javax.swing.JFrame {
         fazenda.setMunicipio(jTextFieldMunicipio.getText());
         fazenda.setFazenda(jTextFieldFazenda.getText());
         //fazenda.setProjeto(jComboBoxProjeto.getSelectedIndex());
-        fazenda.setProjeto('1');
+        fazenda.setProjeto(projeto);
                
         //fazenda.setData_estoque(data_estoque_principal.format(date));
         //fazenda.setId_operario(ControlePrincipal.id_op);
@@ -103,7 +105,6 @@ public class InserirFazenda extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InserirFazenda.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         this.setVisible(false);
         dispose();
     }
@@ -114,7 +115,6 @@ public class InserirFazenda extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InserirFazenda.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         this.setVisible(false);
         dispose();
     }

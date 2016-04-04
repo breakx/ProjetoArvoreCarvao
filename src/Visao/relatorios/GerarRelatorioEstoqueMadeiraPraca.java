@@ -74,8 +74,7 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
             String id_operario_carv = jTableMadeiraEstoquePraca.getValueAt(linha, 6).toString();
             String volume_carvao = jTableMadeiraEstoquePraca.getValueAt(linha, 7).toString();
             String data_saida_carvao_forno = jTableMadeiraEstoquePraca.getValueAt(linha, 8).toString();
-
-            //new Alterar_RetirarCarvaoForno(id_controle_carvao, id_operario_carv, volume_carvao, data_saida_carvao_forno).setVisible(true);
+            this.setVisible(false);
             dispose();
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
     }

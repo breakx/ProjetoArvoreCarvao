@@ -19,7 +19,7 @@ public class AlterarCarvaoCtrl {
                 + "id_operario_carv = '"+ carvao.getId_operario()
                 + "', `volume_carvao` = '"+carvao.getVolume_carvao()
                 + "', `data_saida_carvao_forno` = '"+carvao.getData_saida_carvao()
-                + "', `fator` = '"+carvao.getFator()
+                + "', `rend_grav_forno` = '"+carvao.getRend_grav_forno()
                 + "' WHERE id_controle_carvao = "+carvao.getId_controle_carvao();
         ExecutarSql execut = new ExecutarSql();
         execut.executar(query);

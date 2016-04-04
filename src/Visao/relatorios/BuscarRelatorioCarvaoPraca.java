@@ -6,8 +6,8 @@
 package Visao.relatorios;
 
 import Controle.ControlePrincipal;
+import Visao.carvao.GerenciarCarvaoForno;
 import Visao.login.Login;
-import Visao.madeira.GerenciarMadeiraTalhaoPraca;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,9 +54,9 @@ public class BuscarRelatorioCarvaoPraca extends javax.swing.JFrame {
     
     private void VoltarMenu(){        
         try {
-            new GerenciarMadeiraTalhaoPraca().setVisible(true);
+            new GerenciarCarvaoForno().setVisible(true);
         } catch (SQLException ex) {
-            Logger.getLogger(BuscarRelatorioMadeiraEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BuscarRelatorioCarvaoPraca.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(false);
         dispose();

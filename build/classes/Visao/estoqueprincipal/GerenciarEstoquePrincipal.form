@@ -171,15 +171,15 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jButtonLogout" alignment="1" pref="248" max="32767" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jButtonInserir" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
-                              <Component id="jButtonAlterar" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
-                              <Component id="jButtonExcluir" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jButtonExcluir" linkSize="1" alignment="0" pref="100" max="32767" attributes="0"/>
+                              <Component id="jButtonAtualizar" linkSize="1" alignment="0" pref="100" max="32767" attributes="0"/>
+                              <Component id="jButtonVoltar2" linkSize="1" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
@@ -191,13 +191,13 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace pref="18" max="32767" attributes="0"/>
-                  <Component id="jButtonInserir" min="-2" pref="60" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jButtonAtualizar" linkSize="2" min="-2" pref="60" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButtonAlterar" min="-2" pref="60" max="-2" attributes="0"/>
+                  <Component id="jButtonVoltar2" linkSize="2" min="-2" pref="60" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButtonExcluir" min="-2" pref="60" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jButtonExcluir" linkSize="2" min="-2" pref="60" max="-2" attributes="0"/>
+                  <EmptySpace pref="25" max="32767" attributes="0"/>
                   <Component id="jButtonLogout" min="-2" pref="85" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -205,30 +205,17 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="jButtonInserir">
+        <Component class="javax.swing.JButton" name="jButtonAtualizar">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
               <FontInfo relative="true">
-                <Font component="jButtonInserir" property="font" relativeSize="true" size="1"/>
+                <Font component="jButtonAtualizar" property="font" relativeSize="true" size="1"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Inserir"/>
+            <Property name="text" type="java.lang.String" value="Atualizar"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonInserirActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButtonAlterar">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-              <FontInfo relative="true">
-                <Font component="jButtonAlterar" property="font" relativeSize="true" size="1"/>
-              </FontInfo>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Alterar"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAlterarActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAtualizarActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButtonExcluir">
@@ -255,6 +242,14 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonLogoutActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonVoltar2">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Voltar"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonVoltar2ActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
@@ -306,7 +301,7 @@
             <Component class="javax.swing.JTable" name="jTableEstoquePrincipal">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="45" rowCount="0">
+                  <Table columnCount="47" rowCount="0">
                     <Column editable="false" title="id_estoque" type="java.lang.Object"/>
                     <Column editable="false" title="estado" type="java.lang.Object"/>
                     <Column editable="false" title="bloco" type="java.lang.Object"/>
@@ -323,15 +318,16 @@
                     <Column editable="false" title="data_plantio" type="java.lang.Object"/>
                     <Column editable="false" title="data_rotacao_1" type="java.lang.Object"/>
                     <Column editable="false" title="data_rotacao_2" type="java.lang.Object"/>
+                    <Column editable="false" title="data_rotacao_3" type="java.lang.Object"/>
                     <Column editable="false" title="idade" type="java.lang.Object"/>
                     <Column editable="false" title="categoria" type="java.lang.Object"/>
                     <Column editable="false" title="situacao" type="java.lang.Object"/>
                     <Column editable="false" title="ima" type="java.lang.Object"/>
-                    <Column editable="false" title="mad_ton_tot" type="java.lang.Object"/>
-                    <Column editable="false" title="carv_ton_tot" type="java.lang.Object"/>
                     <Column editable="false" title="mdc_ha" type="java.lang.Object"/>
                     <Column editable="false" title="dens_mad" type="java.lang.Object"/>
                     <Column editable="false" title="dens_carv" type="java.lang.Object"/>
+                    <Column editable="false" title="mad_ton_ha" type="java.lang.Object"/>
+                    <Column editable="false" title="carv_ton_ha" type="java.lang.Object"/>
                     <Column editable="false" title="id_oper" type="java.lang.Object"/>
                     <Column editable="false" title="data_estoque" type="java.lang.Object"/>
                     <Column editable="false" title="vol_mad_est" type="java.lang.Object"/>
@@ -346,9 +342,10 @@
                     <Column editable="false" title="carv_ton_est" type="java.lang.Object"/>
                     <Column editable="false" title="carv_ton_real" type="java.lang.Object"/>
                     <Column editable="false" title="carv_ton_bal" type="java.lang.Object"/>
-                    <Column editable="false" title="mad_talhao" type="java.lang.Object"/>
                     <Column editable="false" title="mad_praca" type="java.lang.Object"/>
                     <Column editable="false" title="mad_forno" type="java.lang.Object"/>
+                    <Column editable="false" title="mad_ton_tot" type="java.lang.Object"/>
+                    <Column editable="false" title="carv_ton_tot" type="java.lang.Object"/>
                     <Column editable="false" title="rend_grav_est" type="java.lang.Object"/>
                     <Column editable="false" title="rend_grav_real" type="java.lang.Object"/>
                     <Column editable="false" title="fator_emp" type="java.lang.Object"/>
@@ -357,6 +354,16 @@
                 <Property name="autoResizeMode" type="int" value="0"/>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="2">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                       <Title/>
                       <Editor/>
@@ -593,7 +600,7 @@
                   <Dimension value="[450, 450]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[3000, 0]"/>
+                  <Dimension value="[3200, 0]"/>
                 </Property>
                 <Property name="requestFocusEnabled" type="boolean" value="false"/>
                 <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">

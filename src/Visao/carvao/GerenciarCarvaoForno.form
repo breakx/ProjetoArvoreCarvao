@@ -183,15 +183,13 @@
                       <Component id="jButtonLogout" alignment="1" pref="252" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jButtonExcluir" min="-2" pref="100" max="-2" attributes="0"/>
+                              <Component id="jButtonExcluir" linkSize="1" min="-2" pref="100" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="jButtonBuscarEstoque" max="32767" attributes="0"/>
-                                      <Component id="jButtonAlterar" pref="100" max="32767" attributes="0"/>
-                                  </Group>
+                                  <Component id="jButtonBuscarEstoque" linkSize="1" min="-2" pref="100" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jButtonGerarRelatorio" min="-2" pref="100" max="-2" attributes="0"/>
+                                  <Component id="jButtonGerarRelatorio" linkSize="1" min="-2" pref="100" max="-2" attributes="0"/>
                               </Group>
+                              <Component id="jButtonRetirarCarvaoForno" linkSize="1" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
@@ -203,16 +201,16 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace pref="19" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jButtonBuscarEstoque" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
-                      <Component id="jButtonGerarRelatorio" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
+                      <Component id="jButtonBuscarEstoque" linkSize="2" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
+                      <Component id="jButtonGerarRelatorio" linkSize="2" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButtonAlterar" min="-2" pref="60" max="-2" attributes="0"/>
+                  <Component id="jButtonRetirarCarvaoForno" linkSize="2" min="-2" pref="60" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButtonExcluir" min="-2" pref="60" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jButtonExcluir" linkSize="2" min="-2" pref="60" max="-2" attributes="0"/>
+                  <EmptySpace pref="26" max="32767" attributes="0"/>
                   <Component id="jButtonLogout" min="-2" pref="85" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -220,17 +218,17 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="jButtonAlterar">
+        <Component class="javax.swing.JButton" name="jButtonRetirarCarvaoForno">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
               <FontInfo relative="true">
-                <Font component="jButtonAlterar" property="font" relativeSize="true" size="1"/>
+                <Font component="jButtonRetirarCarvaoForno" property="font" relativeSize="true" size="1"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Alterar"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Retirar&lt;br&gt;Carvao&lt;br&gt;Forno&lt;/html&gt;"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAlterarActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRetirarCarvaoFornoActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButtonExcluir">
@@ -348,7 +346,7 @@
                     <Column editable="false" title="id_op_c" type="java.lang.Object"/>
                     <Column editable="false" title="vol_carv" type="java.lang.Object"/>
                     <Column editable="false" title="data_sai" type="java.lang.Object"/>
-                    <Column editable="false" title="fator" type="java.lang.Object"/>
+                    <Column editable="false" title="r_g_forno" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="autoResizeMode" type="int" value="0"/>

@@ -19,7 +19,7 @@ public class ControleCarvao {
     private String data_entrada_madeira_forno;
     private float volume_carvao;
     private String data_saida_carvao;
-    private float fator;
+    private float rend_grav_forno;
 
     /**
      * @return the id_controle_carvao
@@ -134,17 +134,17 @@ public class ControleCarvao {
     }
 
     /**
-     * @return the fator
+     * @return the rend_grav_forno
      */
-    public float getFator() {
-        return fator;
+    public float getRend_grav_forno() {
+        return rend_grav_forno;
     }
 
     /**
-     * @param fator the fator to set
+     * @param rend_grav_forno the rend_grav_forno to set
      */
-    public void setFator(float fator) {
-        this.fator = fator;
+    public void setRend_grav_forno(float rend_grav_forno) {
+        this.rend_grav_forno = rend_grav_forno;
     }
 
     /**

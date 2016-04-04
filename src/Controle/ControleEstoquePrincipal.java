@@ -12,36 +12,51 @@ package Controle;
 public class ControleEstoquePrincipal {
     private String id_estoque_p;
     private String estado; 
-    private String upc;
     private String bloco; 
     private String municipio; 
     private String fazenda; 
     private String projeto; 
-    private int ano_rotacao; 
-    private String talhao; 
+    private String upc;
+    private int talhao; 
     private float area; 
     private float m3_ha; 
-    private String data_plantio;
     private int material_genetico;
-    private String talhadia;
+    private int talhadia;
+    private int ano_rotacao; 
+    private String data_plantio;
     private String data_rotacao_1;
     private String data_rotacao_2;
+    private String data_rotacao_3;
     private float idade;
     private String categoria;
     private String situacao;
     private float ima; 
-    private float mdc_ha;
-    private float mdc; 
-    private float densidade_carvao; 
-    private float densidade_madeira; 
-    private String id_operario;
-    private String data_estoque;
-    private float volume_estimado;
-    private float madeira_talhao; 
-    private float madeira_praca;
-    private float madeira_forno; 
     private float mad_ton_tot;
     private float carv_ton_tot;
+    private float mdc_ha;
+    private float densidade_madeira; 
+    private float densidade_carvao; 
+    private float mad_ton_ha; 
+    private float carv_ton_ha; 
+    private String id_operario;
+    private String data_estoque;
+    private float vol_mad_estimado;
+    private float vol_mad_real; 
+    private float vol_mad_balanco;
+    private float mdc_estimado; 
+    private float mdc_real;
+    private float mdc_balanco;
+    private float mad_ton_estimado; 
+    private float mad_ton_real;
+    private float mad_ton_balanco; 
+    private float carv_ton_estimado;
+    private float carv_ton_real;
+    private float carv_ton_balanco; 
+    private float madeira_praca;
+    private float madeira_forno; 
+    private float rend_grav_estimado;
+    private float rend_grav_real; 
+    private float fator_empilalhemto;      
 
     /**
      * @return the id_estoque_p
@@ -69,20 +84,6 @@ public class ControleEstoquePrincipal {
      */
     public void setEstado(String estado) {
         this.estado = estado;
-    }
-
-    /**
-     * @return the upc
-     */
-    public String getUpc() {
-        return upc;
-    }
-
-    /**
-     * @param upc the upc to set
-     */
-    public void setUpc(String upc) {
-        this.upc = upc;
     }
 
     /**
@@ -142,30 +143,30 @@ public class ControleEstoquePrincipal {
     }
 
     /**
-     * @return the ano_rotacao
+     * @return the upc
      */
-    public int getAno_rotacao() {
-        return ano_rotacao;
+    public String getUpc() {
+        return upc;
     }
 
     /**
-     * @param ano_rotacao the ano_rotacao to set
+     * @param upc the upc to set
      */
-    public void setAno_rotacao(int ano_rotacao) {
-        this.ano_rotacao = ano_rotacao;
+    public void setUpc(String upc) {
+        this.upc = upc;
     }
 
     /**
      * @return the talhao
      */
-    public String getTalhao() {
+    public int getTalhao() {
         return talhao;
     }
 
     /**
      * @param talhao the talhao to set
      */
-    public void setTalhao(String talhao) {
+    public void setTalhao(int talhao) {
         this.talhao = talhao;
     }
 
@@ -184,17 +185,17 @@ public class ControleEstoquePrincipal {
     }
 
     /**
-     * @return the talhadia
+     * @return the m3_ha
      */
-    public String getTalhadia() {
-        return talhadia;
+    public float getM3_ha() {
+        return m3_ha;
     }
 
     /**
-     * @param talhadia the talhadia to set
+     * @param m3_ha the m3_ha to set
      */
-    public void setTalhadia(String talhadia) {
-        this.talhadia = talhadia;
+    public void setM3_ha(float m3_ha) {
+        this.m3_ha = m3_ha;
     }
 
     /**
@@ -209,6 +210,34 @@ public class ControleEstoquePrincipal {
      */
     public void setMaterial_genetico(int material_genetico) {
         this.material_genetico = material_genetico;
+    }
+
+    /**
+     * @return the talhadia
+     */
+    public int getTalhadia() {
+        return talhadia;
+    }
+
+    /**
+     * @param talhadia the talhadia to set
+     */
+    public void setTalhadia(int talhadia) {
+        this.talhadia = talhadia;
+    }
+
+    /**
+     * @return the ano_rotacao
+     */
+    public int getAno_rotacao() {
+        return ano_rotacao;
+    }
+
+    /**
+     * @param ano_rotacao the ano_rotacao to set
+     */
+    public void setAno_rotacao(int ano_rotacao) {
+        this.ano_rotacao = ano_rotacao;
     }
 
     /**
@@ -254,6 +283,20 @@ public class ControleEstoquePrincipal {
     }
 
     /**
+     * @return the data_rotacao_3
+     */
+    public String getData_rotacao_3() {
+        return data_rotacao_3;
+    }
+
+    /**
+     * @param data_rotacao_3 the data_rotacao_3 to set
+     */
+    public void setData_rotacao_3(String data_rotacao_3) {
+        this.data_rotacao_3 = data_rotacao_3;
+    }
+
+    /**
      * @return the idade
      */
     public float getIdade() {
@@ -296,20 +339,6 @@ public class ControleEstoquePrincipal {
     }
 
     /**
-     * @return the volume_estimado
-     */
-    public float getVolume_estimado() {
-        return volume_estimado;
-    }
-
-    /**
-     * @param volume_estimado the volume_estimado to set
-     */
-    public void setVolume_estimado(float volume_estimado) {
-        this.volume_estimado = volume_estimado;
-    }
-
-    /**
      * @return the ima
      */
     public float getIma() {
@@ -321,104 +350,6 @@ public class ControleEstoquePrincipal {
      */
     public void setIma(float ima) {
         this.ima = ima;
-    }
-
-    /**
-     * @return the mdc_ha
-     */
-    public float getMdc_ha() {
-        return mdc_ha;
-    }
-
-    /**
-     * @param mdc_ha the mdc_ha to set
-     */
-    public void setMdc_ha(float mdc_ha) {
-        this.mdc_ha = mdc_ha;
-    }
-
-    /**
-     * @return the densidade_carvao
-     */
-    public float getDensidade_carvao() {
-        return densidade_carvao;
-    }
-
-    /**
-     * @param densidade_carvao the densidade_carvao to set
-     */
-    public void setDensidade_carvao(float densidade_carvao) {
-        this.densidade_carvao = densidade_carvao;
-    }
-
-    /**
-     * @return the densidade_madeira
-     */
-    public float getDensidade_madeira() {
-        return densidade_madeira;
-    }
-
-    /**
-     * @param densidade_madeira the densidade_madeira to set
-     */
-    public void setDensidade_madeira(float densidade_madeira) {
-        this.densidade_madeira = densidade_madeira;
-    }
-
-    /**
-     * @return the madeira_talhao
-     */
-    public float getMadeira_talhao() {
-        return madeira_talhao;
-    }
-
-    /**
-     * @param madeira_talhao the madeira_talhao to set
-     */
-    public void setMadeira_talhao(float madeira_talhao) {
-        this.madeira_talhao = madeira_talhao;
-    }
-
-    /**
-     * @return the madeira_praca
-     */
-    public float getMadeira_praca() {
-        return madeira_praca;
-    }
-
-    /**
-     * @param madeira_praca the madeira_praca to set
-     */
-    public void setMadeira_praca(float madeira_praca) {
-        this.madeira_praca = madeira_praca;
-    }
-
-    /**
-     * @return the madeira_forno
-     */
-    public float getMadeira_forno() {
-        return madeira_forno;
-    }
-
-    /**
-     * @param madeira_forno the madeira_forno to set
-     */
-    public void setMadeira_forno(float madeira_forno) {
-        this.madeira_forno = madeira_forno;
-    }
-
-    /**
-     * @return the mdc
-     */
-    public float getMdc() {
-        return mdc;
-    }
-
-    /**
-     * @param mdc the mdc to set
-     */
-    public void setMdc(float mdc) {
-        this.mdc = mdc;
     }
 
     /**
@@ -450,17 +381,73 @@ public class ControleEstoquePrincipal {
     }
 
     /**
-     * @return the data_estoque
+     * @return the mdc_ha
      */
-    public String getData_estoque() {
-        return data_estoque;
+    public float getMdc_ha() {
+        return mdc_ha;
     }
 
     /**
-     * @param data_estoque the data_estoque to set
+     * @param mdc_ha the mdc_ha to set
      */
-    public void setData_estoque(String data_estoque) {
-        this.data_estoque = data_estoque;
+    public void setMdc_ha(float mdc_ha) {
+        this.mdc_ha = mdc_ha;
+    }
+
+    /**
+     * @return the densidade_madeira
+     */
+    public float getDensidade_madeira() {
+        return densidade_madeira;
+    }
+
+    /**
+     * @param densidade_madeira the densidade_madeira to set
+     */
+    public void setDensidade_madeira(float densidade_madeira) {
+        this.densidade_madeira = densidade_madeira;
+    }
+
+    /**
+     * @return the densidade_carvao
+     */
+    public float getDensidade_carvao() {
+        return densidade_carvao;
+    }
+
+    /**
+     * @param densidade_carvao the densidade_carvao to set
+     */
+    public void setDensidade_carvao(float densidade_carvao) {
+        this.densidade_carvao = densidade_carvao;
+    }
+
+    /**
+     * @return the mad_ton_ha
+     */
+    public float getMad_ton_ha() {
+        return mad_ton_ha;
+    }
+
+    /**
+     * @param mad_ton_ha the mad_ton_ha to set
+     */
+    public void setMad_ton_ha(float mad_ton_ha) {
+        this.mad_ton_ha = mad_ton_ha;
+    }
+
+    /**
+     * @return the carv_ton_ha
+     */
+    public float getCarv_ton_ha() {
+        return carv_ton_ha;
+    }
+
+    /**
+     * @param carv_ton_ha the carv_ton_ha to set
+     */
+    public void setCarv_ton_ha(float carv_ton_ha) {
+        this.carv_ton_ha = carv_ton_ha;
     }
 
     /**
@@ -478,17 +465,254 @@ public class ControleEstoquePrincipal {
     }
 
     /**
-     * @return the m3_ha
+     * @return the data_estoque
      */
-    public float getM3_ha() {
-        return m3_ha;
+    public String getData_estoque() {
+        return data_estoque;
     }
 
     /**
-     * @param m3_ha the m3_ha to set
+     * @param data_estoque the data_estoque to set
      */
-    public void setM3_ha(float m3_ha) {
-        this.m3_ha = m3_ha;
+    public void setData_estoque(String data_estoque) {
+        this.data_estoque = data_estoque;
     }
-    
+
+    /**
+     * @return the vol_mad_estimado
+     */
+    public float getVol_mad_estimado() {
+        return vol_mad_estimado;
+    }
+
+    /**
+     * @param vol_mad_estimado the vol_mad_estimado to set
+     */
+    public void setVol_mad_estimado(float vol_mad_estimado) {
+        this.vol_mad_estimado = vol_mad_estimado;
+    }
+
+    /**
+     * @return the vol_mad_real
+     */
+    public float getVol_mad_real() {
+        return vol_mad_real;
+    }
+
+    /**
+     * @param vol_mad_real the vol_mad_real to set
+     */
+    public void setVol_mad_real(float vol_mad_real) {
+        this.vol_mad_real = vol_mad_real;
+    }
+
+    /**
+     * @return the vol_mad_balanco
+     */
+    public float getVol_mad_balanco() {
+        return vol_mad_balanco;
+    }
+
+    /**
+     * @param vol_mad_balanco the vol_mad_balanco to set
+     */
+    public void setVol_mad_balanco(float vol_mad_balanco) {
+        this.vol_mad_balanco = vol_mad_balanco;
+    }
+
+    /**
+     * @return the mdc_estimado
+     */
+    public float getMdc_estimado() {
+        return mdc_estimado;
+    }
+
+    /**
+     * @param mdc_estimado the mdc_estimado to set
+     */
+    public void setMdc_estimado(float mdc_estimado) {
+        this.mdc_estimado = mdc_estimado;
+    }
+
+    /**
+     * @return the mdc_real
+     */
+    public float getMdc_real() {
+        return mdc_real;
+    }
+
+    /**
+     * @param mdc_real the mdc_real to set
+     */
+    public void setMdc_real(float mdc_real) {
+        this.mdc_real = mdc_real;
+    }
+
+    /**
+     * @return the mdc_balanco
+     */
+    public float getMdc_balanco() {
+        return mdc_balanco;
+    }
+
+    /**
+     * @param mdc_balanco the mdc_balanco to set
+     */
+    public void setMdc_balanco(float mdc_balanco) {
+        this.mdc_balanco = mdc_balanco;
+    }
+
+    /**
+     * @return the mad_ton_estimado
+     */
+    public float getMad_ton_estimado() {
+        return mad_ton_estimado;
+    }
+
+    /**
+     * @param mad_ton_estimado the mad_ton_estimado to set
+     */
+    public void setMad_ton_estimado(float mad_ton_estimado) {
+        this.mad_ton_estimado = mad_ton_estimado;
+    }
+
+    /**
+     * @return the mad_ton_real
+     */
+    public float getMad_ton_real() {
+        return mad_ton_real;
+    }
+
+    /**
+     * @param mad_ton_real the mad_ton_real to set
+     */
+    public void setMad_ton_real(float mad_ton_real) {
+        this.mad_ton_real = mad_ton_real;
+    }
+
+    /**
+     * @return the mad_ton_balanco
+     */
+    public float getMad_ton_balanco() {
+        return mad_ton_balanco;
+    }
+
+    /**
+     * @param mad_ton_balanco the mad_ton_balanco to set
+     */
+    public void setMad_ton_balanco(float mad_ton_balanco) {
+        this.mad_ton_balanco = mad_ton_balanco;
+    }
+
+    /**
+     * @return the carv_ton_estimado
+     */
+    public float getCarv_ton_estimado() {
+        return carv_ton_estimado;
+    }
+
+    /**
+     * @param carv_ton_estimado the carv_ton_estimado to set
+     */
+    public void setCarv_ton_estimado(float carv_ton_estimado) {
+        this.carv_ton_estimado = carv_ton_estimado;
+    }
+
+    /**
+     * @return the carv_ton_real
+     */
+    public float getCarv_ton_real() {
+        return carv_ton_real;
+    }
+
+    /**
+     * @param carv_ton_real the carv_ton_real to set
+     */
+    public void setCarv_ton_real(float carv_ton_real) {
+        this.carv_ton_real = carv_ton_real;
+    }
+
+    /**
+     * @return the carv_ton_balanco
+     */
+    public float getCarv_ton_balanco() {
+        return carv_ton_balanco;
+    }
+
+    /**
+     * @param carv_ton_balanco the carv_ton_balanco to set
+     */
+    public void setCarv_ton_balanco(float carv_ton_balanco) {
+        this.carv_ton_balanco = carv_ton_balanco;
+    }
+
+    /**
+     * @return the madeira_praca
+     */
+    public float getMadeira_praca() {
+        return madeira_praca;
+    }
+
+    /**
+     * @param madeira_praca the madeira_praca to set
+     */
+    public void setMadeira_praca(float madeira_praca) {
+        this.madeira_praca = madeira_praca;
+    }
+
+    /**
+     * @return the madeira_forno
+     */
+    public float getMadeira_forno() {
+        return madeira_forno;
+    }
+
+    /**
+     * @param madeira_forno the madeira_forno to set
+     */
+    public void setMadeira_forno(float madeira_forno) {
+        this.madeira_forno = madeira_forno;
+    }
+
+    /**
+     * @return the rend_grav_estimado
+     */
+    public float getRend_grav_estimado() {
+        return rend_grav_estimado;
+    }
+
+    /**
+     * @param rend_grav_estimado the rend_grav_estimado to set
+     */
+    public void setRend_grav_estimado(float rend_grav_estimado) {
+        this.rend_grav_estimado = rend_grav_estimado;
+    }
+
+    /**
+     * @return the rend_grav_real
+     */
+    public float getRend_grav_real() {
+        return rend_grav_real;
+    }
+
+    /**
+     * @param rend_grav_real the rend_grav_real to set
+     */
+    public void setRend_grav_real(float rend_grav_real) {
+        this.rend_grav_real = rend_grav_real;
+    }
+
+    /**
+     * @return the fator_empilalhemto
+     */
+    public float getFator_empilalhemto() {
+        return fator_empilalhemto;
+    }
+
+    /**
+     * @param fator_empilalhemto the fator_empilalhemto to set
+     */
+    public void setFator_empilalhemto(float fator_empilalhemto) {
+        this.fator_empilalhemto = fator_empilalhemto;
+    }
 }

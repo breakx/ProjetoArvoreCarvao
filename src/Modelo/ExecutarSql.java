@@ -27,13 +27,13 @@ public class ExecutarSql {
         {
             try
             {
-                //JOptionPane.showMessageDialog(null, "SQL= "+comando);
+                JOptionPane.showMessageDialog(null, "SQL= "+comando);
                 ConexaoBD conexao = ConexaoBD.getConexao();
                 Statement stmt = ConexaoBD.con.createStatement();
                 stmt.executeUpdate(comando);
                 stmt.close();
                 conexao.fecharConexao();
-                if(ControlePrincipal.id_estoque_principal!=null){
+                if(ControlePrincipal.atualizarDados!=null){
                     UpdateEstoque();
                 }
             }
@@ -51,45 +51,30 @@ public class ExecutarSql {
     }
     
     private void UpdateEstoque(){
-        ControlePrincipal.volume_madeira_total = ControlePrincipal.volume_madeira_talhao+ControlePrincipal.volume_madeira_praca+ControlePrincipal.volume_madeira_forno;
         String query = "";
+        if(ControlePrincipal.tipo_u.equals("op_m")){
+            query = "UPDATE estoque_principal SET "
+                + "`vol_mad_real` = '"+ControlePrincipal.vol_mad_real
+                + "', `vol_mad_balanco` = '"+ControlePrincipal.vol_mad_balanco
+                + "', `mad_ton_real` = '"+ControlePrincipal.mad_ton_real
+                + "', `mad_ton_balanco` = '"+ControlePrincipal.mad_ton_balanco
+                + "', `madeira_praca` = '"+ControlePrincipal.madeira_praca 
+                + "', `mad_ton_tot` = '"+ControlePrincipal.mad_ton_tot
+                + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
+        }else if(ControlePrincipal.tipo_u.equals("op_c")){
+            query = "UPDATE estoque_principal SET "
+                + "`mdc_real` = '"+ControlePrincipal.mdc_real
+                + "', `mdc_balanco` = '"+ControlePrincipal.mdc_balanco
+                + "', `carv_ton_real` = '"+ControlePrincipal.carv_ton_real
+                + "', `carv_ton_balanco` = '"+ControlePrincipal.carv_ton_balanco
+                + "', `madeira_praca` = '"+ControlePrincipal.madeira_praca
+                + "', `madeira_forno` = '"+ControlePrincipal.madeira_forno   
+                + "', `carv_ton_tot` = '"+ControlePrincipal.carv_ton_tot
+                + "', `rend_grav_real` = '"+ControlePrincipal.rend_grav_real
+                + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
+        }
         
-        /*if(ControlePrincipal.volume_madeira_talhao > 0){
-            query = "UPDATE estoque_principal SET "
-                + "`madeira_talhao` = '"+ControlePrincipal.volume_madeira_talhao    
-                + "', `mad_ton_tot` = '"+ControlePrincipal.volume_madeira_total           
-                + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
-        }else if(ControlePrincipal.volume_madeira_praca > 0){
-            query = "UPDATE estoque_principal SET "
-                + "`madeira_praca` = '"+ControlePrincipal.volume_madeira_praca
-                + "', `mad_ton_tot` = '"+ControlePrincipal.volume_madeira_total
-                + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
-        }else if(ControlePrincipal.volume_madeira_forno > 0){
-            query = "UPDATE estoque_principal SET "
-                + "`madeira_praca` = '"+ControlePrincipal.volume_madeira_praca
-                + "', `madeira_forno` = '"+ControlePrincipal.volume_madeira_forno
-                + "', `mad_ton_tot` = '"+ControlePrincipal.volume_madeira_total
-                + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
-        }else if(ControlePrincipal.volume_carvao_total > 0){
-            query = "UPDATE estoque_principal SET "
-                + "`madeira_forno` = '"+ControlePrincipal.volume_madeira_forno
-                + "', `carv_ton_tot` = '"+ControlePrincipal.volume_carvao_total
-                + "', `mad_ton_tot` = '"+ControlePrincipal.volume_madeira_total
-                + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
-        }/*else if(ControlePrincipal.volume_madeira_total > 0){
-            query = "UPDATE estoque_principal SET "
-                + "`mad_ton_tot` = '"+ControlePrincipal.volume_madeira_total
-                + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
-        }*/
-        query = "UPDATE estoque_principal SET "
-                + "`madeira_talhao` = '"+ControlePrincipal.volume_madeira_talhao
-                + "', `madeira_praca` = '"+ControlePrincipal.volume_madeira_praca
-                + "', `madeira_forno` = '"+ControlePrincipal.volume_madeira_forno
-                + "', `mad_ton_tot` = '"+ControlePrincipal.volume_madeira_total
-                + "', `carv_ton_tot` = '"+ControlePrincipal.volume_carvao_total
-                + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
-        
-        //JOptionPane.showMessageDialog(null, "Executar Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_total+" carv: "+ControlePrincipal.volume_carvao_total);
+        //JOptionPane.showMessageDialog(null, "Executar Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_real+" carv: "+ControlePrincipal.volume_carvao_real);
         
         try {
             ConexaoBD conexao = ConexaoBD.getConexao();
@@ -100,11 +85,31 @@ public class ExecutarSql {
         } catch (SQLException ex) {
             Logger.getLogger(ExecutarSql.class.getName()).log(Level.SEVERE, null, ex);
         }     
+        LimparDados();        
+    }
+    
+    public void LimparDados(){
         ControlePrincipal.id_estoque_principal = null;
-        ControlePrincipal.volume_carvao_total = 0;
-        ControlePrincipal.volume_madeira_forno = 0;
-        ControlePrincipal.volume_madeira_praca = 0;
-        ControlePrincipal.volume_madeira_talhao = 0;
-        ControlePrincipal.volume_madeira_total = 0;
+        ControlePrincipal.densidade_madeira = 0;
+        ControlePrincipal.densidade_carvao = 0;
+    
+        ControlePrincipal.vol_mad_estimado = 0;
+        ControlePrincipal.vol_mad_real = 0;
+        ControlePrincipal.vol_mad_balanco = 0;
+        ControlePrincipal.mdc_estimado = 0;
+        ControlePrincipal.mdc_real = 0;
+        ControlePrincipal.mdc_balanco = 0;
+        ControlePrincipal.mad_ton_estimado = 0;
+        ControlePrincipal.mad_ton_real = 0;
+        ControlePrincipal.mad_ton_balanco = 0;
+        ControlePrincipal.carv_ton_estimado = 0;
+        ControlePrincipal.carv_ton_real = 0;
+        ControlePrincipal.carv_ton_balanco = 0;
+        ControlePrincipal.madeira_praca = 0;
+        ControlePrincipal.madeira_forno = 0;
+        ControlePrincipal.mad_ton_tot = 0;
+        ControlePrincipal.carv_ton_tot = 0;
+        ControlePrincipal.rend_grav_real = 0;
+        ControlePrincipal.atualizarDados = null;
     }
 }

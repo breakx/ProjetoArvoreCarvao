@@ -66,7 +66,7 @@
           <Font name="Serif" size="36" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="Relatorio Estoque Principal"/>
+        <Property name="text" type="java.lang.String" value="Relatorio Estoque Principal M/C"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[275, 70]"/>
@@ -284,206 +284,57 @@
             <Component class="javax.swing.JTable" name="jTableRelatorioEstoquePrincipal">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="32" rowCount="0">
+                  <Table columnCount="47" rowCount="0">
                     <Column editable="false" title="id_estoque" type="java.lang.Object"/>
                     <Column editable="false" title="estado" type="java.lang.Object"/>
-                    <Column editable="false" title="upc" type="java.lang.Object"/>
                     <Column editable="false" title="bloco" type="java.lang.Object"/>
                     <Column editable="false" title="municipio" type="java.lang.Object"/>
                     <Column editable="false" title="fazenda" type="java.lang.Object"/>
                     <Column editable="false" title="projeto" type="java.lang.Object"/>
-                    <Column editable="false" title="ano_rotacao" type="java.lang.Object"/>
+                    <Column editable="false" title="upc" type="java.lang.Object"/>
                     <Column editable="false" title="talhao" type="java.lang.Object"/>
                     <Column editable="false" title="area" type="java.lang.Object"/>
                     <Column editable="false" title="m3/ha" type="java.lang.Object"/>
-                    <Column editable="false" title="data_plantio" type="java.lang.Object"/>
                     <Column editable="false" title="mat_gen" type="java.lang.Object"/>
                     <Column editable="false" title="talhadia" type="java.lang.Object"/>
+                    <Column editable="false" title="ano_rotacao" type="java.lang.Object"/>
+                    <Column editable="false" title="data_plantio" type="java.lang.Object"/>
                     <Column editable="false" title="data_rotacao_1" type="java.lang.Object"/>
                     <Column editable="false" title="data_rotacao_2" type="java.lang.Object"/>
+                    <Column editable="false" title="data_rotacao_3" type="java.lang.Object"/>
                     <Column editable="false" title="idade" type="java.lang.Object"/>
                     <Column editable="false" title="categoria" type="java.lang.Object"/>
                     <Column editable="false" title="situacao" type="java.lang.Object"/>
                     <Column editable="false" title="ima" type="java.lang.Object"/>
                     <Column editable="false" title="mdc_ha" type="java.lang.Object"/>
-                    <Column editable="false" title="mdc" type="java.lang.Object"/>
-                    <Column editable="false" title="dens_carv" type="java.lang.Object"/>
                     <Column editable="false" title="dens_mad" type="java.lang.Object"/>
+                    <Column editable="false" title="dens_carv" type="java.lang.Object"/>
+                    <Column editable="false" title="mad_ton_ha" type="java.lang.Object"/>
+                    <Column editable="false" title="carv_ton_ha" type="java.lang.Object"/>
                     <Column editable="false" title="id_oper" type="java.lang.Object"/>
                     <Column editable="false" title="data_estoque" type="java.lang.Object"/>
-                    <Column editable="false" title="vol_estimado" type="java.lang.Object"/>
-                    <Column editable="false" title="mad_talhao" type="java.lang.Object"/>
+                    <Column editable="false" title="vol_mad_est" type="java.lang.Object"/>
+                    <Column editable="false" title="vol_mad_real" type="java.lang.Object"/>
+                    <Column editable="false" title="vol_mad_bal" type="java.lang.Object"/>
+                    <Column editable="false" title="mdc_est" type="java.lang.Object"/>
+                    <Column editable="false" title="mdc_real" type="java.lang.Object"/>
+                    <Column editable="false" title="mdc_bal" type="java.lang.Object"/>
+                    <Column editable="false" title="mad_ton_est" type="java.lang.Object"/>
+                    <Column editable="false" title="mad_ton_real" type="java.lang.Object"/>
+                    <Column editable="false" title="mad_ton_bal" type="java.lang.Object"/>
+                    <Column editable="false" title="carv_ton_est" type="java.lang.Object"/>
+                    <Column editable="false" title="carv_ton_real" type="java.lang.Object"/>
+                    <Column editable="false" title="carv_ton_bal" type="java.lang.Object"/>
                     <Column editable="false" title="mad_praca" type="java.lang.Object"/>
                     <Column editable="false" title="mad_forno" type="java.lang.Object"/>
-                    <Column editable="false" title="mad_tot" type="java.lang.Object"/>
-                    <Column editable="false" title="carv_tot" type="java.lang.Object"/>
+                    <Column editable="false" title="mad_ton_tot" type="java.lang.Object"/>
+                    <Column editable="false" title="carv_ton_tot" type="java.lang.Object"/>
+                    <Column editable="false" title="rend_grav_est" type="java.lang.Object"/>
+                    <Column editable="false" title="rend_grav_real" type="java.lang.Object"/>
+                    <Column editable="false" title="fator_emp" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="autoResizeMode" type="int" value="0"/>
-                <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                  <TableColumnModel selectionModel="2">
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                  </TableColumnModel>
-                </Property>
                 <Property name="columnSelectionAllowed" type="boolean" value="true"/>
                 <Property name="fillsViewportHeight" type="boolean" value="true"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -493,7 +344,7 @@
                   <Dimension value="[450, 450]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[2300, 0]"/>
+                  <Dimension value="[3200, 0]"/>
                 </Property>
                 <Property name="requestFocusEnabled" type="boolean" value="false"/>
                 <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">

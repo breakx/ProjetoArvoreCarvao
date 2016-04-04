@@ -106,6 +106,7 @@ public class ExcluirUsuario extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(ExcluirUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.setVisible(false);
         dispose();
     }//GEN-LAST:event_jButtonSimActionPerformed
 
@@ -116,6 +117,7 @@ public class ExcluirUsuario extends javax.swing.JFrame {
        } catch (SQLException ex) {
            Logger.getLogger(InserirUsuario.class.getName()).log(Level.SEVERE, null, ex);
        }
+        this.setVisible(false);
         dispose();
     }//GEN-LAST:event_jButtonnaoActionPerformed
 

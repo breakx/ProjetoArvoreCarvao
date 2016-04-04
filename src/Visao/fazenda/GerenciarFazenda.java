@@ -10,6 +10,7 @@ import Controle.ControleFazenda;
 import Controle.ControlePrincipal;
 import Controle.fazenda.InserirFazendaCtrl;
 import Modelo.ConexaoBD;
+import Visao.estoqueprincipal.GerenciarEstoquePrincipal;
 import Visao.estoqueprincipal.InserirEstoquePrincipal;
 import Visao.login.Login;
 import java.sql.ResultSet;
@@ -25,11 +26,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class GerenciarFazenda extends javax.swing.JFrame {
 
+    private int projeto = 0;
     /**
      * Creates new form GereciarFazenda
      */
     public GerenciarFazenda() throws SQLException {
         initComponents();
+        jButtonExcluir.setVisible(false);
         CarregarNome();
         DefaultTableModel dtm = (DefaultTableModel) jTableFazenda.getModel();
         String query = "Select * from fazenda";
@@ -51,52 +54,67 @@ public class GerenciarFazenda extends javax.swing.JFrame {
             };
             dtm.addRow(reg);
         }
-        //JOptionPane.showMessageDialog(null, "Usuario: "+usuario.getNome_usuario());  
+        //JOptionPane.showMessageDialog(null, "Fazenda: ");  
         con.fecharConexao();
     }
     
     private void InserirInfo(){
         new InserirFazenda().setVisible(true);
+        this.setVisible(false);
         dispose();
     }
     
     private void AdicionarProjeto(){
         if(jTableFazenda.getSelectedRow()>=0)//verifica se a linha a ser alterada esta marcada
-        {
+        {                       
             int linha = jTableFazenda.getSelectedRow();
             String id_fazenda = jTableFazenda.getValueAt(linha, 0).toString();
             String estado = jTableFazenda.getValueAt(linha, 1).toString();
             String municipio = jTableFazenda.getValueAt(linha, 2).toString();
             String fazenda = jTableFazenda.getValueAt(linha, 3).toString();
-            int projeto = Integer.parseInt(jTableFazenda.getValueAt(linha, 4).toString());
+            //projeto = Integer.parseInt(jTableFazenda.getValueAt(linha, 4).toString());
             String bloco = jTableFazenda.getValueAt(linha, 5).toString();
             int  cod_est = Integer.parseInt(jTableFazenda.getValueAt(linha, 6).toString());
             int  cod_blc = Integer.parseInt(jTableFazenda.getValueAt(linha, 7).toString());
 
-            projeto++;
+            String query = "Select projeto from fazenda where municipio = '"+municipio+"' and fazenda = '"+fazenda+"'";
+            ConexaoBD con = ConexaoBD.getConexao();
+            ResultSet rs = con.consultaSql(query);
+                try {
+                    while(rs.next()){
+                        projeto++;
+                    }   
+                } catch (SQLException ex) {
+                    Logger.getLogger(GerenciarFazenda.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            JOptionPane.showMessageDialog(null, "Projeto: "+projeto);  
+            con.fecharConexao();
             
-            //new AlterarFazenda(id_fazenda, cod_est, municipio, fazenda, cod_blc, projeto).setVisible(true);
+            if(projeto<10){
+                projeto++;
             
-            ControleFazenda faz = new ControleFazenda();
-            faz.setId_fazenda(id_fazenda);
-            faz.setCod_estado(cod_est);
-            faz.setEstado(estado);
-            faz.setCod_bloco(cod_blc);
-            faz.setBloco(bloco);
-            faz.setMunicipio(municipio);
-            faz.setFazenda(fazenda);
-            faz.setProjeto(projeto);
-        
-            //SELECT * FROM notas WHERE id_notas >= 0 limit 10
+                ControleFazenda faz = new ControleFazenda();
+                faz.setId_fazenda(id_fazenda);
+                faz.setCod_estado(cod_est);
+                faz.setEstado(estado);
+                faz.setCod_bloco(cod_blc);
+                faz.setBloco(bloco);
+                faz.setMunicipio(municipio);
+                faz.setFazenda(fazenda);
+                faz.setProjeto(projeto);
 
-            InserirFazendaCtrl inserir = new InserirFazendaCtrl(faz); 
+                //SELECT * FROM notas WHERE id_notas >= 0 limit 10
+
+                InserirFazendaCtrl inserir = new InserirFazendaCtrl(faz); 
+            }else{
+                JOptionPane.showMessageDialog(null, "Fazenda atingiu limite max de "+projeto+" projetos.");
+            }
             
             try {
                 new GerenciarFazenda().setVisible(true);
             } catch (SQLException ex) {
                 Logger.getLogger(InserirFazenda.class.getName()).log(Level.SEVERE, null, ex);
             }
-
             this.setVisible(false);
             dispose();
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
@@ -116,6 +134,7 @@ public class GerenciarFazenda extends javax.swing.JFrame {
             String cod_blc = jTableFazenda.getValueAt(linha, 7).toString();
 
             new AlterarFazenda(id_fazenda, cod_est, municipio, fazenda, cod_blc, projeto).setVisible(true);
+            this.setVisible(false);
             dispose();
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
     }
@@ -124,7 +143,7 @@ public class GerenciarFazenda extends javax.swing.JFrame {
         if(jTableFazenda.getSelectedRow()>=0) {
             int linha = jTableFazenda.getSelectedRow();
             String id_fazenda = jTableFazenda.getValueAt(linha, 0).toString();
-            //new ExcluirFazenda(id_usuario).setVisible(true);
+            this.setVisible(false);
             dispose();
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
     }
@@ -155,8 +174,19 @@ public class GerenciarFazenda extends javax.swing.JFrame {
             estoque.setBloco(jTableFazenda.getValueAt(linha, 5).toString());*/
             
             new InserirEstoquePrincipal().setVisible(true);
+            this.setVisible(false);
             dispose();
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
+    }
+    
+    private void GerenciarEstoque(){
+        try {
+            new GerenciarEstoquePrincipal().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GerenciarFazenda.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        dispose();   
     }
 
     /**
@@ -180,6 +210,7 @@ public class GerenciarFazenda extends javax.swing.JFrame {
         jButtonInserir = new javax.swing.JButton();
         jButtonAdicionarProjeto = new javax.swing.JButton();
         jButtonCriarEstoque = new javax.swing.JButton();
+        jButtonGerenciarEstoque = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableFazenda = new javax.swing.JTable();
@@ -240,7 +271,7 @@ public class GerenciarFazenda extends javax.swing.JFrame {
         jPanel2.setPreferredSize(new java.awt.Dimension(270, 350));
 
         jButtonAlterar.setFont(jButtonAlterar.getFont().deriveFont(jButtonAlterar.getFont().getSize()+1f));
-        jButtonAlterar.setText("Alterar");
+        jButtonAlterar.setText("<html>Editar<br>Fazenda</html>");
         jButtonAlterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAlterarActionPerformed(evt);
@@ -264,7 +295,7 @@ public class GerenciarFazenda extends javax.swing.JFrame {
         });
 
         jButtonInserir.setFont(jButtonInserir.getFont().deriveFont(jButtonInserir.getFont().getSize()+1f));
-        jButtonInserir.setText("Inserir");
+        jButtonInserir.setText("<html>Nova<br>Fazenda</html>");
         jButtonInserir.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonInserir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -282,11 +313,20 @@ public class GerenciarFazenda extends javax.swing.JFrame {
         });
 
         jButtonCriarEstoque.setFont(jButtonCriarEstoque.getFont().deriveFont(jButtonCriarEstoque.getFont().getSize()+1f));
-        jButtonCriarEstoque.setText("<html>Criar<br>Estoque</html>");
+        jButtonCriarEstoque.setText("<html>Criar<br>Talhao</html>");
         jButtonCriarEstoque.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonCriarEstoque.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCriarEstoqueActionPerformed(evt);
+            }
+        });
+
+        jButtonGerenciarEstoque.setFont(jButtonGerenciarEstoque.getFont().deriveFont(jButtonGerenciarEstoque.getFont().getSize()+1f));
+        jButtonGerenciarEstoque.setText("<html>Gerenciar<br>Estoque</html>");
+        jButtonGerenciarEstoque.setPreferredSize(new java.awt.Dimension(100, 60));
+        jButtonGerenciarEstoque.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGerenciarEstoqueActionPerformed(evt);
             }
         });
 
@@ -301,32 +341,40 @@ public class GerenciarFazenda extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jButtonInserir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonAlterar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonAlterar)
                             .addComponent(jButtonExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonGerenciarEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonAdicionarProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonCriarEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonAdicionarProjeto, jButtonAlterar, jButtonCriarEstoque, jButtonExcluir, jButtonGerenciarEstoque, jButtonInserir});
+
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButtonAdicionarProjeto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonInserir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonInserir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonAdicionarProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButtonCriarEstoque, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonAlterar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonCriarEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonExcluir)
+                    .addComponent(jButtonGerenciarEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonAdicionarProjeto, jButtonAlterar, jButtonCriarEstoque, jButtonExcluir, jButtonGerenciarEstoque, jButtonInserir});
 
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
 
@@ -445,6 +493,10 @@ public class GerenciarFazenda extends javax.swing.JFrame {
         InserirEstoque();
     }//GEN-LAST:event_jButtonCriarEstoqueActionPerformed
 
+    private void jButtonGerenciarEstoqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerenciarEstoqueActionPerformed
+        GerenciarEstoque();
+    }//GEN-LAST:event_jButtonGerenciarEstoqueActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -490,6 +542,7 @@ public class GerenciarFazenda extends javax.swing.JFrame {
     private javax.swing.JButton jButtonAlterar;
     private javax.swing.JButton jButtonCriarEstoque;
     private javax.swing.JButton jButtonExcluir;
+    private javax.swing.JButton jButtonGerenciarEstoque;
     private javax.swing.JButton jButtonInserir;
     private javax.swing.JButton jButtonLogout;
     private javax.swing.JLabel jLabel1;
