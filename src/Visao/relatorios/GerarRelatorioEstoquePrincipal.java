@@ -7,19 +7,20 @@ package Visao.relatorios;
 
 import Controle.ControlePrincipal;
 import Modelo.ConexaoBD;
+import Modelo.GerarTabela;
 import Visao.carvao.GerenciarCarvaoForno;
 import Visao.carvao.InserirMadeiraForno;
-import Visao.estoqueprincipal.AlterarEstoquePrincipal;
-import Visao.estoqueprincipal.GerenciarEstoquePrincipal;
 import Visao.login.Login;
 import Visao.madeira.GerenciarMadeiraPraca;
 import Visao.madeira.InserirMadeiraPraca;
 import Visao.usuario.GerenciarUsuarios;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -27,8 +28,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Cristiano GD
  */
 public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
-
-    String WhereSql;
+    
     /**
      * Creates new form GerarRelatorioEstoquePrincipal
      * @throws java.sql.SQLException
@@ -36,7 +36,65 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
     public GerarRelatorioEstoquePrincipal() throws SQLException {
         initComponents();
         ChangeName();
-        DefaultTableModel dtm = (DefaultTableModel) jTableRelatorioEstoquePrincipal.getModel();
+        PreencherTabela();
+    }
+    
+    /**
+     * 
+     */
+    private void PreencherTabela(){
+        ArrayList dados = new ArrayList();
+        String[] colunas = new String[] { 
+            "Id",
+            "Estado",
+            "Bloco",
+            "Municipio",
+            "Fazenda",
+            "Projeto",
+            "UPC",
+            "Talhao",
+            "Area",
+            "M3/ha",
+            "Mat.Gen.",
+            "Talhadia",
+            "Ano_Rt",
+            "Data_Plant",
+            "Data_Rt_1",
+            "Data_Rt_2",
+            "Data_Rt_3",
+            "Idade",
+            "Categoria",
+            "Situacao",
+            "IMA",
+            "MdC/ha",
+            "Dens_Md",
+            "Dens_Cv",
+            "Md_Tn_ha",
+            "Cv_Tn_ha",
+            "Id_Op",
+            "Data_Reg",
+            "Vol_Md_Est",
+            "Vol_Md_Real",
+            "Vol_Md_Bal",
+            "MdC_Est",
+            "MdC_Real",
+            "MdC_Bal",
+            "Md_Tn_Est",
+            "Md_Tn_Real",
+            "Md_Tn_Bal",
+            "Cv_Tn_Est",
+            "Cv_Tn_Real",
+            "Cv_Tn_Bal",
+            "Md_Praca",
+            "Md_Forno",
+            "Md_Tn_Tot",
+            "Cv_Tn_Tot",
+            "RG_Est",
+            "RG_Real",
+            "Fator_Emp"
+        };
+        
+        String WhereSql;
         if(ControlePrincipal.municipio != null && ControlePrincipal.fazenda != null){
             WhereSql = "where municipio like '%"+ControlePrincipal.municipio+"%' and fazenda like '%"+ControlePrincipal.fazenda+"%'";
         }else if(ControlePrincipal.municipio != null){
@@ -49,61 +107,78 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
         
         String query = "SELECT * FROM estoque_principal "+ WhereSql;
         ConexaoBD con = ConexaoBD.getConexao();
-        JOptionPane.showMessageDialog(null, "Teste!" + query);
+        //JOptionPane.showMessageDialog(null, "Teste!" + query);
         ResultSet rs = con.consultaSql(query);
 
-        while(rs.next()){
-            String [] reg = {
-                rs.getString("id_estoque_p"),
-                rs.getString("estado"),
-                rs.getString("bloco"),
-                rs.getString("municipio"),
-                rs.getString("fazenda"),
-                rs.getString("projeto"),
-                rs.getString("upc"),
-                rs.getString("talhao"),
-                rs.getString("area"),
-                rs.getString("m3_ha"),
-                rs.getString("material_genetico"),
-                rs.getString("talhadia"),
-                rs.getString("ano_rotacao"),
-                rs.getString("data_plantio"),
-                rs.getString("data_rotacao_1"),
-                rs.getString("data_rotacao_2"),
-                rs.getString("data_rotacao_3"),
-                rs.getString("idade"),
-                rs.getString("categoria"),
-                rs.getString("situacao"),
-                rs.getString("ima"),
-                rs.getString("mdc_ha"),
-                rs.getString("densidade_madeira"),
-                rs.getString("densidade_carvao"),
-                rs.getString("mad_ton_ha"),
-                rs.getString("carv_ton_ha"),
-                rs.getString("id_operario"),
-                rs.getString("data_estoque"),
-                rs.getString("vol_mad_estimado"),
-                rs.getString("vol_mad_real"),
-                rs.getString("vol_mad_balanco"),
-                rs.getString("mdc_estimado"),
-                rs.getString("mdc_real"),
-                rs.getString("mdc_balanco"),
-                rs.getString("mad_ton_estimado"),
-                rs.getString("mad_ton_real"),
-                rs.getString("mad_ton_balanco"),
-                rs.getString("carv_ton_estimado"),
-                rs.getString("carv_ton_real"),
-                rs.getString("carv_ton_balanco"),
-                rs.getString("madeira_praca"),
-                rs.getString("madeira_forno"),
-                rs.getString("mad_ton_tot"),
-                rs.getString("carv_ton_tot"),
-                rs.getString("rend_grav_estimado"),
-                rs.getString("rend_grav_real"),
-                rs.getString("fator_empilalhemto")
-            };
-            dtm.addRow(reg);
+        int tamanho = 0;
+        try {
+            while(rs.next()){
+                dados.add(new Object[]{
+                    rs.getString("id_estoque_p"),
+                    rs.getString("estado"),
+                    rs.getString("bloco"),
+                    rs.getString("municipio"),
+                    rs.getString("fazenda"),
+                    rs.getString("projeto"),
+                    rs.getString("upc"),
+                    rs.getString("talhao"),
+                    rs.getString("area"),
+                    rs.getString("m3_ha"),
+                    rs.getString("material_genetico"),
+                    rs.getString("talhadia"),
+                    rs.getString("ano_rotacao"),
+                    rs.getString("data_plantio"),
+                    rs.getString("data_rotacao_1"),
+                    rs.getString("data_rotacao_2"),
+                    rs.getString("data_rotacao_3"),
+                    rs.getString("idade"),
+                    rs.getString("categoria"),
+                    rs.getString("situacao"),
+                    rs.getString("ima"),
+                    rs.getString("mdc_ha"),
+                    rs.getString("densidade_madeira"),
+                    rs.getString("densidade_carvao"),
+                    rs.getString("mad_ton_ha"),
+                    rs.getString("carv_ton_ha"),
+                    rs.getString("id_operario"),
+                    rs.getString("data_estoque"),
+                    rs.getString("vol_mad_estimado"),
+                    rs.getString("vol_mad_real"),
+                    rs.getString("vol_mad_balanco"),
+                    rs.getString("mdc_estimado"),
+                    rs.getString("mdc_real"),
+                    rs.getString("mdc_balanco"),
+                    rs.getString("mad_ton_estimado"),
+                    rs.getString("mad_ton_real"),
+                    rs.getString("mad_ton_balanco"),
+                    rs.getString("carv_ton_estimado"),
+                    rs.getString("carv_ton_real"),
+                    rs.getString("carv_ton_balanco"),
+                    rs.getString("madeira_praca"),
+                    rs.getString("madeira_forno"),
+                    rs.getString("mad_ton_tot"),
+                    rs.getString("carv_ton_tot"),
+                    rs.getString("rend_grav_estimado"),
+                    rs.getString("rend_grav_real"),
+                    rs.getString("fator_empilalhemto")
+                });
+                tamanho++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao preencher a tabela! "+ex);
         }
+        
+        GerarTabela modelo = new GerarTabela(dados, colunas);
+        jTableRelatorioEstoquePrincipal.setModel(modelo);
+        for(int i=0;i<colunas.length;i++){
+            jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*100);
+            jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setResizable(false);
+            //System.out.println("Indice: "+i+" - "+ colunas[i].length()*200);
+        }
+        jTableRelatorioEstoquePrincipal.getTableHeader().setReorderingAllowed(false);
+        jTableRelatorioEstoquePrincipal.setAutoResizeMode(jTableRelatorioEstoquePrincipal.AUTO_RESIZE_OFF);
+        jTableRelatorioEstoquePrincipal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         con.fecharConexao();
     }
     
@@ -114,7 +189,7 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
             ControlePrincipal.municipio = jTableRelatorioEstoquePrincipal.getValueAt(linha, 3).toString();
             ControlePrincipal.fazenda = jTableRelatorioEstoquePrincipal.getValueAt(linha, 4).toString();
             ControlePrincipal.projeto = jTableRelatorioEstoquePrincipal.getValueAt(linha, 5).toString();
-            ControlePrincipal.upcAtual = jTableRelatorioEstoquePrincipal.getValueAt(linha, 6).toString();
+            ControlePrincipal.upc = Integer.parseInt(jTableRelatorioEstoquePrincipal.getValueAt(linha, 6).toString());
             ControlePrincipal.talhao = jTableRelatorioEstoquePrincipal.getValueAt(linha, 7).toString();            
                         
             if(ControlePrincipal.tipo_u.equals("op_m")){
@@ -337,17 +412,9 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id_estoque", "estado", "bloco", "municipio", "fazenda", "projeto", "upc", "talhao", "area", "m3/ha", "mat_gen", "talhadia", "ano_rotacao", "data_plantio", "data_rotacao_1", "data_rotacao_2", "data_rotacao_3", "idade", "categoria", "situacao", "ima", "mdc_ha", "dens_mad", "dens_carv", "mad_ton_ha", "carv_ton_ha", "id_oper", "data_estoque", "vol_mad_est", "vol_mad_real", "vol_mad_bal", "mdc_est", "mdc_real", "mdc_bal", "mad_ton_est", "mad_ton_real", "mad_ton_bal", "carv_ton_est", "carv_ton_real", "carv_ton_bal", "mad_praca", "mad_forno", "mad_ton_tot", "carv_ton_tot", "rend_grav_est", "rend_grav_real", "fator_emp"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
-            };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
             }
-        });
+        ));
         jTableRelatorioEstoquePrincipal.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jTableRelatorioEstoquePrincipal.setColumnSelectionAllowed(true);
         jTableRelatorioEstoquePrincipal.setFillsViewportHeight(true);
@@ -357,6 +424,7 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
         jTableRelatorioEstoquePrincipal.setRequestFocusEnabled(false);
         jTableRelatorioEstoquePrincipal.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableRelatorioEstoquePrincipal);
+        jTableRelatorioEstoquePrincipal.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -471,4 +539,5 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableRelatorioEstoquePrincipal;
     // End of variables declaration//GEN-END:variables
+    
 }

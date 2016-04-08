@@ -7,22 +7,25 @@ package Visao.carvao;
 
 import Controle.ControlePrincipal;
 import Modelo.ConexaoBD;
+import Modelo.GerarTabela;
 import Visao.login.Login;
 import Visao.relatorios.BuscarRelatorioCarvaoPraca;
 import Visao.relatorios.BuscarRelatorioMadeiraEstoquePrincipal;
+import Visao.relatorios.GerarRelatorioEstoquePrincipal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.ListSelectionModel;
 
 /**
  *
  * @author Cristiano GD
  */
 public class GerenciarCarvaoForno extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form Carvao
      * @throws java.sql.SQLException
@@ -31,20 +34,32 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
         initComponents();
         jButtonExcluir.setVisible(false);
         CarregarNome();
-        DefaultTableModel dtm = (DefaultTableModel) jTableCarvao.getModel();
+        PreencherTabela();
+    }   
+    
+    /**
+     * 
+     */
+    private void PreencherTabela(){
+        ArrayList dados = new ArrayList();
+        String[] colunas = new String[] { 
+            "id_controle_carvao", "id_estoque_p", "talhao", "forno", "id_operario_mad", "volume_madeira", "data_entrada_madeira_forno", "id_operario_carv", "volume_carvao", "data_saida_carvao_forno", "rend_grav_forno"
+        };
         String query;
+        int tamanho = 0;
         if("op_s".equals(ControlePrincipal.tipo_u)){
             query = "Select * from controle_carvao";
         }else{
             query = "Select * from controle_carvao where id_operario_mad = '" +ControlePrincipal.id_op+"' or id_operario_carv = '"+ControlePrincipal.id_op+"'";
         }
+        
         ConexaoBD con = ConexaoBD.getConexao();
-
         ResultSet rs = con.consultaSql(query);
-
-        while(rs.next()){
-            String [] reg = {
-                rs.getString("id_controle_carvao"),
+        
+        try {
+            while(rs.next()){
+                dados.add(new Object[]{
+                    rs.getString("id_controle_carvao"),
                 rs.getString("id_estoque_p"),
                 rs.getString("talhao"),
                 rs.getString("forno"),
@@ -55,12 +70,26 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
                 rs.getString("volume_carvao"),
                 rs.getString("data_saida_carvao_forno"),
                 rs.getString("rend_grav_forno")
-            };
-            dtm.addRow(reg);
+                });
+                tamanho++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao preencher a tabela! "+ex);
         }
+        
+        GerarTabela modelo = new GerarTabela(dados, colunas);
+        jTableCarvao.setModel(modelo);
+        for(int i=0;i<colunas.length;i++){
+            jTableCarvao.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*100);
+            jTableCarvao.getColumnModel().getColumn(i).setResizable(false);
+            //System.out.println("Indice: "+i+" - "+ colunas[i].length()*200);
+        }
+        jTableCarvao.getTableHeader().setReorderingAllowed(false);
+        jTableCarvao.setAutoResizeMode(jTableCarvao.AUTO_RESIZE_OFF);
+        jTableCarvao.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         con.fecharConexao();
-    }   
-    
+    }    
     
     private void AlterarInfo(){
         if(jTableCarvao.getSelectedRow()>=0)//verifica se a linha a ser alterada esta marcada
@@ -141,7 +170,6 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(800, 600));
-        setResizable(false);
 
         jLabelTitulo.setFont(new java.awt.Font("Serif", 1, 36)); // NOI18N
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -291,17 +319,9 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id", "id_estoque", "talhao", "forno", "id_op_m", "vol_mad", "data_ent", "id_op_c", "vol_carv", "data_sai", "r_g_forno"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false
-            };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
             }
-        });
+        ));
         jTableCarvao.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jTableCarvao.setCellSelectionEnabled(true);
         jTableCarvao.setFillsViewportHeight(true);
@@ -312,19 +332,6 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
         jTableCarvao.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableCarvao);
         jTableCarvao.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        if (jTableCarvao.getColumnModel().getColumnCount() > 0) {
-            jTableCarvao.getColumnModel().getColumn(0).setResizable(false);
-            jTableCarvao.getColumnModel().getColumn(1).setResizable(false);
-            jTableCarvao.getColumnModel().getColumn(2).setResizable(false);
-            jTableCarvao.getColumnModel().getColumn(3).setResizable(false);
-            jTableCarvao.getColumnModel().getColumn(4).setResizable(false);
-            jTableCarvao.getColumnModel().getColumn(5).setResizable(false);
-            jTableCarvao.getColumnModel().getColumn(6).setResizable(false);
-            jTableCarvao.getColumnModel().getColumn(7).setResizable(false);
-            jTableCarvao.getColumnModel().getColumn(8).setResizable(false);
-            jTableCarvao.getColumnModel().getColumn(9).setResizable(false);
-            jTableCarvao.getColumnModel().getColumn(10).setResizable(false);
-        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);

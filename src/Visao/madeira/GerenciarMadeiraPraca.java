@@ -8,14 +8,17 @@ package Visao.madeira;
 import Controle.ControlePrincipal;
 import Controle.ControleUsuario;
 import Modelo.ConexaoBD;
-import Visao.relatorios.BuscarRelatorioMadeiraEstoquePrincipal;
+import Modelo.GerarTabela;
 import Visao.login.Login;
+import Visao.relatorios.BuscarRelatorioMadeiraEstoquePrincipal;
+import Visao.relatorios.GerarRelatorioEstoquePrincipal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -32,8 +35,19 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
     public GerenciarMadeiraPraca() throws SQLException {
         initComponents();
         jButtonExcluir.setVisible(false);
-        CarregarNome();
-        DefaultTableModel dtm = (DefaultTableModel) jTableMadeira.getModel();
+        CarregarNome();        
+        PreencherTabela();
+    }   
+    
+    /**
+     * 
+     */
+    private void PreencherTabela(){
+        ArrayList dados = new ArrayList();
+        String[] colunas = new String[] { 
+            "id_controle_madeira", "id_estoque_p", "id_operario", "talhao", "data_entrega", "mad_volume_m_stereo", "mad_volume_m3", "altura1_t", "altura2_t", "altura3_t", "comprimento_t", "largura_t", "peso_t", "altura1_bt", "altura2_bt", "altura3_bt", "comprimento_bt", "largura_bt", "peso_bt"
+        };
+        int tamanho = 0;    
         String query;
         if(ControlePrincipal.tipo_u.equals("op_s")){
             query = "Select * from controle_madeira";
@@ -41,36 +55,51 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
             jButtonAlterar.setVisible(false);
             query = "Select * from controle_madeira where id_operario = '" +ControlePrincipal.id_op+"'";
         }
-        ConexaoBD con = ConexaoBD.getConexao();
-        
+        ConexaoBD con = ConexaoBD.getConexao();         
         ResultSet rs = con.consultaSql(query);
-
-        while(rs.next()){
-            String [] reg = {
-                rs.getString("id_controle_madeira"),
-                rs.getString("id_estoque_p"),
-                rs.getString("id_operario"),
-                rs.getString("talhao"),
-                rs.getString("data_entrega"),
-                rs.getString("mad_volume_m_stereo"),
-                rs.getString("mad_volume_m3"),
-                rs.getString("altura1_t"),
-                rs.getString("altura2_t"),
-                rs.getString("altura3_t"),
-                rs.getString("comprimento_t"),
-                rs.getString("largura_t"),
-                rs.getString("peso_t"),
-                rs.getString("altura1_bt"),
-                rs.getString("altura2_bt"),
-                rs.getString("altura3_bt"),
-                rs.getString("comprimento_bt"),
-                rs.getString("largura_bt"),
-                rs.getString("peso_bt")
-            };
-            dtm.addRow(reg);
+        
+        try {
+            while(rs.next()){
+                dados.add(new Object[]{
+                    rs.getString("id_controle_madeira"),
+                    rs.getString("id_estoque_p"),
+                    rs.getString("id_operario"),
+                    rs.getString("talhao"),
+                    rs.getString("data_entrega"),
+                    rs.getString("mad_volume_m_stereo"),
+                    rs.getString("mad_volume_m3"),
+                    rs.getString("altura1_t"),
+                    rs.getString("altura2_t"),
+                    rs.getString("altura3_t"),
+                    rs.getString("comprimento_t"),
+                    rs.getString("largura_t"),
+                    rs.getString("peso_t"),
+                    rs.getString("altura1_bt"),
+                    rs.getString("altura2_bt"),
+                    rs.getString("altura3_bt"),
+                    rs.getString("comprimento_bt"),
+                    rs.getString("largura_bt"),
+                    rs.getString("peso_bt")
+                });
+                tamanho++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao preencher a tabela! "+ex);
         }
+        
+        GerarTabela modelo = new GerarTabela(dados, colunas);
+        jTableMadeira.setModel(modelo);
+        for(int i=0;i<colunas.length;i++){
+            jTableMadeira.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*100);
+            jTableMadeira.getColumnModel().getColumn(i).setResizable(false);
+            //System.out.println("Indice: "+i+" - "+ colunas[i].length()*200);
+        }
+        jTableMadeira.getTableHeader().setReorderingAllowed(false);
+        jTableMadeira.setAutoResizeMode(jTableMadeira.AUTO_RESIZE_OFF);
+        jTableMadeira.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         con.fecharConexao();
-    }       
+    }      
     
     private void AlterarInfo(){
         if(jTableMadeira.getSelectedRow()>=0)//verifica se a linha a ser alterada esta marcada
@@ -168,7 +197,6 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
         jTableMadeira = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setResizable(false);
 
         jLabelTitulo.setFont(new java.awt.Font("Serif", 1, 36)); // NOI18N
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -299,22 +327,6 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(450, 450));
         jScrollPane1.setRequestFocusEnabled(false);
 
-        jTableMadeira.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "id_mad", "id_estoque", "id_op", "talhao", "data_entrega", "vol_mst", "vol_m3", "h1_t", "h2_t", "h3_t", "compr_t", "larg_t", "peso_t", "h1_bt", "h2_bt", "h3_bt", "compr_bt", "larg_bt", "peso_bt"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
         jTableMadeira.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jTableMadeira.setColumnSelectionAllowed(true);
         jTableMadeira.setFillsViewportHeight(true);

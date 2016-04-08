@@ -10,6 +10,7 @@ package Controle;
  * @author Cristiano GD
  */
 public class ControleEstoquePrincipal {
+    
     private String id_estoque_p;
     private String estado; 
     private String bloco; 
@@ -56,7 +57,7 @@ public class ControleEstoquePrincipal {
     private float madeira_forno; 
     private float rend_grav_estimado;
     private float rend_grav_real; 
-    private float fator_empilalhemto;      
+    private float fator_empilalhemto;
 
     /**
      * @return the id_estoque_p
@@ -715,4 +716,5 @@ public class ControleEstoquePrincipal {
     public void setFator_empilalhemto(float fator_empilalhemto) {
         this.fator_empilalhemto = fator_empilalhemto;
     }
+
 }

@@ -7,14 +7,17 @@ package Visao.estoqueprincipal;
 
 import Controle.ControlePrincipal;
 import Modelo.ConexaoBD;
+import Modelo.GerarTabela;
 import Visao.login.Login;
+import Visao.relatorios.GerarRelatorioEstoquePrincipal;
 import Visao.usuario.GerenciarUsuarios;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -30,64 +33,136 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         initComponents();
         jButtonExcluir.setVisible(false);
         CarregarNome();
-        DefaultTableModel dtm = (DefaultTableModel) jTableEstoquePrincipal.getModel();
+        PreencherTabela();
+    }   
+    
+    /**
+     * 
+     */
+    private void PreencherTabela(){
+        ArrayList dados = new ArrayList();
+        String[] colunas = new String[] { 
+            "Id",
+            "Estado",
+            "Bloco",
+            "Municipio",
+            "Fazenda",
+            "Projeto",
+            "UPC",
+            "Talhao",
+            "Area",
+            "M3/ha",
+            "Mat.Gen.",
+            "Talhadia",
+            "Ano_Rt",
+            "Data_Plant",
+            "Data_Rt_1",
+            "Data_Rt_2",
+            "Data_Rt_3",
+            "Idade",
+            "Categoria",
+            "Situacao",
+            "IMA",
+            "MdC/ha",
+            "Dens_Md",
+            "Dens_Cv",
+            "Md_Tn_ha",
+            "Cv_Tn_ha",
+            "Id_Op",
+            "Data_Reg",
+            "Vol_Md_Est",
+            "Vol_Md_Real",
+            "Vol_Md_Bal",
+            "MdC_Est",
+            "MdC_Real",
+            "MdC_Bal",
+            "Md_Tn_Est",
+            "Md_Tn_Real",
+            "Md_Tn_Bal",
+            "Cv_Tn_Est",
+            "Cv_Tn_Real",
+            "Cv_Tn_Bal",
+            "Md_Praca",
+            "Md_Forno",
+            "Md_Tn_Tot",
+            "Cv_Tn_Tot",
+            "RG_Est",
+            "RG_Real",
+            "Fator_Emp"
+        };
         String query = "Select * from estoque_principal";
-        ConexaoBD con = ConexaoBD.getConexao();
-        
+        int tamanho = 0;       
+        ConexaoBD con = ConexaoBD.getConexao();        
         ResultSet rs = con.consultaSql(query);
-
-        while(rs.next()){
-            String [] reg = {
-                rs.getString("id_estoque_p"),
-                rs.getString("estado"),
-                rs.getString("bloco"),
-                rs.getString("municipio"),
-                rs.getString("fazenda"),
-                rs.getString("projeto"),
-                rs.getString("upc"),
-                rs.getString("talhao"),
-                rs.getString("area"),
-                rs.getString("m3_ha"),
-                rs.getString("material_genetico"),
-                rs.getString("talhadia"),
-                rs.getString("ano_rotacao"),
-                rs.getString("data_plantio"),
-                rs.getString("data_rotacao_1"),
-                rs.getString("data_rotacao_2"),
-                rs.getString("data_rotacao_3"),
-                rs.getString("idade"),
-                rs.getString("categoria"),
-                rs.getString("situacao"),
-                rs.getString("ima"),
-                rs.getString("mdc_ha"),
-                rs.getString("densidade_madeira"),
-                rs.getString("densidade_carvao"),
-                rs.getString("mad_ton_ha"),
-                rs.getString("carv_ton_ha"),
-                rs.getString("id_operario"),
-                rs.getString("data_estoque"),
-                rs.getString("vol_mad_estimado"),
-                rs.getString("vol_mad_real"),
-                rs.getString("vol_mad_balanco"),
-                rs.getString("mdc_estimado"),
-                rs.getString("mdc_real"),
-                rs.getString("mdc_balanco"),
-                rs.getString("mad_ton_estimado"),
-                rs.getString("mad_ton_real"),
-                rs.getString("mad_ton_balanco"),
-                rs.getString("carv_ton_estimado"),
-                rs.getString("carv_ton_real"),
-                rs.getString("carv_ton_balanco"),
-                rs.getString("madeira_praca"),
-                rs.getString("madeira_forno"),
-                rs.getString("mad_ton_tot"),
-                rs.getString("carv_ton_tot"),
-                rs.getString("rend_grav_estimado"),
-                rs.getString("rend_grav_real"),
-                rs.getString("fator_empilalhemto")
-            };
-            dtm.addRow(reg);
+        
+        try {
+            while(rs.next()){
+                dados.add(new Object[]{
+                    rs.getString("id_estoque_p"),
+                    rs.getString("estado"),
+                    rs.getString("bloco"),
+                    rs.getString("municipio"),
+                    rs.getString("fazenda"),
+                    rs.getString("projeto"),
+                    rs.getString("upc"),
+                    rs.getString("talhao"),
+                    rs.getString("area"),
+                    rs.getString("m3_ha"),
+                    rs.getString("material_genetico"),
+                    rs.getString("talhadia"),
+                    rs.getString("ano_rotacao"),
+                    rs.getString("data_plantio"),
+                    rs.getString("data_rotacao_1"),
+                    rs.getString("data_rotacao_2"),
+                    rs.getString("data_rotacao_3"),
+                    rs.getString("idade"),
+                    rs.getString("categoria"),
+                    rs.getString("situacao"),
+                    rs.getString("ima"),
+                    rs.getString("mdc_ha"),
+                    rs.getString("densidade_madeira"),
+                    rs.getString("densidade_carvao"),
+                    rs.getString("mad_ton_ha"),
+                    rs.getString("carv_ton_ha"),
+                    rs.getString("id_operario"),
+                    rs.getString("data_estoque"),
+                    rs.getString("vol_mad_estimado"),
+                    rs.getString("vol_mad_real"),
+                    rs.getString("vol_mad_balanco"),
+                    rs.getString("mdc_estimado"),
+                    rs.getString("mdc_real"),
+                    rs.getString("mdc_balanco"),
+                    rs.getString("mad_ton_estimado"),
+                    rs.getString("mad_ton_real"),
+                    rs.getString("mad_ton_balanco"),
+                    rs.getString("carv_ton_estimado"),
+                    rs.getString("carv_ton_real"),
+                    rs.getString("carv_ton_balanco"),
+                    rs.getString("madeira_praca"),
+                    rs.getString("madeira_forno"),
+                    rs.getString("mad_ton_tot"),
+                    rs.getString("carv_ton_tot"),
+                    rs.getString("rend_grav_estimado"),
+                    rs.getString("rend_grav_real"),
+                    rs.getString("fator_empilalhemto")
+                });
+                tamanho++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao preencher a tabela! "+ex);
         }
+        
+        GerarTabela modelo = new GerarTabela(dados, colunas);
+        jTableEstoquePrincipal.setModel(modelo);
+        for(int i=0;i<colunas.length;i++){
+            jTableEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*100);
+            jTableEstoquePrincipal.getColumnModel().getColumn(i).setResizable(false);
+            //System.out.println("Indice: "+i+" - "+ colunas[i].length()*200);
+        }
+        jTableEstoquePrincipal.getTableHeader().setReorderingAllowed(false);
+        jTableEstoquePrincipal.setAutoResizeMode(jTableEstoquePrincipal.AUTO_RESIZE_OFF);
+        jTableEstoquePrincipal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         con.fecharConexao();
     }
         
@@ -194,6 +269,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanelMain = new javax.swing.JPanel();
         jLabelTitulo = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -344,17 +420,9 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id_estoque", "estado", "bloco", "municipio", "fazenda", "projeto", "upc", "talhao", "area", "m3/ha", "mat_gen", "talhadia", "ano_rotacao", "data_plantio", "data_rotacao_1", "data_rotacao_2", "data_rotacao_3", "idade", "categoria", "situacao", "ima", "mdc_ha", "dens_mad", "dens_carv", "mad_ton_ha", "carv_ton_ha", "id_oper", "data_estoque", "vol_mad_est", "vol_mad_real", "vol_mad_bal", "mdc_est", "mdc_real", "mdc_bal", "mad_ton_est", "mad_ton_real", "mad_ton_bal", "carv_ton_est", "carv_ton_real", "carv_ton_bal", "mad_praca", "mad_forno", "mad_ton_tot", "carv_ton_tot", "rend_grav_est", "rend_grav_real", "fator_emp"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
-            };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
             }
-        });
+        ));
         jTableEstoquePrincipal.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jTableEstoquePrincipal.setColumnSelectionAllowed(true);
         jTableEstoquePrincipal.setFillsViewportHeight(true);
@@ -370,11 +438,46 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanelMainLayout = new javax.swing.GroupLayout(jPanelMain);
+        jPanelMain.setLayout(jPanelMainLayout);
+        jPanelMainLayout.setHorizontalGroup(
+            jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 937, Short.MAX_VALUE)
+            .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelMainLayout.createSequentialGroup()
+                    .addContainerGap(10, Short.MAX_VALUE)
+                    .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelMainLayout.createSequentialGroup()
+                            .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE))
+                        .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addContainerGap(10, Short.MAX_VALUE)))
+        );
+        jPanelMainLayout.setVerticalGroup(
+            jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 619, Short.MAX_VALUE)
+            .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelMainLayout.createSequentialGroup()
+                    .addContainerGap(10, Short.MAX_VALUE)
+                    .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                    .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanelMainLayout.createSequentialGroup()
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 505, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addContainerGap(10, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -382,30 +485,16 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(25, Short.MAX_VALUE)
+                .addComponent(jPanelMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE)
+                .addComponent(jPanelMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -482,6 +571,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanelMain;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableEstoquePrincipal;
     // End of variables declaration//GEN-END:variables

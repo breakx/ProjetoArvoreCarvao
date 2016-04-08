@@ -51,6 +51,6 @@ public class ControlePrincipal {
     public static float rend_grav_real;
     
     //Dados atuais
-    public static String upcAtual;
-    public static String materialGeneticoAtual;
+    public static int upc;
+    public static String material_genetico;
 }

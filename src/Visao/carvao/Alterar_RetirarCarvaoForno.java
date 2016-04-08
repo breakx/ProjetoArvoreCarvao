@@ -79,12 +79,12 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
             ControlePrincipal.municipio = rs.getString("municipio");
             ControlePrincipal.fazenda = rs.getString("fazenda");
             ControlePrincipal.talhao = rs.getString("talhao");
-            ControlePrincipal.upcAtual = rs.getString("upc");
+            ControlePrincipal.upc = Integer.parseInt(rs.getString("upc"));
         }        
         jLabelMunicipio.setText("Municipio: "+ControlePrincipal.municipio);
         jLabelFazenda.setText("Fazenda: "+ControlePrincipal.fazenda);        
         jLabelTalhao.setText("Talhao: "+ControlePrincipal.talhao);        
-        jLabelUPC.setText("UPC: "+ControlePrincipal.upcAtual);
+        jLabelUPC.setText("UPC: "+ControlePrincipal.upc);
         jLabelVolumeMadeiraForno.setText("Volume de madeira forno: "+madeira+" m³");
         con.fecharConexao();
     }   

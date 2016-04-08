@@ -31,7 +31,7 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         jLabelMunicipio.setText("Municipio: "+ControlePrincipal.municipio);
         jLabelFazenda.setText("Fazenda: "+ControlePrincipal.fazenda);        
         jLabelTalhao.setText("Talhao: "+ControlePrincipal.talhao);        
-        jLabelUPC.setText("UPC: "+ControlePrincipal.upcAtual);
+        jLabelUPC.setText("UPC: "+ControlePrincipal.upc);
         
         jLabelVolumeMadeiraPraca.setText("Volume atual de madeira: "+ControlePrincipal.madeira_praca+" m³");
         CarregarNome();

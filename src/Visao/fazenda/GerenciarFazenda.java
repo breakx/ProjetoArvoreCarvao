@@ -5,19 +5,22 @@
  */
 package Visao.fazenda;
 
-import Controle.ControleEstoquePrincipal;
 import Controle.ControleFazenda;
 import Controle.ControlePrincipal;
 import Controle.fazenda.InserirFazendaCtrl;
 import Modelo.ConexaoBD;
+import Modelo.GerarTabela;
 import Visao.estoqueprincipal.GerenciarEstoquePrincipal;
 import Visao.estoqueprincipal.InserirEstoquePrincipal;
 import Visao.login.Login;
+import Visao.relatorios.GerarRelatorioEstoquePrincipal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -34,27 +37,51 @@ public class GerenciarFazenda extends javax.swing.JFrame {
         initComponents();
         jButtonExcluir.setVisible(false);
         CarregarNome();
-        DefaultTableModel dtm = (DefaultTableModel) jTableFazenda.getModel();
+        PreencherTabela();
+    }   
+    
+    /**
+     * 
+     */
+    private void PreencherTabela(){
+        ArrayList dados = new ArrayList();
+        String[] colunas = new String[] { 
+            "id_fazenda", "cod_estado", "estado", "cod_bloco", "bloco", "municipio", "fazenda", "projeto"
+        };
+        int tamanho = 0;    
         String query = "Select * from fazenda";
-        ConexaoBD con = ConexaoBD.getConexao();
-
-
+        ConexaoBD con = ConexaoBD.getConexao();         
         ResultSet rs = con.consultaSql(query);
-
-        while(rs.next()){
-            String [] reg = {
-                rs.getString("id_fazenda"),
-                rs.getString("estado"),
-                rs.getString("municipio"),
-                rs.getString("fazenda"),
-                rs.getString("projeto"),
-                rs.getString("bloco"),
-                rs.getString("cod_estado"),
-                rs.getString("cod_bloco")
-            };
-            dtm.addRow(reg);
+        
+        try {
+            while(rs.next()){
+                dados.add(new Object[]{
+                    rs.getString("id_fazenda"),
+                    rs.getString("estado"),
+                    rs.getString("municipio"),
+                    rs.getString("fazenda"),
+                    rs.getString("projeto"),
+                    rs.getString("bloco"),
+                    rs.getString("cod_estado"),
+                    rs.getString("cod_bloco")
+                });
+                tamanho++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao preencher a tabela! "+ex);
         }
-        //JOptionPane.showMessageDialog(null, "Fazenda: ");  
+        
+        GerarTabela modelo = new GerarTabela(dados, colunas);
+        jTableFazenda.setModel(modelo);
+        for(int i=0;i<colunas.length;i++){
+            jTableFazenda.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*100);
+            jTableFazenda.getColumnModel().getColumn(i).setResizable(false);
+            //System.out.println("Indice: "+i+" - "+ colunas[i].length()*200);
+        }
+        jTableFazenda.getTableHeader().setReorderingAllowed(false);
+        jTableFazenda.setAutoResizeMode(jTableFazenda.AUTO_RESIZE_OFF);
+        jTableFazenda.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         con.fecharConexao();
     }
     
@@ -385,22 +412,6 @@ public class GerenciarFazenda extends javax.swing.JFrame {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(450, 450));
         jScrollPane1.setRequestFocusEnabled(false);
 
-        jTableFazenda.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "id_faz", "estado", "municipio", "fazenda", "projeto", "bloco", "cod_est", "cod_blc"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
         jTableFazenda.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jTableFazenda.setColumnSelectionAllowed(true);
         jTableFazenda.setFillsViewportHeight(true);
@@ -411,16 +422,6 @@ public class GerenciarFazenda extends javax.swing.JFrame {
         jTableFazenda.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableFazenda);
         jTableFazenda.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        if (jTableFazenda.getColumnModel().getColumnCount() > 0) {
-            jTableFazenda.getColumnModel().getColumn(0).setResizable(false);
-            jTableFazenda.getColumnModel().getColumn(1).setResizable(false);
-            jTableFazenda.getColumnModel().getColumn(2).setResizable(false);
-            jTableFazenda.getColumnModel().getColumn(3).setResizable(false);
-            jTableFazenda.getColumnModel().getColumn(4).setResizable(false);
-            jTableFazenda.getColumnModel().getColumn(5).setResizable(false);
-            jTableFazenda.getColumnModel().getColumn(6).setResizable(false);
-            jTableFazenda.getColumnModel().getColumn(7).setResizable(false);
-        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
