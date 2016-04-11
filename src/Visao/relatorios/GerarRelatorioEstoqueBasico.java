@@ -26,13 +26,13 @@ import javax.swing.ListSelectionModel;
  *
  * @author Cristiano GD
  */
-public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
+public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     
     /**
      * Creates new form GerarRelatorioEstoquePrincipal
      * @throws java.sql.SQLException
      */
-    public GerarRelatorioEstoquePrincipal() throws SQLException {
+    public GerarRelatorioEstoqueBasico() throws SQLException {
         initComponents();
         ChangeName();
         PreencherTabela();
@@ -164,7 +164,7 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
                 tamanho++;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao preencher a tabela! "+ex);
         }
         
@@ -251,19 +251,19 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
             try {
                 new GerenciarMadeiraPraca().setVisible(true);
             } catch (SQLException ex) {
-                Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else if(ControlePrincipal.tipo_u.equals("op_c")){
             try {
                 new GerenciarCarvaoForno().setVisible(true);
             } catch (SQLException ex) {
-                Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else if(ControlePrincipal.tipo_u.equals("op_s")){
             try {
                 new GerenciarUsuarios().setVisible(true);
             } catch (SQLException ex) {
-                Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         this.setVisible(false);
@@ -502,23 +502,24 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new GerarRelatorioEstoquePrincipal().setVisible(true);
+                    new GerarRelatorioEstoqueBasico().setVisible(true);
                 } catch (SQLException ex) {
-                    Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
