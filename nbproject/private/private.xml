@@ -4,13 +4,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Modelo/GerarTabela.java</file>
-            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Visao/relatorios/GerarRelatorioEstoquePrincipal.java</file>
+            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Visao/relatorios/GerarRelatorioEstoqueBasico.java</file>
             <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Modelo/ConexaoBD.java</file>
-            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Visao/madeira/GerenciarMadeiraPraca.java</file>
-            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Visao/fazenda/GerenciarFazenda.java</file>
-            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Visao/carvao/GerenciarCarvaoForno.java</file>
-            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Visao/estoqueprincipal/GerenciarEstoquePrincipal.java</file>
         </group>
     </open-files>
 </project-private>

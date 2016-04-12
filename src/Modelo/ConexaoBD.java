@@ -17,6 +17,7 @@ public class ConexaoBD {
 
     private ConexaoBD()
     {
+        //System.gc(); 
         String database = "appmadeira";
         String url = "jdbc:mysql://localhost/"+database;
         String usuario_bd = "root";
@@ -27,13 +28,13 @@ public class ConexaoBD {
         String senha_bd = "duarte1207";*/
         try
         {
-            //Class.forName("org.gjt.mm.mysql.Driver");
-            Class.forName("com.mysql.jdbc.Driver").newInstance( );
+            //Class.forName("org.gjt.mm.mysql.Driver").newInstance();
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
             con = DriverManager.getConnection(url,usuario_bd,senha_bd);
         }catch( Exception ex )
         {
             System.err.printf("\nExceção: %s\n", ex);
-            //JOptionPane.showMessageDialog(null, "Banco de dados não encontrado!");
+            JOptionPane.showMessageDialog(null, "Erro ao conectar: "+ex);
             throw new java.lang.RuntimeException("Erro ao conectar 2");
         }
     }
@@ -48,7 +49,7 @@ public class ConexaoBD {
             return instancia;
         }catch( Exception ex ){
             System.err.printf("\nExceção: %s\n", ex);
-            JOptionPane.showMessageDialog(null, "Servidor/Banco de Dados não encontrado!");
+            JOptionPane.showMessageDialog(null, "Erro ao conectar: "+ex);
             throw new java.lang.RuntimeException("Erro ao conectar 1");
         }
     }
@@ -61,11 +62,11 @@ public class ConexaoBD {
             if(con != null){
                 con.close();
                 con = null;
-
             }
         } catch (Exception ex)
         {
             System.err.printf("\nExceção: %s\n", ex);
+            JOptionPane.showMessageDialog(null, "Conexão fechada! "+ex);
             throw new java.lang.RuntimeException("Erro ao conectar 3");
         }
 
