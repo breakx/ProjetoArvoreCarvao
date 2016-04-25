@@ -10,7 +10,7 @@ import Controle.ControleUsuario;
 import Modelo.ConexaoBD;
 import Modelo.GerarTabela;
 import Visao.login.Login;
-import Visao.relatorios.BuscarRelatorioMadeiraEstoquePrincipal;
+import Visao.buscas.BuscarRelatorioMadeiraEstoquePrincipal;
 import Visao.relatorios.GerarRelatorioEstoquePrincipal;
 import java.sql.ResultSet;
 import java.sql.SQLException;

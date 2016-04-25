@@ -31,7 +31,8 @@ public class InserirUsuario extends javax.swing.JFrame {
         usuario.setLogin_usuario(jTextFieldLogin.getText());
         usuario.setSenha_usuario(jTextFieldSenha.getText());
         //usuario.setTipo_usuario(jTextFieldTipo.getText());        
-        usuario.setTipo_usuario(jComboBoxTipo.getSelectedItem().toString());
+        usuario.setTipo_usuario(jComboBoxTipo.getSelectedItem().toString()); 
+        usuario.setUpc_usuario(String.valueOf(jComboBoxUpcOp.getSelectedIndex()));
         usuario.setNome_usuario(jTextFieldNome.getText());
 
         InserirUsuarioCtrl inserir = new InserirUsuarioCtrl(usuario);
@@ -89,6 +90,8 @@ public class InserirUsuario extends javax.swing.JFrame {
         jTextFieldNome = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jComboBoxTipo = new javax.swing.JComboBox();
+        jComboBoxUpcOp = new javax.swing.JComboBox();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -205,6 +208,10 @@ public class InserirUsuario extends javax.swing.JFrame {
 
         jComboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "op_c", "op_m", "op_s" }));
 
+        jComboBoxUpcOp.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" }));
+
+        jLabel7.setText("UPC");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -215,9 +222,11 @@ public class InserirUsuario extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel7))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jComboBoxUpcOp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextFieldLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                     .addComponent(jTextFieldSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                     .addComponent(jTextFieldNome, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
@@ -243,7 +252,11 @@ public class InserirUsuario extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jComboBoxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(17, 17, 17)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jComboBoxUpcOp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
@@ -251,7 +264,7 @@ public class InserirUsuario extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCadastrar)
                     .addComponent(jButtonVoltar))
-                .addContainerGap(193, Short.MAX_VALUE))
+                .addContainerGap(154, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -322,11 +335,13 @@ public class InserirUsuario extends javax.swing.JFrame {
     private javax.swing.JButton jButtonLogout;
     private javax.swing.JButton jButtonVoltar;
     private javax.swing.JComboBox jComboBoxTipo;
+    private javax.swing.JComboBox jComboBoxUpcOp;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabelIdTipo;
     private javax.swing.JLabel jLabelName;
     private javax.swing.JLabel jLabelNome;

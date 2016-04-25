@@ -55,7 +55,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
     }
     
     private void CarregarEstoque() throws SQLException{
-        String query = "Select municipio, fazenda, talhao, upc, densidade_carvao, mdc_estimado, mdc_real, mdc_balanco, carv_ton_estimado, carv_ton_real, carv_ton_balanco, madeira_praca, madeira_forno, carv_ton_tot, mad_ton_tot, rend_grav_real "
+        String query = "Select municipio, fazenda, talhao, upc, densidade_carvao, mdc_estimado, mdc_transp, mdc_balanco, carv_ton_estimado, carv_ton_transp, carv_ton_balanco, madeira_praca, madeira_forno, carv_ton_tot, mad_ton_tot, rend_grav_real "
                 + "from estoque_principal where id_estoque_p = "+ControlePrincipal.id_estoque_principal;
         ConexaoBD con = ConexaoBD.getConexao();
         
@@ -64,10 +64,10 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         while(rs.next()){ 
             ControlePrincipal.densidade_carvao = Float.parseFloat(rs.getString("densidade_carvao"));
             ControlePrincipal.mdc_estimado = Float.parseFloat(rs.getString("mdc_estimado"));
-            ControlePrincipal.mdc_real = Float.parseFloat(rs.getString("mdc_real"));
+            ControlePrincipal.mdc_transp = Float.parseFloat(rs.getString("mdc_transp"));
             ControlePrincipal.mdc_balanco = Float.parseFloat(rs.getString("mdc_balanco"));
             ControlePrincipal.carv_ton_estimado = Float.parseFloat(rs.getString("carv_ton_estimado"));
-            ControlePrincipal.carv_ton_real = Float.parseFloat(rs.getString("carv_ton_real"));
+            ControlePrincipal.carv_ton_transp = Float.parseFloat(rs.getString("carv_ton_transp"));
             ControlePrincipal.carv_ton_balanco = Float.parseFloat(rs.getString("carv_ton_balanco"));
             ControlePrincipal.madeira_praca = Float.parseFloat(rs.getString("madeira_praca"));
             ControlePrincipal.madeira_forno = Float.parseFloat(rs.getString("madeira_forno"));
@@ -90,15 +90,15 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
     }   
     
     private void AtualizarDadosCarvao(){                
-        ControlePrincipal.mdc_real += Float.parseFloat(jTextFieldVolumeCarvao.getText());
-        ControlePrincipal.mdc_balanco = ControlePrincipal.mdc_real - ControlePrincipal.mdc_estimado;
+        ControlePrincipal.mdc_transp += Float.parseFloat(jTextFieldVolumeCarvao.getText());
+        ControlePrincipal.mdc_balanco = ControlePrincipal.mdc_transp - ControlePrincipal.mdc_estimado;
         
-        ControlePrincipal.carv_ton_real = ControlePrincipal.mdc_real * ControlePrincipal.densidade_carvao;
-        ControlePrincipal.carv_ton_balanco = ControlePrincipal.carv_ton_real - ControlePrincipal.carv_ton_estimado;
+        ControlePrincipal.carv_ton_transp = ControlePrincipal.mdc_transp * ControlePrincipal.densidade_carvao;
+        ControlePrincipal.carv_ton_balanco = ControlePrincipal.carv_ton_transp - ControlePrincipal.carv_ton_estimado;
         
         ControlePrincipal.madeira_forno -= madeira;
         
-        ControlePrincipal.carv_ton_tot += ControlePrincipal.carv_ton_real;
+        ControlePrincipal.carv_ton_tot += ControlePrincipal.carv_ton_transp;
         
         ControlePrincipal.rend_grav_real = ControlePrincipal.carv_ton_tot/ControlePrincipal.mad_ton_tot;
         
@@ -120,7 +120,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         carvao.setData_saida_carvao(data_forno.format(date));
         carvao.setRend_grav_forno(rend_grav_forno);
         
-        //JOptionPane.showMessageDialog(null, "id: "+ControlePrincipal.id_estoque_principal+"Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_real+" carv: "+ControlePrincipal.volume_carvao_real);
+        //JOptionPane.showMessageDialog(null, "id: "+ControlePrincipal.id_estoque_principal+"Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_transp+" carv: "+ControlePrincipal.volume_carvao_transp);
         
         AlterarCarvaoCtrl alterar = new AlterarCarvaoCtrl(carvao);
 

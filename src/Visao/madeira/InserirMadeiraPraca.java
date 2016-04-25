@@ -67,15 +67,15 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
     }   
     
     private void AtualizarDadosMadeira(){                
-        ControlePrincipal.vol_mad_real += volumeMadeiraM3;
-        ControlePrincipal.vol_mad_balanco = ControlePrincipal.vol_mad_real - ControlePrincipal.vol_mad_estimado;
+        ControlePrincipal.vol_mad_transp += volumeMadeiraM3;
+        ControlePrincipal.vol_mad_balanco = ControlePrincipal.vol_mad_transp - ControlePrincipal.vol_mad_estimado;
         
-        ControlePrincipal.mad_ton_real = ControlePrincipal.vol_mad_real * ControlePrincipal.densidade_madeira;
-        ControlePrincipal.mad_ton_balanco = ControlePrincipal.mad_ton_real - ControlePrincipal.mad_ton_estimado;
+        ControlePrincipal.mad_ton_transp = ControlePrincipal.vol_mad_transp * ControlePrincipal.densidade_madeira;
+        ControlePrincipal.mad_ton_balanco = ControlePrincipal.mad_ton_transp - ControlePrincipal.mad_ton_estimado;
         
         ControlePrincipal.madeira_praca += volumeMadeiraM3;
         
-        ControlePrincipal.mad_ton_tot += ControlePrincipal.mad_ton_real;
+        ControlePrincipal.mad_ton_tot += ControlePrincipal.mad_ton_transp;
         
         ControlePrincipal.atualizarDados = "madeira";
         RegistarCargaPraca();
@@ -109,7 +109,7 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
         
         madeira.setId_estoque(ControlePrincipal.id_estoque_principal);
         
-        //JOptionPane.showMessageDialog(null, "Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_real+" carv: "+ControlePrincipal.volume_carvao_real);
+        //JOptionPane.showMessageDialog(null, "Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_transp+" carv: "+ControlePrincipal.volume_carvao_transp);
                         
         InserirMadeiraCtrl inserir = new InserirMadeiraCtrl(madeira);
 

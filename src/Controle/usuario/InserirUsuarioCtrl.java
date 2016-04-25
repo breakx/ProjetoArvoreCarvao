@@ -15,10 +15,17 @@ import javax.swing.JOptionPane;
 public class InserirUsuarioCtrl {
     public InserirUsuarioCtrl(ControleUsuario usuario)
     {
-      String query = "INSERT INTO usuario values (" + null 
+      String query = "INSERT INTO usuario ("
+              + "`id_usuario`, "
+              + "`login_usuario`, "
+              + "`senha_usuario`, "
+              + "`tipo_usuario`, `nome_usuario`, "
+              + "`upc_usuario`) "
+              + "values (" + null 
               + ", '" + usuario.getLogin_usuario()
               + "', '" + usuario.getSenha_usuario()
               + "', '" + usuario.getTipo_usuario()
+              + "', '" + usuario.getUpc_usuario()
               + "', '" + usuario.getNome_usuario()
               + "')";
       ExecutarSql execut = new ExecutarSql();

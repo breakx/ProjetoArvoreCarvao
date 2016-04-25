@@ -18,11 +18,14 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import Modelo.ConexaoBD;
-import Visao.relatorios.BuscarRelatorioMadeiraEstoquePrincipal;
+import Modelo.GerarTabela;
 import Visao.estoqueprincipal.GerenciarEstoquePrincipal;
 import Visao.fazenda.GerenciarFazenda;
 import Visao.login.Login;
 import Visao.relatorios.GerarRelatorioEstoqueBasico;
+import Visao.relatorios.GerarRelatorioEstoquePrincipal;
+import java.util.ArrayList;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -38,18 +41,58 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         initComponents(); 
         jButtonExcluir.setVisible(false);       
         CarregarNome();
-        DefaultTableModel dtm = (DefaultTableModel) jTableUsuario.getModel();
+        PreencherTabela();
+    }
+    
+    /**
+     * 
+     */
+    private void PreencherTabela(){
+        ArrayList linhas = new ArrayList();
+        String[] colunas = new String[] { 
+            //"Id",
+            "Login",
+            "Tipo",
+            "Upc_Op",
+            "Nome"
+        };
         String query = "Select * from usuario";
-        ConexaoBD con = ConexaoBD.getConexao();
-
-
+        int tamanho = 0;       
+        ConexaoBD con = ConexaoBD.getConexao();        
         ResultSet rs = con.consultaSql(query);
-
-        while(rs.next()){
-            String [] reg = {rs.getString("id_usuario"),rs.getString("login_usuario"),rs.getString("tipo_usuario"),rs.getString("nome_usuario")};
-            dtm.addRow(reg);
+        
+        try {
+            while(rs.next()){
+                linhas.add(new Object[]{
+                    //rs.getString("id_usuario"),
+                    rs.getString("login_usuario"),
+                    rs.getString("tipo_usuario"),
+                    rs.getString("upc_usuario"),
+                    rs.getString("nome_usuario")
+                });
+                tamanho++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao preencher a tabela! "+ex);
         }
-        //JOptionPane.showMessageDialog(null, "Usuario: "+usuario.getNome_usuario());  
+        
+        GerarTabela modelo = new GerarTabela(linhas, colunas);
+        jTableUsuario.setModel(modelo);
+        for(int i=0;i<colunas.length;i++){
+            if(colunas[i].length()<=8){                
+                jTableUsuario.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*25);
+            }else if(colunas[i].length()>8 && colunas[i].length()<=15){
+                jTableUsuario.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*20);
+            }else{
+                jTableUsuario.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*15);
+            }
+            jTableUsuario.getColumnModel().getColumn(i).setResizable(false);
+            //System.out.println("Indice: "+i+" - "+ colunas[i].length());
+        }
+        jTableUsuario.getTableHeader().setReorderingAllowed(false);
+        jTableUsuario.setAutoResizeMode(jTableUsuario.AUTO_RESIZE_OFF);
+        jTableUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         con.fecharConexao();
     }
     
@@ -65,9 +108,10 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
             String id_usuario = jTableUsuario.getValueAt(linha, 0).toString();
             String login_usuario = jTableUsuario.getValueAt(linha, 1).toString();
             String tipo_usuario = jTableUsuario.getValueAt(linha, 2).toString();
-            String nome_usuario = jTableUsuario.getValueAt(linha, 3).toString();
+            String upc_usuario = jTableUsuario.getValueAt(linha, 3).toString();
+            String nome_usuario = jTableUsuario.getValueAt(linha, 4).toString();
 
-            new AlterarUsuario(id_usuario, login_usuario, tipo_usuario, nome_usuario).setVisible(true);
+            new AlterarUsuario(id_usuario, login_usuario, tipo_usuario, upc_usuario, nome_usuario).setVisible(true);
             dispose();
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
     }
@@ -121,7 +165,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         jButtonFazenda = new javax.swing.JButton();
         jButtonRelatorio = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jTableUsuario = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -290,39 +334,11 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonAlterar, jButtonEstoque1, jButtonExcluir, jButtonFazenda, jButtonInserir});
 
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
 
-        jTableUsuario.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jTableUsuario.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "id", "login", "tipo", "nome"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
         jTableUsuario.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        jTableUsuario.setFillsViewportHeight(true);
-        jTableUsuario.setMaximumSize(new java.awt.Dimension(450, 450));
-        jTableUsuario.setMinimumSize(new java.awt.Dimension(450, 450));
-        jTableUsuario.setPreferredSize(new java.awt.Dimension(800, 100));
-        jTableUsuario.setRequestFocusEnabled(false);
-        jTableUsuario.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(jTableUsuario);
-        if (jTableUsuario.getColumnModel().getColumnCount() > 0) {
-            jTableUsuario.getColumnModel().getColumn(0).setResizable(false);
-            jTableUsuario.getColumnModel().getColumn(1).setResizable(false);
-            jTableUsuario.getColumnModel().getColumn(2).setResizable(false);
-            jTableUsuario.getColumnModel().getColumn(3).setResizable(false);
-        }
+        jScrollPane2.setViewportView(jTableUsuario);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -330,12 +346,15 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -444,7 +463,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableUsuario;
     // End of variables declaration//GEN-END:variables
 

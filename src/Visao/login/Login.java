@@ -15,13 +15,9 @@ import Controle.ControleUsuario;
 import Modelo.ConexaoBD;
 import Visao.usuario.GerenciarUsuarios;
 import Visao.carvao.GerenciarCarvaoForno;
-import Visao.estoqueprincipal.AlterarEstoquePrincipal;
 import Visao.madeira.GerenciarMadeiraPraca;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -55,7 +51,8 @@ public class Login extends javax.swing.JFrame {
                     String login = rs.getString("login_usuario");
                     String tipo = ControlePrincipal.tipo_u = rs.getString("tipo_usuario");
                     ControlePrincipal.nome = rs.getString("nome_usuario");
-                    ControlePrincipal.id_op = tipo+"."+id_u;     
+                    ControlePrincipal.upc_u = rs.getString("upc_usuario"); 
+                    ControlePrincipal.id_op = tipo+"."+id_u+".upc-"+rs.getString("upc_usuario");     
                     
                     //JOptionPane.showMessageDialog(null, "Logado!"+login+tipo+usuario.getNome_usuario()+usuario.getId_tipo());  
                     CarregaTela(tipo);                    

@@ -26,8 +26,8 @@ public class InserirEstoquePrincipalCtrl {
         + "`upc`, "
         + "`talhao`, "
         + "`area`, "
-        + "`m3_ha`, "
         + "`material_genetico`, "
+        + "`m3_ha`, "
         + "`talhadia`, "
                 
         + "`ano_rotacao`, "
@@ -35,7 +35,11 @@ public class InserirEstoquePrincipalCtrl {
         + "`data_rotacao_1`, "
         + "`data_rotacao_2`, "
         + "`data_rotacao_3`, "
-        + "`idade`, "
+        + "`idade_corte1`, "
+        + "`idade_corte2`, "
+        + "`idade_corte3`, "
+        + "`idade_hoje`, "
+        + "`conducao`, "
         + "`categoria`, "
         + "`situacao`, "
                 
@@ -49,22 +53,20 @@ public class InserirEstoquePrincipalCtrl {
         + "`data_estoque`, "
                 
         + "`vol_mad_estimado`, "
-        + "`vol_mad_real`, "
+        + "`vol_mad_transp`, "
         + "`vol_mad_balanco`, "
         + "`mdc_estimado`, "
-        + "`mdc_real`, "
+        + "`mdc_transp`, "
         + "`mdc_balanco`, "
         + "`mad_ton_estimado`, "
-        + "`mad_ton_real`, "
+        + "`mad_ton_transp`, "
         + "`mad_ton_balanco`, "
         + "`carv_ton_estimado`, "
-        + "`carv_ton_real`, "
+        + "`carv_ton_transp`, "
         + "`carv_ton_balanco`, "
                 
         + "`madeira_praca`, "
         + "`madeira_forno`, "
-        + "`mad_ton_tot`, "
-        + "`carv_ton_tot`, "
         + "`rend_grav_estimado`, "
         + "`rend_grav_real`, "
         + "`fator_empilalhemto`) "
@@ -78,8 +80,8 @@ public class InserirEstoquePrincipalCtrl {
             + "', '" + estoque.getUpc()
             + "', '" + estoque.getTalhao()
             + "', '" + estoque.getArea()
-            + "', '" + estoque.getM3_ha()
             + "', '" + estoque.getMaterial_genetico()
+            + "', '" + estoque.getM3_ha()
             + "', '0"       
                 
             +"', '0000"
@@ -88,6 +90,10 @@ public class InserirEstoquePrincipalCtrl {
             +"', '00-00-0000"
             +"', '00-00-0000"
             +"', '0.0"
+            +"', '0.0"
+            +"', '0.0"
+            +"', '0.0"
+            +"', '---"
             +"', 'Silvicultura"
             +"', 'Plantio Futuro"
                 
@@ -117,9 +123,58 @@ public class InserirEstoquePrincipalCtrl {
             +"', '0.0"
             +"', '0.0"
             +"', '0.0"
-            +"', '0.0"
-            +"', '0.0"
             +"', '"+ estoque.getFator_empilalhemto()
+            /*+ "VALUES (" + null
+            + ", '" + estoque.getEstado()
+            + "', '" + estoque.getBloco()
+            + "', '" + estoque.getMunicipio()
+            + "', '" + estoque.getFazenda()
+            + "', '" + estoque.getProjeto()
+            + "', '" + estoque.getUpc()
+            + "', '" + estoque.getTalhao()
+            + "', '" + estoque.getArea()
+            + "', '" + estoque.getM3_ha()
+            + "', '" + estoque.getMaterial_genetico()
+            + "', '" + estoque.getTalhadia()
+                
+            +"', '" + estoque.getAno_rotacao()
+            +"', '" + estoque.getData_plantio()
+            +"', '" + estoque.getData_rotacao_1()
+            +"', '" + estoque.getData_rotacao_2()
+            +"', '" + estoque.getData_rotacao_3()
+            +"', '" + estoque.getIdade()
+            +"', '" + estoque.getCategoria()
+            +"', '" + estoque.getSituacao()
+                
+            +"', '" + estoque.getIma()
+            +"', '" + estoque.getMdc_ha()
+            +"', '"+estoque.getDensidade_madeira()
+            +"', '"+estoque.getDensidade_carvao()
+            +"', '" + estoque.getMad_ton_ha()
+            +"', '" + estoque.getCarv_ton_ha()
+            +"', '" + estoque.getId_operario()
+            +"', '" + estoque.getData_estoque()  
+                
+            +"', '" + estoque.getVol_mad_estimado()
+            +"', '" + estoque.getVol_mad_transp()
+            +"', '" + estoque.getVol_mad_balanco()
+            +"', '" + estoque.getMdc_estimado()
+            +"', '" + estoque.getMdc_transp()
+            +"', '" + estoque.getMdc_balanco()
+            +"', '" + estoque.getMad_ton_estimado()
+            +"', '" + estoque.getMad_ton_transp()
+            +"', '" + estoque.getMad_ton_balanco()
+            +"', '" + estoque.getCarv_ton_estimado()
+            +"', '" + estoque.getCarv_ton_transp()
+            +"', '" + estoque.getCarv_ton_balanco()
+                
+            +"', '" + estoque.getMadeira_praca()
+            +"', '" + estoque.getMadeira_forno()
+            +"', '" + estoque.getMad_ton_tot()
+            +"', '" + estoque.getCarv_ton_tot()
+            +"', '" + estoque.getRend_grav_estimado()
+            +"', '" + estoque.getRend_grav_real()
+            +"', '"+ estoque.getFator_empilalhemto()*/
             +"')";
         
         ExecutarSql execut = new ExecutarSql();

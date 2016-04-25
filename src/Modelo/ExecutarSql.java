@@ -54,18 +54,18 @@ public class ExecutarSql {
         String query = "";
         if(ControlePrincipal.tipo_u.equals("op_m")){
             query = "UPDATE estoque_principal SET "
-                + "`vol_mad_real` = '"+ControlePrincipal.vol_mad_real
+                + "`vol_mad_transp` = '"+ControlePrincipal.vol_mad_transp
                 + "', `vol_mad_balanco` = '"+ControlePrincipal.vol_mad_balanco
-                + "', `mad_ton_real` = '"+ControlePrincipal.mad_ton_real
+                + "', `mad_ton_transp` = '"+ControlePrincipal.mad_ton_transp
                 + "', `mad_ton_balanco` = '"+ControlePrincipal.mad_ton_balanco
                 + "', `madeira_praca` = '"+ControlePrincipal.madeira_praca 
                 + "', `mad_ton_tot` = '"+ControlePrincipal.mad_ton_tot
                 + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
         }else if(ControlePrincipal.tipo_u.equals("op_c")){
             query = "UPDATE estoque_principal SET "
-                + "`mdc_real` = '"+ControlePrincipal.mdc_real
+                + "`mdc_transp` = '"+ControlePrincipal.mdc_transp
                 + "', `mdc_balanco` = '"+ControlePrincipal.mdc_balanco
-                + "', `carv_ton_real` = '"+ControlePrincipal.carv_ton_real
+                + "', `carv_ton_transp` = '"+ControlePrincipal.carv_ton_transp
                 + "', `carv_ton_balanco` = '"+ControlePrincipal.carv_ton_balanco
                 + "', `madeira_praca` = '"+ControlePrincipal.madeira_praca
                 + "', `madeira_forno` = '"+ControlePrincipal.madeira_forno   
@@ -74,7 +74,7 @@ public class ExecutarSql {
                 + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
         }
         
-        //JOptionPane.showMessageDialog(null, "Executar Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_real+" carv: "+ControlePrincipal.volume_carvao_real);
+        //JOptionPane.showMessageDialog(null, "Executar Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_transp+" carv: "+ControlePrincipal.volume_carvao_transp);
         
         try {
             ConexaoBD conexao = ConexaoBD.getConexao();
@@ -94,16 +94,16 @@ public class ExecutarSql {
         ControlePrincipal.densidade_carvao = 0;
     
         ControlePrincipal.vol_mad_estimado = 0;
-        ControlePrincipal.vol_mad_real = 0;
+        ControlePrincipal.vol_mad_transp = 0;
         ControlePrincipal.vol_mad_balanco = 0;
         ControlePrincipal.mdc_estimado = 0;
-        ControlePrincipal.mdc_real = 0;
+        ControlePrincipal.mdc_transp = 0;
         ControlePrincipal.mdc_balanco = 0;
         ControlePrincipal.mad_ton_estimado = 0;
-        ControlePrincipal.mad_ton_real = 0;
+        ControlePrincipal.mad_ton_transp = 0;
         ControlePrincipal.mad_ton_balanco = 0;
         ControlePrincipal.carv_ton_estimado = 0;
-        ControlePrincipal.carv_ton_real = 0;
+        ControlePrincipal.carv_ton_transp = 0;
         ControlePrincipal.carv_ton_balanco = 0;
         ControlePrincipal.madeira_praca = 0;
         ControlePrincipal.madeira_forno = 0;

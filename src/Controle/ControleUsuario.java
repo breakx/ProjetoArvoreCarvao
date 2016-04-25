@@ -14,6 +14,7 @@ public class ControleUsuario {
     private String login_usuario;
     private String senha_usuario;
     private String tipo_usuario;
+    private String upc_usuario;
     private String nome_usuario;
 
     /**
@@ -84,6 +85,20 @@ public class ControleUsuario {
      */
     public void setNome_usuario(String nome_usuario) {
         this.nome_usuario = nome_usuario;
+    }
+
+    /**
+     * @return the upc_usuario
+     */
+    public String getUpc_usuario() {
+        return upc_usuario;
+    }
+
+    /**
+     * @param upc_usuario the upc_usuario to set
+     */
+    public void setUpc_usuario(String upc_usuario) {
+        this.upc_usuario = upc_usuario;
     }
     
 }

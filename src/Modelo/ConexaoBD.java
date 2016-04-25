@@ -17,7 +17,6 @@ public class ConexaoBD {
 
     private ConexaoBD()
     {
-        //System.gc(); 
         String database = "appmadeira";
         String url = "jdbc:mysql://localhost/"+database;
         String usuario_bd = "root";

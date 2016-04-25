@@ -13,6 +13,7 @@ public class ControlePrincipal {
     public static String nome;
     public static String tipo_u;
     public static String id_op;
+    public static String upc_u;
     public static String data_inicio;
     public static String data_fim;
     public static String forno;
@@ -33,16 +34,16 @@ public class ControlePrincipal {
     public static float densidade_carvao;
     
     public static float vol_mad_estimado;
-    public static float vol_mad_real;
+    public static float vol_mad_transp;
     public static float vol_mad_balanco;
     public static float mdc_estimado;
-    public static float mdc_real;
+    public static float mdc_transp;
     public static float mdc_balanco;
     public static float mad_ton_estimado;
-    public static float mad_ton_real;
+    public static float mad_ton_transp;
     public static float mad_ton_balanco;
     public static float carv_ton_estimado;
-    public static float carv_ton_real;
+    public static float carv_ton_transp;
     public static float carv_ton_balanco;
     public static float madeira_praca;
     public static float madeira_forno;

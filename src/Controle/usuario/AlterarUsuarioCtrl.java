@@ -14,7 +14,13 @@ import Modelo.ExecutarSql;
 public class AlterarUsuarioCtrl {
     public AlterarUsuarioCtrl(ControleUsuario usuario)
     {
-       String query = "Update usuario set login_usuario = '" + usuario.getLogin_usuario()+ "', senha_usuario='" + usuario.getSenha_usuario()+ "', tipo_usuario='" + usuario.getTipo_usuario()+ "', nome_usuario='" + usuario.getNome_usuario()+"'where id_usuario='"+ usuario.getId_usuario()+"'";
+       String query = "Update usuario set "
+               + "login_usuario = '" + usuario.getLogin_usuario()
+               + "', senha_usuario='" + usuario.getSenha_usuario()
+               + "', tipo_usuario='" + usuario.getTipo_usuario()
+               + "', upc_usuario='" + usuario.getUpc_usuario()
+               + "', nome_usuario='" + usuario.getNome_usuario()
+               +"'where id_usuario='"+ usuario.getId_usuario()+"'";
        ExecutarSql execut = new ExecutarSql();
        execut.executar(query);
     }

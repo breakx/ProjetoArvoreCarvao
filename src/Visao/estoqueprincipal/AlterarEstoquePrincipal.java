@@ -27,12 +27,14 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
 
     private String id;
     private float mdc_ha;
-    private float rendimento;
+    //private float rendimento;
     private int talhadia;
-    private float idade;
+    private float idade_hoje;
+    private float idade_corte1;
+    private float idade_corte2;
+    private float idade_corte3;
     private String situacao;  
-    private float rend_grav_est;
-    private float rend_grav_real;
+    //private float rend_grav_est;
     
     private float volume_madeira_estimado;
     private float mdc_estimado;
@@ -47,60 +49,74 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
     
     /**
      * Creates new form AlterarEstoque
+     * @param coluna
      */
-    public AlterarEstoquePrincipal(String id_estoque, String upc, String talhao, String area, String m3_ha, String data_plantio, String material_genetico, String talhadia, String ano_rotacao, String data_rotacao_1, String data_rotacao_2, String data_rotacao_3, String idade, String categoria, String situacao, String ima, String mdc_ha, String mdc_estimado, String densidade_carvao, String densidade_madeira, String mdc_balanco, String rend_grav_estimado, String fator_empilalhemto) {
+    public AlterarEstoquePrincipal(String coluna[]) {
         super("Alterar Carvao");
         initComponents();     
         _carregarCategoria();
-        this.id = id_estoque;      
-        //jComboBoxEstado.setSelectedIndex(Integer.parseInt(estado));
-        jTextFieldUpc.setText(upc);        
-        //jComboBoxBloco.setSelectedIndex(Integer.parseInt(bloco));
-        //jTextFieldMunicipio.setText(municipio);
-        //jTextFieldFazenda.setText(fazenda);  
-        //jTextFieldProjeto.setText(projeto);                   
-        jTextFieldAnoRotacao.setText(ano_rotacao); 
-        jTextFieldTalhao.setText(talhao);        
-        jTextFieldArea.setText(area);                    
-        jTextFieldM3HA.setText(m3_ha);
-        jTextFieldDataPlantio.setText(data_plantio);          
-        jTextFieldMaterialGenetico.setText(material_genetico);         
-        this.talhadia = Integer.parseInt(talhadia);  
-        jTextFieldDataRotacao1.setText(data_rotacao_1);    
-        jTextFieldDataRotacao2.setText(data_rotacao_2);     
-        jTextFieldDataRotacao3.setText(data_rotacao_3);         
-        //jTextFieldIdade.setText(idade); 
-        if(categoria.equals("Colheita")){
+        id = coluna[0];//id_estoque      
+        //jComboBoxEstado.setSelectedIndex(Integer.parseInt(coluna[1]));//estado  
+        //jComboBoxBloco.setSelectedIndex(Integer.parseInt(coluna[2]));//bloco  
+        //jTextFieldMunicipio.setText(coluna[3]);//municipio  
+        //jTextFieldFazenda.setText(coluna[4]);//fazenda  
+        //jTextFieldProjeto.setText(coluna[5]);//projeto  
+        jTextFieldUpc.setText(coluna[6]);//upc  
+        jTextFieldTalhao.setText(coluna[7]);//talhao                  
+        jTextFieldArea.setText(coluna[8]);//area         
+        jTextFieldMaterialGenetico.setText(coluna[9]);//material_genetico            
+        jTextFieldM3HA.setText(coluna[10]);//m3_ha             
+        talhadia = Integer.parseInt(coluna[11]);//talhadia
+        jTextFieldAnoRotacao.setText(coluna[12]);//ano_rotacao
+        jTextFieldDataPlantio.setText(coluna[13]);//data_plantio  
+        jTextFieldDataRotacao1.setText(coluna[14]);//data_rotacao_1
+        jTextFieldDataRotacao2.setText(coluna[15]);//data_rotacao_2
+        jTextFieldDataRotacao3.setText(coluna[16]);//data_rotacao_3 
+        //jTextFieldCorte1.setText(coluna[17]);//idade_corte1 
+        //jTextFieldCorte2.setText(coluna[18]);//idade_corte2 
+        //jTextFieldCorte3.setText(coluna[19]);//idade_corte3 
+        //jTextFieldIdadeHj.setText(coluna[20]);//idade_hj 
+        //jTextFieldConducao.setText(coluna[21]);//conducao 
+        if(coluna[22].equals("Colheita")){//categoria
             jComboBoxCategoria.setSelectedIndex(1); 
-        }else if(categoria.equals("Silvicultura")){
+        }else if(coluna[22].equals("Silvicultura")){
             jComboBoxCategoria.setSelectedIndex(2); 
-        }else if(categoria.equals("UTM")){
+        }else if(coluna[22].equals("UTM")){
             jComboBoxCategoria.setSelectedIndex(3); 
         }else{
             jComboBoxCategoria.setSelectedIndex(0); 
         }
-        this.situacao = situacao; 
-        if(situacao =="Exaurida"){
+        situacao = coluna[23];//situacao
+        if(situacao.equals("Exaurida")){
             jCheckBoxExaurida.setSelected(true);
         }else{
             jCheckBoxExaurida.setSelected(false);
         }
-        jTextFieldIMA.setText(ima);          
-        //jTextFieldMDCHA.setText(mdc_ha);       
-        //jTextFieldMDC.setText(mdc);     
-        jTextFieldDensidadeCarvao.setText(densidade_carvao);  
-        jTextFieldDensidadeMadeira.setText(densidade_madeira);       
-        /*jTextFieldIdOperario.setText(id_operario);                  
-        jTextFieldDataEstoque.setText(data_estoque);               
-        jTextFieldVolumeEstimado.setText(volume_estimado);  
-        jTextFieldMadeiraTalhao.setText(madeira_talhao);                     
-        jTextFieldMadeiraPraca.setText(madeira_praca);                    
-        jTextFieldMadeiraForno.setText(madeira_forno);              
-        jTextFieldMadeiraTotal.setText(mad_ton_tot);                      
-        jTextFieldCarvaoTotal.setText(carv_ton_tot); */
-        rend_grav_est = Float.parseFloat(rend_grav_estimado);
-        jTextFieldRendimentoGravimetricoEstimado.setText(rend_grav_estimado);                      
-        jTextFieldFatorEmpilhamento.setText(fator_empilalhemto);
+        jTextFieldIMA.setText(coluna[24]);//ima          
+        //jTextFieldMDCHA.setText(coluna[25]);//mdc_ha   
+        jTextFieldDensidadeMadeira.setText(coluna[26]);//densidade_madeira     
+        jTextFieldDensidadeCarvao.setText(coluna[27]);//densidade_carvao
+        /*jTextFieldIdOperario.setText(coluna[28]);//mad_ton_ha   
+        /*jTextFieldIdOperario.setText(coluna[29]);//carv_ton_ha   
+        /*jTextFieldIdOperario.setText(coluna[30]);//id_operario                  
+        jTextFieldDataEstoque.setText(coluna[31]);//data_estoque           
+        jTextFieldMDC.setText(coluna[32]);//vol_mad_estimado      
+        jTextFieldVolumeEstimado.setText(coluna[33]);//vol_mad_transp
+        jTextFieldMadeiraTalhao.setText(coluna[34]);//vol_mad_balanco                   
+        jTextFieldMadeiraPraca.setText(coluna[35]);//vol_mad_balanco                   
+        jTextFieldMadeiraForno.setText(coluna[36]);//mdc_transp                   
+        jTextFieldMadeiraForno.setText(coluna[37]);//mdc_balanco                   
+        jTextFieldMadeiraForno.setText(coluna[38]);//mad_ton_estimado                   
+        jTextFieldMadeiraForno.setText(coluna[39]);//mad_ton_transp                   
+        jTextFieldMadeiraForno.setText(coluna[40]);//mad_ton_balanco                   
+        jTextFieldMadeiraForno.setText(coluna[41]);//carv_ton_estimado                 
+        jTextFieldMadeiraForno.setText(coluna[42]);//carv_ton_transp                 
+        jTextFieldMadeiraForno.setText(coluna[43]);//carv_ton_balanco                 
+        jTextFieldMadeiraForno.setText(coluna[44]);//madeira_praca                 
+        jTextFieldMadeiraForno.setText(coluna[45]);//madeira_forno */
+        jTextFieldRendimentoGravimetricoEstimado.setText(coluna[46]);//rend_grav_estimado        
+        //jTextFieldRendimentoGravimetricoEstimado.setText(coluna[47]);//rend_grav_real 
+        jTextFieldFatorEmpilhamento.setText(coluna[48]);//fator_empilalhemto
         //CalcularMadeiraTotal();
     }   
     
@@ -112,11 +128,11 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
     }
         
     private void DefinirTalhadia(){
-        jLabelIdade.setForeground(Color.BLACK );
+        jLabelIdadeHoje.setForeground(Color.BLACK );
         jLabelTalhadia.setForeground(Color.BLACK );
         jLabelSituacao.setForeground(Color.BLACK );       
         
-        if(!jTextFieldDataPlantio.getText().equals("00-00-0000") && !jTextFieldDataRotacao1.getText().equals("00-00-0000") && !jTextFieldDataRotacao2.getText().equals("00-00-0000") && !jTextFieldDataRotacao3.getText().equals("00-00-0000")){
+        /*if(!jTextFieldDataPlantio.getText().equals("00-00-0000") && !jTextFieldDataRotacao1.getText().equals("00-00-0000") && !jTextFieldDataRotacao2.getText().equals("00-00-0000") && !jTextFieldDataRotacao3.getText().equals("00-00-0000")){
             talhadia = 3;
             CalcularIdade(jTextFieldDataRotacao3.getText());                        
         }else if(!jTextFieldDataPlantio.getText().equals("00-00-0000") && !jTextFieldDataRotacao1.getText().equals("00-00-0000") && !jTextFieldDataRotacao2.getText().equals("00-00-0000") && jTextFieldDataRotacao3.getText().equals("00-00-0000")){
@@ -129,20 +145,193 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
             talhadia = 0;
             CalcularIdade(jTextFieldDataPlantio.getText());
         }else {
-            jLabelIdade.setForeground(Color.red );
-            jLabelIdade.setText("Idade: Erro Data"); 
+            jLabelIdadeHoje.setForeground(Color.red );
+            jLabelIdadeHoje.setText("Idade: Erro Data"); 
             jLabelTalhadia.setForeground(Color.red );
             jLabelTalhadia.setText("Talhadia: Erro Data");
             jLabelSituacao.setForeground(Color.red );
             jLabelSituacao.setText("Situação: Erro Data");
+        }*/
+        
+        CalcularIdade(jTextFieldDataRotacao1.getText(), jTextFieldDataRotacao2.getText(), jTextFieldDataRotacao3.getText(), jTextFieldDataPlantio.getText());
+    }
+    
+    /**
+     * 
+     * @param data_c1
+     * @param data_c2
+     * @param data_c3
+     * @param data_plt 
+     */
+    private void CalcularIdade(String data_c1, String data_c2, String data_c3, String data_plt){
+        DecimalFormat decformat = new DecimalFormat("0.0");
+        SimpleDateFormat dataformat = new SimpleDateFormat("dd-MM-yyyy");
+        Date hoje = new Date(); 
+        
+        java.sql.Date plantio = null;
+        java.sql.Date corte1 = null;
+        java.sql.Date corte2 = null;
+        java.sql.Date corte3 = null;
+        java.sql.Date fim = null;
+        try {
+            plantio = new java.sql.Date(dataformat.parse(data_plt).getTime());
+            fim = new java.sql.Date(dataformat.parse(dataformat.format(hoje)).getTime());
+            
+            corte1 = new java.sql.Date(dataformat.parse(data_c1).getTime());
+            plantio = new java.sql.Date(dataformat.parse(data_plt).getTime());
+            
+            corte2 = new java.sql.Date(dataformat.parse(data_c2).getTime());
+            corte1 = new java.sql.Date(dataformat.parse(data_c1).getTime());
+            
+            corte3 = new java.sql.Date(dataformat.parse(data_c3).getTime());
+            corte2 = new java.sql.Date(dataformat.parse(data_c2).getTime());
+        } catch (ParseException ex) {
+            Logger.getLogger(AlterarEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //idade hj
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(plantio);
+        int w1 = c1.get(Calendar.DAY_OF_WEEK);
+        c1.add(Calendar.DAY_OF_WEEK, -w1);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(fim);
+        int w2 = c2.get(Calendar.DAY_OF_WEEK);
+        c2.add(Calendar.DAY_OF_WEEK, -w2);
+        
+        //idade c1
+        Calendar c3 = Calendar.getInstance();
+        c3.setTime(plantio);
+        int w3 = c3.get(Calendar.DAY_OF_WEEK);
+        c3.add(Calendar.DAY_OF_WEEK, -w3);
+
+        Calendar c4 = Calendar.getInstance();
+        c4.setTime(corte1);
+        int w4 = c4.get(Calendar.DAY_OF_WEEK);
+        c2.add(Calendar.DAY_OF_WEEK, -w4);
+        
+        //idade c2
+        Calendar c5 = Calendar.getInstance();
+        c5.setTime(corte1);
+        int w5 = c5.get(Calendar.DAY_OF_WEEK);
+        c1.add(Calendar.DAY_OF_WEEK, -w5);
+
+        Calendar c6 = Calendar.getInstance();
+        c6.setTime(corte2);
+        int w6 = c6.get(Calendar.DAY_OF_WEEK);
+        c2.add(Calendar.DAY_OF_WEEK, -w6);
+        
+        //idade c3
+        Calendar c7 = Calendar.getInstance();
+        c7.setTime(corte2);
+        int w7 = c7.get(Calendar.DAY_OF_WEEK);
+        c7.add(Calendar.DAY_OF_WEEK, -w7);
+
+        Calendar c8 = Calendar.getInstance();
+        c8.setTime(corte3);
+        int w8 = c8.get(Calendar.DAY_OF_WEEK);
+        c8.add(Calendar.DAY_OF_WEEK, -w8);
+
+        float dias1 = (c2.getTimeInMillis()-c1.getTimeInMillis())/(60*60*24*365);
+        float dias2 = (c4.getTimeInMillis()-c3.getTimeInMillis())/(60*60*24*365);
+        float dias3 = (c6.getTimeInMillis()-c5.getTimeInMillis())/(60*60*24*365);
+        float dias4 = (c8.getTimeInMillis()-c7.getTimeInMillis())/(60*60*24*365);
+        idade_hoje = dias1/1000;
+        idade_corte1 = dias2/1000;
+        idade_corte2 = dias3/1000;
+        idade_corte3 = dias4/1000;
+        
+        jLabelIdadeHoje.setText("Idade Hoje: "+decformat.format(idade_hoje)+" anos."); 
+        
+        //corrige idades de corte para 0 caso sejam menores que zero.
+        if(idade_corte1<0){
+            idade_corte1=0;
+        }
+        if(idade_corte2<0){
+            idade_corte2=0;
+        }
+        if(idade_corte3<0){
+            idade_corte3=0;
+        }        
+        jLabelIdadeCorte.setText("Idade Corte 1: "+decformat.format(idade_corte1)+" anos. Corte 2: "+decformat.format(idade_corte2)+" anos. Corte 3: "+decformat.format(idade_corte3)+" anos.");          
+        
+        jLabelTalhadia.setText("Talhadia: "+talhadia);
+        if(!jCheckBoxExaurida.isSelected()){
+            DefinirSituacao();
+        }else{
+            situacao = "Exaurida";
+            jLabelSituacao.setText("Situação: "+situacao);
+            VolumeMadEstimado();
         }
     }
+    
+    /**
+     * Calcular Idade
+     * @param data_i 
+     */
+    /*private void CalcularIdade(String data_i, String data_f, String data_plt){
+        DecimalFormat decformat = new DecimalFormat("0.0");
+        SimpleDateFormat dataformat = new SimpleDateFormat("dd-MM-yyyy");
+        Date hoje = new Date(); 
+        
+        java.sql.Date inicio = null;        
+        java.sql.Date fim = null;
+        
+        java.sql.Date inicio_rot = null;
+        java.sql.Date fim_rot = null;
+        
+        try {
+            inicio_rot = new java.sql.Date(dataformat.parse(data_i).getTime());
+            fim_rot = new java.sql.Date(dataformat.parse(data_f).getTime());
+            
+            inicio = new java.sql.Date(dataformat.parse(data_plt).getTime());            
+            fim = new java.sql.Date(dataformat.parse(dataformat.format(hoje)).getTime());
+        } catch (ParseException ex) {
+            Logger.getLogger(AlterarEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(inicio_rot);
+        int w1 = c1.get(Calendar.DAY_OF_WEEK);
+        c1.add(Calendar.DAY_OF_WEEK, -w1);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(fim_rot);
+        int w2 = c2.get(Calendar.DAY_OF_WEEK);
+        c2.add(Calendar.DAY_OF_WEEK, -w2);
+        
+        Calendar c3 = Calendar.getInstance();
+        c3.setTime(inicio);
+        int w3 = c3.get(Calendar.DAY_OF_WEEK);
+        c3.add(Calendar.DAY_OF_WEEK, -w3);
+
+        Calendar c4 = Calendar.getInstance();
+        c4.setTime(fim);
+        int w4 = c4.get(Calendar.DAY_OF_WEEK);
+        c4.add(Calendar.DAY_OF_WEEK, -w4);
+
+        float dias1 = (c2.getTimeInMillis()-c1.getTimeInMillis())/(60*60*24*365);
+        float dias2 = (c4.getTimeInMillis()-c3.getTimeInMillis())/(60*60*24*365);
+        idade_hoje = dias2/1000;
+        idade_corte = dias1/1000;
+        jLabelIdadeHoje.setText("Idade Hoje: "+decformat.format(idade_hoje)+" anos.");  
+        jLabelIdadeCorte.setText("Idade Corte 1: "+decformat.format(idade_corte)+" anos. Corte 2: "+idade_corte+" anos. Corte 3: "+idade_corte);  
+        jLabelTalhadia.setText("Talhadia: "+talhadia);
+        if(!jCheckBoxExaurida.isSelected()){
+            DefinirSituacao();
+        }else{
+            situacao = "Exaurida";
+            jLabelSituacao.setText("Situação: "+situacao);
+            VolumeMadEstimado();
+        }
+    }*/
      
     /**
      * Calcular Idade
      * @param datainicio 
      */
-    private void CalcularIdade(String datainicio){
+    /*private void CalcularIdade(String datainicio){
         DecimalFormat decformat = new DecimalFormat("0.0");
         SimpleDateFormat dataformat = new SimpleDateFormat("dd-MM-yyyy");
         Date hoje = new Date(); 
@@ -166,8 +355,9 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         c2.add(Calendar.DAY_OF_WEEK, -w2);
 
         float dias = (c2.getTimeInMillis()-c1.getTimeInMillis())/(60*60*24*365);
-        idade = dias/1000;
-        jLabelIdade.setText("Idade: "+decformat.format(idade)+" anos.");        
+        idade_hoje = dias/1000;
+        jLabelIdadeHoje.setText("Idade hoje: "+decformat.format(idade_hoje)+" anos.");  
+        jLabelIdadeCorte.setText("Idade corte: "+decformat.format(idade_hoje)+" anos.");  
         jLabelTalhadia.setText("Talhadia: "+talhadia);
         if(!jCheckBoxExaurida.isSelected()){
             DefinirSituacao();
@@ -176,7 +366,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
             jLabelSituacao.setText("Situação: "+situacao);
             VolumeMadEstimado();
         }
-    } 
+    } */
     
     private void DefinirSituacao(){
         if(jComboBoxCategoria.getSelectedIndex()==1){
@@ -242,9 +432,10 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         carv_ton_estimado = carv_ton_ha * Float.parseFloat(jTextFieldArea.getText());
         jLabelCarvaoTonEst.setText("Carvão Tonelada Estimada: "+carv_ton_estimado);
         //CalcularRendimentoEstimado();
+        RegistrarEstoque();
     }
     
-    private void CalcularRendimentoEstimado(){
+    /*private void CalcularRendimentoEstimado(){
         rendimento = volume_madeira_estimado/mdc_estimado;
         if(rendimento<rend_grav_est){
             jLabelRendimento.setForeground(new Color(0,102,0));
@@ -256,9 +447,9 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
     }
     
     private void CalcularRendimentoGravimetricoReal(){
-        //rend_grav_real = volume_madeira_real/mdc_real;
+        //rend_grav_real = volume_madeira_transp/mdc_transp;
         //jLabelCarvaoTonEst.setText("Carvão Tonelada Estimada:: "+carv_ton_estimado);
-    }
+    }*/
     
     
     private void RegistrarEstoque(){
@@ -268,7 +459,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         estoque_principal.setArea(Float.parseFloat(jTextFieldArea.getText()));
         estoque_principal.setM3_ha(Float.parseFloat(jTextFieldM3HA.getText()));
         estoque_principal.setMdc_ha(mdc_ha);
-        estoque_principal.setMaterial_genetico(Integer.parseInt(jTextFieldMaterialGenetico.getText()));
+        estoque_principal.setMaterial_genetico(jTextFieldMaterialGenetico.getText());
         estoque_principal.setIma(Float.parseFloat(jTextFieldIMA.getText()));
         estoque_principal.setTalhadia(talhadia);
         estoque_principal.setAno_rotacao(Integer.parseInt(jTextFieldAnoRotacao.getText()));  
@@ -276,7 +467,10 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         estoque_principal.setData_rotacao_1(jTextFieldDataRotacao1.getText());
         estoque_principal.setData_rotacao_2(jTextFieldDataRotacao2.getText());
         estoque_principal.setData_rotacao_3(jTextFieldDataRotacao3.getText());
-        estoque_principal.setIdade(idade);
+        estoque_principal.setIdade_hoje(idade_hoje);        
+        estoque_principal.setIdade_corte1(idade_corte1);
+        estoque_principal.setIdade_corte2(idade_corte2);
+        estoque_principal.setIdade_corte3(idade_corte3);
         estoque_principal.setCategoria(jComboBoxCategoria.getSelectedItem().toString());
         estoque_principal.setSituacao(situacao);             
         estoque_principal.setDensidade_madeira(Float.parseFloat(jTextFieldDensidadeMadeira.getText())); 
@@ -301,13 +495,13 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         
         AlterarEstoquePrincipalCtrl alterar = new AlterarEstoquePrincipalCtrl(estoque_principal);
 
-        try {
+        /*try {
             new GerenciarEstoquePrincipal().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(AlterarEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(false);
-        dispose();
+        dispose();*/
     }
     
     private void VoltarMenu(){
@@ -369,11 +563,9 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         jLabel31 = new javax.swing.JLabel();
         jTextFieldDataRotacao3 = new javax.swing.JTextField();
         jTextFieldM3HA = new javax.swing.JTextField();
-        jLabelRendimento = new javax.swing.JLabel();
         jTextFieldTalhao = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jTextFieldUpc = new javax.swing.JTextField();
-        jLabelIdade = new javax.swing.JLabel();
         jLabelTalhadia = new javax.swing.JLabel();
         jLabelSituacao = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
@@ -388,6 +580,8 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         jLabelCarvaoTonHA = new javax.swing.JLabel();
         jLabelMadeiraTonEst = new javax.swing.JLabel();
         jLabelCarvaoTonEst = new javax.swing.JLabel();
+        jLabelIdadeHoje = new javax.swing.JLabel();
+        jLabelIdadeCorte = new javax.swing.JLabel();
         jLabelTitulo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -571,11 +765,6 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         jTextFieldM3HA.setFont(jTextFieldM3HA.getFont().deriveFont(jTextFieldM3HA.getFont().getSize()+2f));
         jTextFieldM3HA.setPreferredSize(new java.awt.Dimension(100, 25));
 
-        jLabelRendimento.setFont(jLabelRendimento.getFont().deriveFont(jLabelRendimento.getFont().getSize()+1f));
-        jLabelRendimento.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelRendimento.setText("Rendimento Estimado:");
-        jLabelRendimento.setPreferredSize(new java.awt.Dimension(250, 16));
-
         jTextFieldTalhao.setFont(jTextFieldTalhao.getFont().deriveFont(jTextFieldTalhao.getFont().getSize()+2f));
         jTextFieldTalhao.setPreferredSize(new java.awt.Dimension(100, 25));
 
@@ -585,11 +774,6 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
 
         jTextFieldUpc.setFont(jTextFieldUpc.getFont().deriveFont(jTextFieldUpc.getFont().getSize()+2f));
         jTextFieldUpc.setPreferredSize(new java.awt.Dimension(100, 25));
-
-        jLabelIdade.setFont(jLabelIdade.getFont().deriveFont(jLabelIdade.getFont().getSize()+1f));
-        jLabelIdade.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelIdade.setText("Idade:");
-        jLabelIdade.setPreferredSize(new java.awt.Dimension(250, 16));
 
         jLabelTalhadia.setFont(jLabelTalhadia.getFont().deriveFont(jLabelTalhadia.getFont().getSize()+1f));
         jLabelTalhadia.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -643,6 +827,16 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         jLabelCarvaoTonEst.setFont(jLabelCarvaoTonEst.getFont().deriveFont(jLabelCarvaoTonEst.getFont().getSize()+1f));
         jLabelCarvaoTonEst.setText("Carvão Tonelada Estimada:");
         jLabelCarvaoTonEst.setPreferredSize(new java.awt.Dimension(250, 16));
+
+        jLabelIdadeHoje.setFont(jLabelIdadeHoje.getFont().deriveFont(jLabelIdadeHoje.getFont().getSize()+1f));
+        jLabelIdadeHoje.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabelIdadeHoje.setText("Idade Hoje:");
+        jLabelIdadeHoje.setPreferredSize(new java.awt.Dimension(250, 16));
+
+        jLabelIdadeCorte.setFont(jLabelIdadeCorte.getFont().deriveFont(jLabelIdadeCorte.getFont().getSize()+1f));
+        jLabelIdadeCorte.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabelIdadeCorte.setText("Idade Corte:");
+        jLabelIdadeCorte.setPreferredSize(new java.awt.Dimension(250, 16));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -722,10 +916,6 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                                 .addComponent(jTextFieldRendimentoGravimetricoEstimado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabelRendimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabelTalhadia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabelSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabelVolumeEstimado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabelMDCEstimado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabelMDC_HA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -740,8 +930,16 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabelMadeiraTonHA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelIdadeCorte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelMadeiraTonHA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelTalhadia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelIdadeHoje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextFieldAnoRotacao, jTextFieldArea, jTextFieldDataPlantio, jTextFieldDataRotacao1, jTextFieldDataRotacao2, jTextFieldDataRotacao3, jTextFieldDensidadeCarvao, jTextFieldDensidadeMadeira, jTextFieldIMA, jTextFieldM3HA, jTextFieldMaterialGenetico, jTextFieldTalhao, jTextFieldUpc});
@@ -750,7 +948,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel22, jLabel25, jLabel28, jLabel29, jLabel31, jLabel8, jLabel9});
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelIdade, jLabelMDCEstimado, jLabelMDC_HA, jLabelRendimento, jLabelSituacao, jLabelTalhadia, jLabelVolumeEstimado});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelMDCEstimado, jLabelMDC_HA, jLabelSituacao, jLabelTalhadia, jLabelVolumeEstimado});
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -820,16 +1018,16 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                 .addComponent(jLabelCarvaoTonHA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
                 .addComponent(jLabelMadeiraTonEst, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(jLabelCarvaoTonEst, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabelIdadeHoje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelIdadeCorte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelTalhadia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelRendimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCargaTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -837,7 +1035,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                 .addGap(27, 27, 27))
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel10, jLabel11, jLabel14, jLabel18, jLabel20, jLabel21, jLabelCarvaoTonHA, jLabelIdade, jLabelMDCEstimado, jLabelMDC_HA, jLabelMadeiraTonHA, jLabelRendimento, jLabelSituacao, jLabelTalhadia, jLabelTalhao, jLabelVolumeEstimado});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel10, jLabel11, jLabel14, jLabel18, jLabel20, jLabel21, jLabelCarvaoTonHA, jLabelMDCEstimado, jLabelMDC_HA, jLabelMadeiraTonHA, jLabelSituacao, jLabelTalhadia, jLabelTalhao, jLabelVolumeEstimado});
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jTextFieldArea, jTextFieldIMA, jTextFieldM3HA, jTextFieldMaterialGenetico, jTextFieldTalhao, jTextFieldUpc});
 
@@ -985,13 +1183,13 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelCarvaoTonEst;
     private javax.swing.JLabel jLabelCarvaoTonHA;
     private javax.swing.JLabel jLabelIdTipo;
-    private javax.swing.JLabel jLabelIdade;
+    private javax.swing.JLabel jLabelIdadeCorte;
+    private javax.swing.JLabel jLabelIdadeHoje;
     private javax.swing.JLabel jLabelMDCEstimado;
     private javax.swing.JLabel jLabelMDC_HA;
     private javax.swing.JLabel jLabelMadeiraTonEst;
     private javax.swing.JLabel jLabelMadeiraTonHA;
     private javax.swing.JLabel jLabelNome;
-    private javax.swing.JLabel jLabelRendimento;
     private javax.swing.JLabel jLabelSituacao;
     private javax.swing.JLabel jLabelTalhadia;
     private javax.swing.JLabel jLabelTalhao;

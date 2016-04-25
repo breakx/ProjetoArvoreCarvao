@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Visao.relatorios;
+package Visao.buscas;
 
 import Visao.relatorios.GerarRelatorioEstoquePrincipal;
 import Controle.ControlePrincipal;
 import Visao.carvao.GerenciarCarvaoForno;
 import Visao.login.Login;
 import Visao.madeira.GerenciarMadeiraPraca;
+import Visao.relatorios.GerarRelatorioEstoquePrincipal;
 import Visao.usuario.GerenciarUsuarios;
 import java.sql.SQLException;
 import java.util.logging.Level;

@@ -40,9 +40,9 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
      * 
      */
     private void PreencherTabela(){
-        ArrayList dados = new ArrayList();
+        ArrayList linhas = new ArrayList();
         String[] colunas = new String[] { 
-            "Id",
+            //"Id",
             "Estado",
             "Bloco",
             "Municipio",
@@ -51,15 +51,19 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             "UPC",
             "Talhao",
             "Area",
-            "M3/ha",
             "Mat.Gen.",
+            "M3/ha",
             "Talhadia",
             "Ano_Rt",
             "Data_Plant",
             "Data_Rt_1",
             "Data_Rt_2",
             "Data_Rt_3",
-            "Idade",
+            "Idade_C1",
+            "Idade_C2",
+            "Idade_C3",
+            "Idade_Hj",
+            "Conducao",
             "Categoria",
             "Situacao",
             "IMA",
@@ -71,34 +75,32 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             "Id_Op",
             "Data_Reg",
             "Vol_Md_Est",
-            "Vol_Md_Real",
+            "Vol_Md_Transp",
             "Vol_Md_Bal",
             "MdC_Est",
-            "MdC_Real",
+            "MdC_Transp",
             "MdC_Bal",
             "Md_Tn_Est",
-            "Md_Tn_Real",
+            "Md_Tn_Transp",
             "Md_Tn_Bal",
             "Cv_Tn_Est",
-            "Cv_Tn_Real",
+            "Cv_Tn_Transp",
             "Cv_Tn_Bal",
             "Md_Praca",
             "Md_Forno",
-            "Md_Tn_Tot",
-            "Cv_Tn_Tot",
             "RG_Est",
             "RG_Real",
             "Fator_Emp"
         };
-        String query = "Select * from estoque_principal";
+        String query = "Select * from estoque_principal where upc = '"+ControlePrincipal.upc_u+"'";
         int tamanho = 0;       
         ConexaoBD con = ConexaoBD.getConexao();        
         ResultSet rs = con.consultaSql(query);
         
         try {
             while(rs.next()){
-                dados.add(new Object[]{
-                    rs.getString("id_estoque_p"),
+                linhas.add(new Object[]{
+                    //rs.getString("id_estoque_p"),
                     rs.getString("estado"),
                     rs.getString("bloco"),
                     rs.getString("municipio"),
@@ -107,15 +109,19 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                     rs.getString("upc"),
                     rs.getString("talhao"),
                     rs.getString("area"),
-                    rs.getString("m3_ha"),
                     rs.getString("material_genetico"),
+                    rs.getString("m3_ha"),
                     rs.getString("talhadia"),
                     rs.getString("ano_rotacao"),
                     rs.getString("data_plantio"),
                     rs.getString("data_rotacao_1"),
                     rs.getString("data_rotacao_2"),
                     rs.getString("data_rotacao_3"),
-                    rs.getString("idade"),
+                    rs.getString("idade_corte1"),
+                    rs.getString("idade_corte2"),
+                    rs.getString("idade_corte3"),
+                    rs.getString("idade_hoje"),
+                    rs.getString("conducao"),
                     rs.getString("categoria"),
                     rs.getString("situacao"),
                     rs.getString("ima"),
@@ -127,21 +133,19 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                     rs.getString("id_operario"),
                     rs.getString("data_estoque"),
                     rs.getString("vol_mad_estimado"),
-                    rs.getString("vol_mad_real"),
+                    rs.getString("vol_mad_transp"),
                     rs.getString("vol_mad_balanco"),
                     rs.getString("mdc_estimado"),
-                    rs.getString("mdc_real"),
+                    rs.getString("mdc_transp"),
                     rs.getString("mdc_balanco"),
                     rs.getString("mad_ton_estimado"),
-                    rs.getString("mad_ton_real"),
+                    rs.getString("mad_ton_transp"),
                     rs.getString("mad_ton_balanco"),
                     rs.getString("carv_ton_estimado"),
-                    rs.getString("carv_ton_real"),
+                    rs.getString("carv_ton_transp"),
                     rs.getString("carv_ton_balanco"),
                     rs.getString("madeira_praca"),
                     rs.getString("madeira_forno"),
-                    rs.getString("mad_ton_tot"),
-                    rs.getString("carv_ton_tot"),
                     rs.getString("rend_grav_estimado"),
                     rs.getString("rend_grav_real"),
                     rs.getString("fator_empilalhemto")
@@ -153,12 +157,18 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Erro ao preencher a tabela! "+ex);
         }
         
-        GerarTabela modelo = new GerarTabela(dados, colunas);
+        GerarTabela modelo = new GerarTabela(linhas, colunas);
         jTableEstoquePrincipal.setModel(modelo);
         for(int i=0;i<colunas.length;i++){
-            jTableEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*100);
+            if(colunas[i].length()<=8){                
+                jTableEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*12);
+            }else if(colunas[i].length()>8 && colunas[i].length()<=15){
+                jTableEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*10);
+            }else{
+                jTableEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*8);
+            }
             jTableEstoquePrincipal.getColumnModel().getColumn(i).setResizable(false);
-            //System.out.println("Indice: "+i+" - "+ colunas[i].length()*200);
+            //System.out.println("Indice: "+i+" - "+ colunas[i].length());
         }
         jTableEstoquePrincipal.getTableHeader().setReorderingAllowed(false);
         jTableEstoquePrincipal.setAutoResizeMode(jTableEstoquePrincipal.AUTO_RESIZE_OFF);
@@ -170,61 +180,65 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         if(jTableEstoquePrincipal.getSelectedRow()>=0)//verifica se a linha a ser alterada esta marcada
         {
             int linha = jTableEstoquePrincipal.getSelectedRow();
-            String id_estoque = jTableEstoquePrincipal.getValueAt(linha, 0).toString();
+            JOptionPane.showMessageDialog(null, "tamnaho: "+jTableEstoquePrincipal.getColumnCount());
+            String cols[] = new String[jTableEstoquePrincipal.getColumnCount()];
+            for(int i=0; i<jTableEstoquePrincipal.getColumnCount(); i++){
+                cols[i]=jTableEstoquePrincipal.getValueAt(linha, i).toString();
+            }
+            /*String id_estoque = jTableEstoquePrincipal.getValueAt(linha, 0).toString();//<
             String estado = jTableEstoquePrincipal.getValueAt(linha, 1).toString();
             String bloco = jTableEstoquePrincipal.getValueAt(linha, 2).toString();
             String municipio = jTableEstoquePrincipal.getValueAt(linha, 3).toString();
             String fazenda = jTableEstoquePrincipal.getValueAt(linha, 4).toString();
             String projeto = jTableEstoquePrincipal.getValueAt(linha, 5).toString();
-            String upc = jTableEstoquePrincipal.getValueAt(linha, 6).toString();
+            String upc = jTableEstoquePrincipal.getValueAt(linha, 6).toString();//<
             String talhao = jTableEstoquePrincipal.getValueAt(linha, 7).toString();
-            String area = jTableEstoquePrincipal.getValueAt(linha, 8).toString();
-            String m3_ha = jTableEstoquePrincipal.getValueAt(linha, 9).toString();
-            String material_genetico = jTableEstoquePrincipal.getValueAt(linha, 10).toString();
-            String talhadia = jTableEstoquePrincipal.getValueAt(linha, 11).toString();
-            String ano_rotacao = jTableEstoquePrincipal.getValueAt(linha, 12).toString();
-            String data_plantio = jTableEstoquePrincipal.getValueAt(linha, 13).toString();
-            String data_rotacao_1 = jTableEstoquePrincipal.getValueAt(linha, 14).toString();
-            String data_rotacao_2 = jTableEstoquePrincipal.getValueAt(linha, 15).toString();
-            String data_rotacao_3 = jTableEstoquePrincipal.getValueAt(linha, 16).toString();
-            String idade = jTableEstoquePrincipal.getValueAt(linha, 17).toString();
-            String categoria = jTableEstoquePrincipal.getValueAt(linha, 18).toString();
-            String situacao = jTableEstoquePrincipal.getValueAt(linha, 19).toString();
-            String ima = jTableEstoquePrincipal.getValueAt(linha, 20).toString();            
-            String mdc_ha = jTableEstoquePrincipal.getValueAt(linha, 21).toString();
-            String densidade_madeira = jTableEstoquePrincipal.getValueAt(linha, 22).toString();
-            String densidade_carvao = jTableEstoquePrincipal.getValueAt(linha, 23).toString();
-            String mad_ton_ha = jTableEstoquePrincipal.getValueAt(linha, 24).toString();
-            String carv_ton_ha = jTableEstoquePrincipal.getValueAt(linha, 25).toString();
-            String id_operario = jTableEstoquePrincipal.getValueAt(linha, 26).toString();
-            String data_estoque	= jTableEstoquePrincipal.getValueAt(linha, 27).toString();
-            String vol_mad_estimado = jTableEstoquePrincipal.getValueAt(linha, 28).toString();
-            String vol_mad_real = jTableEstoquePrincipal.getValueAt(linha, 29).toString();
-            String vol_mad_balanco = jTableEstoquePrincipal.getValueAt(linha, 30).toString();
-            String mdc_estimado = jTableEstoquePrincipal.getValueAt(linha, 31).toString();
-            String mdc_real = jTableEstoquePrincipal.getValueAt(linha, 32).toString();
-            String mdc_balanco = jTableEstoquePrincipal.getValueAt(linha, 33).toString();
-            String mad_ton_estimado = jTableEstoquePrincipal.getValueAt(linha, 34).toString();
-            String mad_ton_real = jTableEstoquePrincipal.getValueAt(linha, 35).toString();
-            String mad_ton_balanco = jTableEstoquePrincipal.getValueAt(linha, 36).toString();
-            String carv_ton_estimado = jTableEstoquePrincipal.getValueAt(linha, 37).toString();
-            String carv_ton_real = jTableEstoquePrincipal.getValueAt(linha, 38).toString();
-            String carv_ton_balanco = jTableEstoquePrincipal.getValueAt(linha, 39).toString();
-            String madeira_praca = jTableEstoquePrincipal.getValueAt(linha, 40).toString();
-            String madeira_forno = jTableEstoquePrincipal.getValueAt(linha, 41).toString();
-            String mad_ton_tot = jTableEstoquePrincipal.getValueAt(linha, 42).toString();
-            String carv_ton_tot = jTableEstoquePrincipal.getValueAt(linha, 43).toString();
-            String rend_grav_estimado = jTableEstoquePrincipal.getValueAt(linha, 44).toString();
-            String rend_grav_real = jTableEstoquePrincipal.getValueAt(linha, 45).toString();
-            String fator_empilalhemto = jTableEstoquePrincipal.getValueAt(linha, 46).toString();
+            String area = jTableEstoquePrincipal.getValueAt(linha, 8).toString();//<
+            String material_genetico = jTableEstoquePrincipal.getValueAt(linha, 9).toString();//<
+            String m3_ha = jTableEstoquePrincipal.getValueAt(linha, 10).toString();//<
+            //String talhadia = jTableEstoquePrincipal.getValueAt(linha, 11).toString();
+            String ano_rotacao = jTableEstoquePrincipal.getValueAt(linha, 12).toString();//<
+            String data_plantio = jTableEstoquePrincipal.getValueAt(linha, 13).toString();//<
+            String data_rotacao_1 = jTableEstoquePrincipal.getValueAt(linha, 14).toString();//<
+            String data_rotacao_2 = jTableEstoquePrincipal.getValueAt(linha, 15).toString();//<
+            String data_rotacao_3 = jTableEstoquePrincipal.getValueAt(linha, 16).toString();//<
+            String idade_c1 = jTableEstoquePrincipal.getValueAt(linha, 17).toString();
+            String idade_c2 = jTableEstoquePrincipal.getValueAt(linha, 18).toString();
+            String idade_c3 = jTableEstoquePrincipal.getValueAt(linha, 19).toString();
+            String idade_hj = jTableEstoquePrincipal.getValueAt(linha, 20).toString();
+            String conducao = jTableEstoquePrincipal.getValueAt(linha, 21).toString();
+            String categoria = jTableEstoquePrincipal.getValueAt(linha, 22).toString();//<
+            //String situacao = jTableEstoquePrincipal.getValueAt(linha, 23).toString();
+            String ima = jTableEstoquePrincipal.getValueAt(linha, 24).toString();//<
+            //String mdc_ha = jTableEstoquePrincipal.getValueAt(linha, 25).toString();
+            String densidade_madeira = jTableEstoquePrincipal.getValueAt(linha, 26).toString();//<
+            String densidade_carvao = jTableEstoquePrincipal.getValueAt(linha, 27).toString();//<
+            String mad_ton_ha = jTableEstoquePrincipal.getValueAt(linha, 28).toString();
+            String carv_ton_ha = jTableEstoquePrincipal.getValueAt(linha, 29).toString();
+            String id_operario = jTableEstoquePrincipal.getValueAt(linha, 30).toString();
+            String data_estoque	= jTableEstoquePrincipal.getValueAt(linha, 31).toString();
+            String vol_mad_estimado = jTableEstoquePrincipal.getValueAt(linha, 32).toString();
+            String vol_mad_transp = jTableEstoquePrincipal.getValueAt(linha, 33).toString();
+            String vol_mad_balanco = jTableEstoquePrincipal.getValueAt(linha, 34).toString();
+            String mdc_estimado = jTableEstoquePrincipal.getValueAt(linha, 35).toString();
+            String mdc_transp = jTableEstoquePrincipal.getValueAt(linha, 36).toString();
+            String mdc_balanco = jTableEstoquePrincipal.getValueAt(linha, 37).toString();
+            String mad_ton_estimado = jTableEstoquePrincipal.getValueAt(linha, 38).toString();
+            String mad_ton_transp = jTableEstoquePrincipal.getValueAt(linha, 39).toString();
+            String mad_ton_balanco = jTableEstoquePrincipal.getValueAt(linha, 40).toString();
+            String carv_ton_estimado = jTableEstoquePrincipal.getValueAt(linha, 41).toString();
+            String carv_ton_transp = jTableEstoquePrincipal.getValueAt(linha, 42).toString();
+            String carv_ton_balanco = jTableEstoquePrincipal.getValueAt(linha, 43).toString();
+            String madeira_praca = jTableEstoquePrincipal.getValueAt(linha, 44).toString();
+            String madeira_forno = jTableEstoquePrincipal.getValueAt(linha, 45).toString();
+            String rend_grav_estimado = jTableEstoquePrincipal.getValueAt(linha, 46).toString();//<
+            //String rend_grav_real = jTableEstoquePrincipal.getValueAt(linha, 47).toString();
+            String fator_empilalhemto = jTableEstoquePrincipal.getValueAt(linha, 48).toString();//<*/
             
             //String data_estoque = jTableEstoque.getValueAt(linha, 28).toString();
             //String id_operario = jTableEstoque.getValueAt(linha, 29).toString();
  
-            new AlterarEstoquePrincipal(id_estoque, upc, talhao, area, m3_ha, data_plantio,
-            material_genetico, talhadia, ano_rotacao, data_rotacao_1, data_rotacao_2, data_rotacao_3, idade, 
-            categoria, situacao, ima, mdc_ha, mdc_estimado, densidade_carvao, densidade_madeira, mdc_balanco,
-            rend_grav_estimado, fator_empilalhemto).setVisible(true);
+            new AlterarEstoquePrincipal(cols).setVisible(true);
             this.setVisible(false);
             dispose();
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
@@ -281,7 +295,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         jButtonLogout = new javax.swing.JButton();
         jButtonVoltar2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jTableEstoquePrincipal = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -408,41 +422,24 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
 
-        jScrollPane1.setAutoscrolls(true);
-        jScrollPane1.setDebugGraphicsOptions(javax.swing.DebugGraphics.LOG_OPTION);
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(1000, 1000));
-        jScrollPane1.setOpaque(false);
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(1000, 1000));
-        jScrollPane1.setRequestFocusEnabled(false);
-
-        jTableEstoquePrincipal.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
         jTableEstoquePrincipal.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        jTableEstoquePrincipal.setColumnSelectionAllowed(true);
-        jTableEstoquePrincipal.setFillsViewportHeight(true);
-        jTableEstoquePrincipal.setMaximumSize(new java.awt.Dimension(1000, 1000));
-        jTableEstoquePrincipal.setMinimumSize(new java.awt.Dimension(450, 450));
-        jTableEstoquePrincipal.setPreferredSize(new java.awt.Dimension(3200, 0));
-        jTableEstoquePrincipal.setRequestFocusEnabled(false);
-        jTableEstoquePrincipal.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTableEstoquePrincipal);
-        jTableEstoquePrincipal.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        jScrollPane2.setViewportView(jTableEstoquePrincipal);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanelMainLayout = new javax.swing.GroupLayout(jPanelMain);
@@ -459,7 +456,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE))
                         .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addContainerGap(10, Short.MAX_VALUE)))
         );
@@ -572,7 +569,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelMain;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableEstoquePrincipal;
     // End of variables declaration//GEN-END:variables
 }

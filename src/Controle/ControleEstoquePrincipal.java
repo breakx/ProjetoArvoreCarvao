@@ -19,21 +19,23 @@ public class ControleEstoquePrincipal {
     private String projeto; 
     private String upc;
     private int talhao; 
-    private float area; 
-    private float m3_ha; 
-    private int material_genetico;
+    private float area;  
+    private String material_genetico;
+    private float m3_ha;
     private int talhadia;
     private int ano_rotacao; 
     private String data_plantio;
     private String data_rotacao_1;
     private String data_rotacao_2;
     private String data_rotacao_3;
-    private float idade;
+    private float idade_corte1;
+    private float idade_corte2;
+    private float idade_corte3;
+    private float idade_hoje;    
+    private String conducao = "-";
     private String categoria;
     private String situacao;
-    private float ima; 
-    private float mad_ton_tot;
-    private float carv_ton_tot;
+    private float ima;
     private float mdc_ha;
     private float densidade_madeira; 
     private float densidade_carvao; 
@@ -42,16 +44,16 @@ public class ControleEstoquePrincipal {
     private String id_operario;
     private String data_estoque;
     private float vol_mad_estimado;
-    private float vol_mad_real; 
+    private float vol_mad_transp; 
     private float vol_mad_balanco;
     private float mdc_estimado; 
-    private float mdc_real;
+    private float mdc_transp;
     private float mdc_balanco;
     private float mad_ton_estimado; 
-    private float mad_ton_real;
+    private float mad_ton_transp;
     private float mad_ton_balanco; 
     private float carv_ton_estimado;
-    private float carv_ton_real;
+    private float carv_ton_transp;
     private float carv_ton_balanco; 
     private float madeira_praca;
     private float madeira_forno; 
@@ -202,14 +204,14 @@ public class ControleEstoquePrincipal {
     /**
      * @return the material_genetico
      */
-    public int getMaterial_genetico() {
+    public String getMaterial_genetico() {
         return material_genetico;
     }
 
     /**
      * @param material_genetico the material_genetico to set
      */
-    public void setMaterial_genetico(int material_genetico) {
+    public void setMaterial_genetico(String material_genetico) {
         this.material_genetico = material_genetico;
     }
 
@@ -298,17 +300,17 @@ public class ControleEstoquePrincipal {
     }
 
     /**
-     * @return the idade
+     * @return the idade_hoje
      */
-    public float getIdade() {
-        return idade;
+    public float getIdade_hoje() {
+        return idade_hoje;
     }
 
     /**
-     * @param idade the idade to set
+     * @param idade_hoje the idade_hoje to set
      */
-    public void setIdade(float idade) {
-        this.idade = idade;
+    public void setIdade_hoje(float idade_hoje) {
+        this.idade_hoje = idade_hoje;
     }
 
     /**
@@ -352,35 +354,7 @@ public class ControleEstoquePrincipal {
     public void setIma(float ima) {
         this.ima = ima;
     }
-
-    /**
-     * @return the mad_ton_tot
-     */
-    public float getMad_ton_tot() {
-        return mad_ton_tot;
-    }
-
-    /**
-     * @param mad_ton_tot the mad_ton_tot to set
-     */
-    public void setMad_ton_tot(float mad_ton_tot) {
-        this.mad_ton_tot = mad_ton_tot;
-    }
-
-    /**
-     * @return the carv_ton_tot
-     */
-    public float getCarv_ton_tot() {
-        return carv_ton_tot;
-    }
-
-    /**
-     * @param carv_ton_tot the carv_ton_tot to set
-     */
-    public void setCarv_ton_tot(float carv_ton_tot) {
-        this.carv_ton_tot = carv_ton_tot;
-    }
-
+    
     /**
      * @return the mdc_ha
      */
@@ -494,17 +468,17 @@ public class ControleEstoquePrincipal {
     }
 
     /**
-     * @return the vol_mad_real
+     * @return the vol_mad_transp
      */
-    public float getVol_mad_real() {
-        return vol_mad_real;
+    public float getVol_mad_transp() {
+        return vol_mad_transp;
     }
 
     /**
-     * @param vol_mad_real the vol_mad_real to set
+     * @param vol_mad_transp the vol_mad_transp to set
      */
-    public void setVol_mad_real(float vol_mad_real) {
-        this.vol_mad_real = vol_mad_real;
+    public void setVol_mad_transp(float vol_mad_transp) {
+        this.vol_mad_transp = vol_mad_transp;
     }
 
     /**
@@ -536,17 +510,17 @@ public class ControleEstoquePrincipal {
     }
 
     /**
-     * @return the mdc_real
+     * @return the mdc_transp
      */
-    public float getMdc_real() {
-        return mdc_real;
+    public float getMdc_transp() {
+        return mdc_transp;
     }
 
     /**
-     * @param mdc_real the mdc_real to set
+     * @param mdc_transp the mdc_transp to set
      */
-    public void setMdc_real(float mdc_real) {
-        this.mdc_real = mdc_real;
+    public void setMdc_transp(float mdc_transp) {
+        this.mdc_transp = mdc_transp;
     }
 
     /**
@@ -578,17 +552,17 @@ public class ControleEstoquePrincipal {
     }
 
     /**
-     * @return the mad_ton_real
+     * @return the mad_ton_transp
      */
-    public float getMad_ton_real() {
-        return mad_ton_real;
+    public float getMad_ton_transp() {
+        return mad_ton_transp;
     }
 
     /**
-     * @param mad_ton_real the mad_ton_real to set
+     * @param mad_ton_transp the mad_ton_transp to set
      */
-    public void setMad_ton_real(float mad_ton_real) {
-        this.mad_ton_real = mad_ton_real;
+    public void setMad_ton_transp(float mad_ton_transp) {
+        this.mad_ton_transp = mad_ton_transp;
     }
 
     /**
@@ -620,17 +594,17 @@ public class ControleEstoquePrincipal {
     }
 
     /**
-     * @return the carv_ton_real
+     * @return the carv_ton_transp
      */
-    public float getCarv_ton_real() {
-        return carv_ton_real;
+    public float getCarv_ton_transp() {
+        return carv_ton_transp;
     }
 
     /**
-     * @param carv_ton_real the carv_ton_real to set
+     * @param carv_ton_transp the carv_ton_transp to set
      */
-    public void setCarv_ton_real(float carv_ton_real) {
-        this.carv_ton_real = carv_ton_real;
+    public void setCarv_ton_transp(float carv_ton_transp) {
+        this.carv_ton_transp = carv_ton_transp;
     }
 
     /**
@@ -715,6 +689,62 @@ public class ControleEstoquePrincipal {
      */
     public void setFator_empilalhemto(float fator_empilalhemto) {
         this.fator_empilalhemto = fator_empilalhemto;
+    }
+
+    /**
+     * @return the idade_corte1
+     */
+    public float getIdade_corte1() {
+        return idade_corte1;
+    }
+
+    /**
+     * @param idade_corte1 the idade_corte1 to set
+     */
+    public void setIdade_corte1(float idade_corte1) {
+        this.idade_corte1 = idade_corte1;
+    }
+
+    /**
+     * @return the conducao
+     */
+    public String getConducao() {
+        return conducao;
+    }
+
+    /**
+     * @param conducao the conducao to set
+     */
+    public void setConducao(String conducao) {
+        this.conducao = conducao;
+    }
+
+    /**
+     * @return the idade_corte2
+     */
+    public float getIdade_corte2() {
+        return idade_corte2;
+    }
+
+    /**
+     * @param idade_corte2 the idade_corte2 to set
+     */
+    public void setIdade_corte2(float idade_corte2) {
+        this.idade_corte2 = idade_corte2;
+    }
+
+    /**
+     * @return the idade_corte3
+     */
+    public float getIdade_corte3() {
+        return idade_corte3;
+    }
+
+    /**
+     * @param idade_corte3 the idade_corte3 to set
+     */
+    public void setIdade_corte3(float idade_corte3) {
+        this.idade_corte3 = idade_corte3;
     }
 
 }

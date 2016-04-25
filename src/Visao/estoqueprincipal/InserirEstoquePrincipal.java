@@ -140,7 +140,7 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
         
         estoque_principal.setUpc(jSpinnerUpc.getValue().toString());
         estoque_principal.setTalhao(talhao);
-        estoque_principal.setMaterial_genetico(Integer.parseInt(jTextFieldMaterialGenetico.getText())); 
+        estoque_principal.setMaterial_genetico(jTextFieldMaterialGenetico.getText()); 
         estoque_principal.setArea(Float.parseFloat(jSpinnerArea.getValue().toString())); 
         
         estoque_principal.setData_estoque(data_estoque_principal.format(date));
