@@ -54,4 +54,7 @@ public class ControlePrincipal {
     //Dados atuais
     public static int upc;
     public static String material_genetico;
+    
+    //
+    public static boolean excel_cmd;
 }

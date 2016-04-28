@@ -17,12 +17,20 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGerarPDFActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCarregarExcel">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCarregarEstoqueExcel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Carregar Excel"/>
+                <Property name="text" type="java.lang.String" value="Carregar Estoque Excel"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCarregarExcelActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCarregarEstoqueExcelActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCarregarFazendaExcel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Carregar Fazenda Excel"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCarregarFazendaExcelActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemLogout">
@@ -45,9 +53,6 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[1024, 780]"/>
-    </Property>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
@@ -83,7 +88,7 @@
                       </Group>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jPanel3" pref="700" max="32767" attributes="0"/>
+                          <Component id="jPanel3" pref="670" max="32767" attributes="0"/>
                           <Component id="jPanel4" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -101,14 +106,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="jPanel3" pref="617" max="32767" attributes="0"/>
+                      <Component id="jPanel3" pref="582" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="jPanel2" pref="560" max="32767" attributes="0"/>
+                      <Component id="jPanel2" pref="525" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
@@ -309,7 +314,7 @@
                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane3" pref="206" max="32767" attributes="0"/>
+                      <Component id="jScrollPane3" pref="171" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                   <Component id="jButtonFiltrar" min="-2" max="-2" attributes="0"/>
@@ -400,7 +405,7 @@
             <Component class="javax.swing.JList" name="jListFiltrar">
               <Properties>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="48">
+                  <StringArray count="49">
                     <StringItem index="0" value="-"/>
                     <StringItem index="1" value="estado"/>
                     <StringItem index="2" value="bloco"/>
@@ -422,33 +427,34 @@
                     <StringItem index="18" value="idade_corte1"/>
                     <StringItem index="19" value="idade_corte2"/>
                     <StringItem index="20" value="idade_corte3"/>
-                    <StringItem index="21" value="categoria"/>
-                    <StringItem index="22" value="situacao"/>
-                    <StringItem index="23" value="ima"/>
-                    <StringItem index="24" value="mdc_ha"/>
-                    <StringItem index="25" value="densidade_madeira"/>
-                    <StringItem index="26" value="densidade_carvao"/>
-                    <StringItem index="27" value="mad_ton_ha"/>
-                    <StringItem index="28" value="carv_ton_ha"/>
-                    <StringItem index="29" value="id_operario"/>
-                    <StringItem index="30" value="data_estoque"/>
-                    <StringItem index="31" value="vol_mad_estimado"/>
-                    <StringItem index="32" value="vol_mad_transp"/>
-                    <StringItem index="33" value="vol_mad_balanco"/>
-                    <StringItem index="34" value="mdc_estimado"/>
-                    <StringItem index="35" value="mdc_transp"/>
-                    <StringItem index="36" value="mdc_balanco"/>
-                    <StringItem index="37" value="mad_ton_estimado"/>
-                    <StringItem index="38" value="mad_ton_transp"/>
-                    <StringItem index="39" value="mad_ton_balanco"/>
-                    <StringItem index="40" value="carv_ton_estimado"/>
-                    <StringItem index="41" value="carv_ton_transp"/>
-                    <StringItem index="42" value="carv_ton_balanco"/>
-                    <StringItem index="43" value="madeira_praca"/>
-                    <StringItem index="44" value="madeira_forno"/>
-                    <StringItem index="45" value="rend_grav_estimado"/>
-                    <StringItem index="46" value="rend_grav_real"/>
-                    <StringItem index="47" value="fator_empilalhemto"/>
+                    <StringItem index="21" value="conducao"/>
+                    <StringItem index="22" value="categoria"/>
+                    <StringItem index="23" value="situacao"/>
+                    <StringItem index="24" value="ima"/>
+                    <StringItem index="25" value="mdc_ha"/>
+                    <StringItem index="26" value="densidade_madeira"/>
+                    <StringItem index="27" value="densidade_carvao"/>
+                    <StringItem index="28" value="mad_ton_ha"/>
+                    <StringItem index="29" value="carv_ton_ha"/>
+                    <StringItem index="30" value="id_operario"/>
+                    <StringItem index="31" value="data_estoque"/>
+                    <StringItem index="32" value="vol_mad_estimado"/>
+                    <StringItem index="33" value="vol_mad_transp"/>
+                    <StringItem index="34" value="vol_mad_balanco"/>
+                    <StringItem index="35" value="mdc_estimado"/>
+                    <StringItem index="36" value="mdc_transp"/>
+                    <StringItem index="37" value="mdc_balanco"/>
+                    <StringItem index="38" value="mad_ton_estimado"/>
+                    <StringItem index="39" value="mad_ton_transp"/>
+                    <StringItem index="40" value="mad_ton_balanco"/>
+                    <StringItem index="41" value="carv_ton_estimado"/>
+                    <StringItem index="42" value="carv_ton_transp"/>
+                    <StringItem index="43" value="carv_ton_balanco"/>
+                    <StringItem index="44" value="madeira_praca"/>
+                    <StringItem index="45" value="madeira_forno"/>
+                    <StringItem index="46" value="rend_grav_estimado"/>
+                    <StringItem index="47" value="rend_grav_real"/>
+                    <StringItem index="48" value="fator_empilalhemto"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -500,7 +506,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="676" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="646" max="32767" attributes="0"/>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               </Group>
           </Group>

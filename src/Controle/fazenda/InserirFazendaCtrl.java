@@ -15,11 +15,9 @@ import Modelo.ExecutarSql;
 public class InserirFazendaCtrl {
 
     public InserirFazendaCtrl(ControleFazenda fazenda) {
-        String query = "INSERT INTO fazenda (`id_fazenda`, `cod_estado`, `estado`, `cod_bloco`, `bloco`, `municipio`, `fazenda`, `projeto`) "
+        String query = "INSERT INTO fazenda (`id_fazenda`, `estado`, `bloco`, `municipio`, `fazenda`, `projeto`) "
               + "VALUES (" + null
-              + ", '" + fazenda.getCod_estado()
-              + "', '" + fazenda.getEstado()
-              + "', '" + fazenda.getCod_bloco()
+              + ", '" + fazenda.getEstado()
               + "', '" + fazenda.getBloco()
               + "', '" + fazenda.getMunicipio()
               + "', '" + fazenda.getFazenda()

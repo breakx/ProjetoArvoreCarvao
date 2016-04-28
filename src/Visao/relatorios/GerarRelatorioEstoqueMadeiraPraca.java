@@ -7,12 +7,15 @@ package Visao.relatorios;
 
 import Controle.ControlePrincipal;
 import Modelo.ConexaoBD;
+import Modelo.GerarTabela;
 import Visao.login.Login;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,41 +28,93 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
      * Creates new form SelecionarEstoqueMadeiraPraca
      */
     public GerarRelatorioEstoqueMadeiraPraca() throws SQLException {
-        initComponents();ChangeName();
-        DefaultTableModel dtm = (DefaultTableModel) jTableMadeiraEstoquePraca.getModel();
+        initComponents();
+        this.setExtendedState(MAXIMIZED_BOTH);
+        ChangeName();
+    }    
+    
+    /**
+     * 
+     */
+    private void PreencherTabela(){
+        ArrayList dados = new ArrayList();
+        String[] colunas = new String[] { 
+            "id_controle_madeira",
+            "id_operario",
+            "talhao",
+            "saida_volume_talhao",
+            "data_talhao",
+            "altura1_t",
+            "altura2_t",
+            "altura3_t",
+            "comprimento_t",
+            "largura_t",
+            "entrada_volume_praca",
+            "data_praca",
+            "altura1_p",
+            "altura2_p",
+            "altura3_p",
+            "comprimento_p",
+            "largura_p",
+            "fator"
+        };
+        int tamanho = 0;    
         String query;
-        if("op_s".equals(ControlePrincipal.tipo_u)){
+        if(ControlePrincipal.tipo_u.equals("op_s")){
             query = "Select * from controle_madeira";
         }else{
             query = "Select * from controle_madeira where id_operario = '" +ControlePrincipal.id_op+"'";
         }
-        ConexaoBD con = ConexaoBD.getConexao();
-        
+        ConexaoBD con = ConexaoBD.getConexao();         
         ResultSet rs = con.consultaSql(query);
-
-        while(rs.next()){
-            String [] reg = {rs.getString("id_controle_madeira"),
-                rs.getString("id_operario"),
-                rs.getString("talhao"),
-                rs.getString("saida_volume_talhao"),
-                rs.getString("data_talhao"),
-                rs.getString("altura1_t"),
-                rs.getString("altura2_t"),
-                rs.getString("altura3_t"),
-                rs.getString("comprimento_t"),
-                rs.getString("largura_t"),
-                rs.getString("entrada_volume_praca"),
-                rs.getString("data_praca"),
-                rs.getString("altura1_p"),
-                rs.getString("altura2_p"),
-                rs.getString("altura3_p"),
-                rs.getString("comprimento_p"),
-                rs.getString("largura_p"),
-                rs.getString("fator")};
-            dtm.addRow(reg);
+        
+        try {
+            while(rs.next()){
+                dados.add(new Object[]{
+                    rs.getString("id_controle_madeira"),
+                    rs.getString("id_operario"),
+                    rs.getString("talhao"),
+                    rs.getString("saida_volume_talhao"),
+                    rs.getString("data_talhao"),
+                    rs.getString("altura1_t"),
+                    rs.getString("altura2_t"),
+                    rs.getString("altura3_t"),
+                    rs.getString("comprimento_t"),
+                    rs.getString("largura_t"),
+                    rs.getString("entrada_volume_praca"),
+                    rs.getString("data_praca"),
+                    rs.getString("altura1_p"),
+                    rs.getString("altura2_p"),
+                    rs.getString("altura3_p"),
+                    rs.getString("comprimento_p"),
+                    rs.getString("largura_p"),
+                    rs.getString("fator")
+                });
+                tamanho++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao preencher a tabela! "+ex);
         }
+        
+        GerarTabela modelo = new GerarTabela(dados, colunas);
+        jTableMadeiraEstoquePraca.setModel(modelo);
+        for(int i=0;i<colunas.length;i++){
+            if(colunas[i].length()<=8){                
+                jTableMadeiraEstoquePraca.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*12);
+            }else if(colunas[i].length()>8 && colunas[i].length()<=15){
+                jTableMadeiraEstoquePraca.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*10);
+            }else{
+                jTableMadeiraEstoquePraca.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*8);
+            }
+            jTableMadeiraEstoquePraca.getColumnModel().getColumn(i).setResizable(false);
+            //System.out.println("Indice: "+i+" - "+ colunas[i].length()*200);
+        }
+        jTableMadeiraEstoquePraca.getTableHeader().setReorderingAllowed(false);
+        jTableMadeiraEstoquePraca.setAutoResizeMode(jTableMadeiraEstoquePraca.AUTO_RESIZE_OFF);
+        jTableMadeiraEstoquePraca.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         con.fecharConexao();
-    }    
+    }       
     
     private void SelecionarInfo(){
         if(jTableMadeiraEstoquePraca.getSelectedRow()>=0)//verifica se a linha a ser alterada esta marcada
@@ -104,7 +159,7 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
         jButtonSelecionar = new javax.swing.JButton();
         jButtonLogout = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jTableMadeiraEstoquePraca = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -113,7 +168,7 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitulo.setText("Gerenciar Madeira");
         jLabelTitulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabelTitulo.setPreferredSize(new java.awt.Dimension(275, 70));
+        jLabelTitulo.setPreferredSize(new java.awt.Dimension(275, 60));
 
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.setPreferredSize(new java.awt.Dimension(270, 145));
@@ -134,19 +189,20 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
-                        .addGap(53, 53, 53))
-                    .addComponent(jLabelNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(94, 94, 94))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabelIdTipo)
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabelIdTipo, jLabelNome});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -154,10 +210,12 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jLabelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(jLabelIdTipo)
                 .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel1, jLabelIdTipo, jLabelNome});
 
         jPanel2.setBorder(new javax.swing.border.MatteBorder(null));
         jPanel2.setPreferredSize(new java.awt.Dimension(270, 350));
@@ -194,7 +252,7 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(96, Short.MAX_VALUE)
+                .addContainerGap(269, Short.MAX_VALUE)
                 .addComponent(jButtonSelecionar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(96, 96, 96)
                 .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -203,49 +261,17 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
 
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
 
-        jScrollPane1.setAutoscrolls(true);
-        jScrollPane1.setDebugGraphicsOptions(javax.swing.DebugGraphics.LOG_OPTION);
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(450, 450));
-        jScrollPane1.setOpaque(false);
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(450, 450));
-        jScrollPane1.setRequestFocusEnabled(false);
-
-        jTableMadeiraEstoquePraca.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "id_mad", "id_op", "talhao", "s_vol_talhao", "data_t", "h1_t", "h2_t", "h3_t", "compr_t", "larg_t", "e_vol_praca", "data_p", "h1_p", "h2_p", "h3_p", "compr_p", "larg_p", "fator"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTableMadeiraEstoquePraca.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        jTableMadeiraEstoquePraca.setColumnSelectionAllowed(true);
-        jTableMadeiraEstoquePraca.setFillsViewportHeight(true);
-        jTableMadeiraEstoquePraca.setMaximumSize(new java.awt.Dimension(450, 450));
-        jTableMadeiraEstoquePraca.setMinimumSize(new java.awt.Dimension(450, 450));
-        jTableMadeiraEstoquePraca.setPreferredSize(new java.awt.Dimension(1300, 100));
-        jTableMadeiraEstoquePraca.setRequestFocusEnabled(false);
-        jTableMadeiraEstoquePraca.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTableMadeiraEstoquePraca);
-        jTableMadeiraEstoquePraca.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        jScrollPane2.setViewportView(jTableMadeiraEstoquePraca);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -253,30 +279,32 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE))
                     .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(10, 10, 10)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
+                        .addGap(10, 10, 10))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+                        .addGap(10, 10, 10))))
         );
 
         pack();
@@ -341,7 +369,7 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableMadeiraEstoquePraca;
     // End of variables declaration//GEN-END:variables
 }

@@ -14,7 +14,19 @@ import Modelo.ExecutarSql;
  */
 public class InserirCarvaoCtrl {
     public InserirCarvaoCtrl(ControleCarvao carvao) {
-        String query = "INSERT INTO controle_carvao (`id_controle_carvao`, `id_estoque_p`, `id_operario_mad`, `talhao`, `forno`, `volume_madeira`, `data_entrada_madeira_forno`, `id_operario_carv`, `volume_carvao`, `data_saida_carvao_forno`) "
+        String query = "INSERT INTO controle_carvao ("
+                + "`id_controle_carvao`, "
+                + "`id_estoque_p`, "
+                + "`id_operario_mad`, "
+                + "`talhao`, "
+                + "`forno`, "
+                + "`volume_madeira`, "
+                + "`data_entrada_madeira_forno`, "
+                + "`id_operario_carv`, "
+                + "`volume_carvao`, "
+                + "`data_saida_carvao_forno`, "                
+                + "`rend_grav_forno`"
+                + ")"
               + "VALUES (" + null
               + ", '" + carvao.getId_estoque()
               + "', '" + carvao.getId_operario()
@@ -24,7 +36,8 @@ public class InserirCarvaoCtrl {
               + "', '" + carvao.getData_entrada_madeira_forno()
               +"', '---"
               +"', '0.0"
-              +"', '00-00-0000 00:00:00"
+              +"', '00/00/0000 00:00:00"
+              +"', '0.0"
               +"')";
         ExecutarSql execut = new ExecutarSql();
         execut.executar(query);

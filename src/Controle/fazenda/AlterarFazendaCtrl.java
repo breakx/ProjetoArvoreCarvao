@@ -16,9 +16,7 @@ public class AlterarFazendaCtrl {
 
     public AlterarFazendaCtrl(ControleFazenda fazenda) {
         String query = "UPDATE fazenda SET "
-                + "`cod_estado` = '"+fazenda.getCod_estado()
-                + "', `estado` = '"+fazenda.getEstado()
-                + "', `cod_bloco` = '"+fazenda.getCod_bloco()
+                + "`estado` = '"+fazenda.getEstado()
                 + "', `bloco` = '"+fazenda.getBloco()
                 + "', `municipio` = '"+fazenda.getMunicipio()
                 + "', `fazenda` = '"+fazenda.getFazenda()

@@ -7,14 +7,17 @@ package Visao.relatorios;
 
 import Controle.ControlePrincipal;
 import Modelo.ConexaoBD;
+import Modelo.GerarTabela;
 import Visao.carvao.GerenciarCarvaoForno;
 import Visao.carvao.InserirMadeiraForno;
 import Visao.login.Login;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -30,40 +33,77 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
      */
     public GerarRelatorioCarvao() throws SQLException {
         initComponents();
+        this.setExtendedState(MAXIMIZED_BOTH);
         ChangeName();
-        DefaultTableModel dtm = (DefaultTableModel) jTableRelatorioCarvao.getModel();
-        if(ControlePrincipal.data_inicio != null){
-            WhereSql = "where data_entrada_madeira_forno > '"+ControlePrincipal.data_inicio+"'";
-        }else if(ControlePrincipal.forno != null){
-            WhereSql = "where forno like '%"+ControlePrincipal.forno+"%' ORDER BY `id_controle_carvao` DESC";
-        }else if(ControlePrincipal.talhao != null){
-            WhereSql = "where talhao like '%"+ControlePrincipal.talhao+"%' ORDER BY `id_controle_carvao` DESC";
-        }else {
-            WhereSql = "";
+        PreencherTabela();
+    }
+    
+    /**
+     * 
+     */
+    private void PreencherTabela(){
+        ArrayList dados = new ArrayList();
+        String[] colunas = new String[] { 
+            "Id_controle_carvao",
+            "Talhao",
+            "Forno",
+            "Id_operario_mad",
+            "Volume_madeira",
+            "Data_entrada_madeira_forno",
+            "Id_operario_carv",
+            "Volume_carvao",
+            "Data_saida_carvao_forno",
+            "Fator"
+        };
+        int tamanho = 0;    
+        String query;
+        if(ControlePrincipal.tipo_u.equals("op_s")){
+            query = "Select * from controle_carvao";
+        }else{
+            query = "Select * from controle_carvao where id_operario = '" +ControlePrincipal.id_op+"'";
+        }
+        ConexaoBD con = ConexaoBD.getConexao();         
+        ResultSet rs = con.consultaSql(query);
+        
+        try {
+            while(rs.next()){
+                dados.add(new Object[]{
+                    rs.getString("id_controle_carvao"),
+                    rs.getString("talhao"),
+                    rs.getString("forno"),
+                    rs.getString("id_operario_mad"),
+                    rs.getString("volume_madeira"),
+                    rs.getString("data_entrada_madeira_forno"),
+                    rs.getString("id_operario_carv"),
+                    rs.getString("volume_carvao"),
+                    rs.getString("data_saida_carvao_forno"),
+                    rs.getString("fator")
+                });
+                tamanho++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao preencher a tabela! "+ex);
         }
         
-        String query = "SELECT * FROM controle_carvao "+ WhereSql;
-        ConexaoBD con = ConexaoBD.getConexao();
-        JOptionPane.showMessageDialog(null, "Teste!" + query);
-        ResultSet rs = con.consultaSql(query);
-
-        while(rs.next()){
-            String [] reg = {
-                rs.getString("id_controle_carvao"),
-                rs.getString("talhao"),
-                rs.getString("forno"),
-                rs.getString("id_operario_mad"),
-                rs.getString("volume_madeira"),
-                rs.getString("data_entrada_madeira_forno"),
-                rs.getString("id_operario_carv"),
-                rs.getString("volume_carvao"),
-                rs.getString("data_saida_carvao_forno"),
-                rs.getString("fator")
-            };
-            dtm.addRow(reg);
+        GerarTabela modelo = new GerarTabela(dados, colunas);
+        jTableRelatorioCarvao.setModel(modelo);
+        for(int i=0;i<colunas.length;i++){
+            if(colunas[i].length()<=8){                
+                jTableRelatorioCarvao.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*12);
+            }else if(colunas[i].length()>8 && colunas[i].length()<=15){
+                jTableRelatorioCarvao.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*10);
+            }else{
+                jTableRelatorioCarvao.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*8);
+            }
+            jTableRelatorioCarvao.getColumnModel().getColumn(i).setResizable(false);
+            //System.out.println("Indice: "+i+" - "+ colunas[i].length()*200);
         }
+        jTableRelatorioCarvao.getTableHeader().setReorderingAllowed(false);
+        jTableRelatorioCarvao.setAutoResizeMode(jTableRelatorioCarvao.AUTO_RESIZE_OFF);
+        jTableRelatorioCarvao.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         con.fecharConexao();
-    }
+    }      
     
     private void SelecionarPraca(){
         if(jTableRelatorioCarvao.getSelectedRow()>=0) {
@@ -110,7 +150,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         jButtonLogout = new javax.swing.JButton();
         jButtonVoltar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jTableRelatorioCarvao = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -119,7 +159,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitulo.setText("Relatorio Estoque Carvão");
         jLabelTitulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabelTitulo.setPreferredSize(new java.awt.Dimension(275, 70));
+        jLabelTitulo.setPreferredSize(new java.awt.Dimension(275, 60));
 
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.setPreferredSize(new java.awt.Dimension(270, 145));
@@ -143,16 +183,17 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
-                        .addGap(53, 53, 53))
-                    .addComponent(jLabelNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(94, 94, 94))
+                    .addComponent(jLabelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabelIdTipo)
                 .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabelIdTipo, jLabelNome});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -160,10 +201,12 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jLabelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(jLabelIdTipo)
                 .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel1, jLabelIdTipo, jLabelNome});
 
         jPanel2.setBorder(new javax.swing.border.MatteBorder(null));
         jPanel2.setPreferredSize(new java.awt.Dimension(270, 350));
@@ -188,68 +231,38 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addGap(10, 10, 10))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(102, Short.MAX_VALUE)
+                .addGap(83, 83, 83)
                 .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(90, 90, 90)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
                 .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(10, 10, 10))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
 
-        jScrollPane1.setAutoscrolls(true);
-        jScrollPane1.setDebugGraphicsOptions(javax.swing.DebugGraphics.LOG_OPTION);
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(1000, 1000));
-        jScrollPane1.setOpaque(false);
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(1000, 1000));
-        jScrollPane1.setRequestFocusEnabled(false);
-
-        jTableRelatorioCarvao.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "id_controle_carvao", "talhao", "forno", "id_operario_mad", "volume_madeira", "data_entrada_madeira_forno", "id_operario_carv", "volume_carvao", "data_saida_carvao_forno", "fator"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTableRelatorioCarvao.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        jTableRelatorioCarvao.setFillsViewportHeight(true);
-        jTableRelatorioCarvao.setMaximumSize(new java.awt.Dimension(1000, 1000));
-        jTableRelatorioCarvao.setMinimumSize(new java.awt.Dimension(450, 450));
-        jTableRelatorioCarvao.setPreferredSize(new java.awt.Dimension(800, 0));
-        jTableRelatorioCarvao.setRequestFocusEnabled(false);
-        jTableRelatorioCarvao.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTableRelatorioCarvao);
+        jScrollPane2.setViewportView(jTableRelatorioCarvao);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -257,30 +270,30 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(10, 10, 10)
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(10, 10, 10)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
         );
 
         pack();
@@ -345,7 +358,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableRelatorioCarvao;
     // End of variables declaration//GEN-END:variables
 }

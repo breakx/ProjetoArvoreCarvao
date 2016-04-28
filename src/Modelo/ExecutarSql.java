@@ -15,8 +15,7 @@ import javax.swing.JOptionPane;
  * @author Cristiano GD
  */
 public class ExecutarSql {
-    public void executar(String comando)
-    {
+    public void executar(String comando){
         int n = JOptionPane.showConfirmDialog(  
                     null,
                     "Continuar?!" ,
@@ -27,7 +26,8 @@ public class ExecutarSql {
         {
             try
             {
-                JOptionPane.showMessageDialog(null, "SQL= "+comando);
+                //JOptionPane.showMessageDialog(null, "SQL= "+comando);
+                //System.out.println("SQL= "+comando);
                 ConexaoBD conexao = ConexaoBD.getConexao();
                 Statement stmt = ConexaoBD.con.createStatement();
                 stmt.executeUpdate(comando);
@@ -50,6 +50,22 @@ public class ExecutarSql {
         }       
     }
     
+    public void executar2(String comando){
+        try
+        {
+            ConexaoBD conexao = ConexaoBD.getConexao();
+            Statement stmt = ConexaoBD.con.createStatement();
+            stmt.executeUpdate(comando);
+            stmt.close();
+            conexao.fecharConexao();
+        }
+        catch( java.sql.SQLException e )
+        {
+            System.err.printf("\nExceção: %s\n"+comando, e);
+            throw new java.lang.RuntimeException(e.getMessage());
+        }       
+    }
+    
     private void UpdateEstoque(){
         String query = "";
         if(ControlePrincipal.tipo_u.equals("op_m")){
@@ -59,7 +75,6 @@ public class ExecutarSql {
                 + "', `mad_ton_transp` = '"+ControlePrincipal.mad_ton_transp
                 + "', `mad_ton_balanco` = '"+ControlePrincipal.mad_ton_balanco
                 + "', `madeira_praca` = '"+ControlePrincipal.madeira_praca 
-                + "', `mad_ton_tot` = '"+ControlePrincipal.mad_ton_tot
                 + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
         }else if(ControlePrincipal.tipo_u.equals("op_c")){
             query = "UPDATE estoque_principal SET "
@@ -69,7 +84,6 @@ public class ExecutarSql {
                 + "', `carv_ton_balanco` = '"+ControlePrincipal.carv_ton_balanco
                 + "', `madeira_praca` = '"+ControlePrincipal.madeira_praca
                 + "', `madeira_forno` = '"+ControlePrincipal.madeira_forno   
-                + "', `carv_ton_tot` = '"+ControlePrincipal.carv_ton_tot
                 + "', `rend_grav_real` = '"+ControlePrincipal.rend_grav_real
                 + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
         }

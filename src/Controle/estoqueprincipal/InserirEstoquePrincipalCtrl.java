@@ -77,53 +77,58 @@ public class InserirEstoquePrincipalCtrl {
             + "', '" + ControlePrincipal.municipio
             + "', '" + ControlePrincipal.fazenda
             + "', '" + ControlePrincipal.projeto
+            /*+ ", '" + estoque.getEstado()
+            + "', '" + estoque.getBloco()
+            + "', '" + estoque.getMunicipio()
+            + "', '" + estoque.getFazenda()
+            + "', '" + estoque.getProjeto()*/
             + "', '" + estoque.getUpc()
             + "', '" + estoque.getTalhao()
             + "', '" + estoque.getArea()
             + "', '" + estoque.getMaterial_genetico()
             + "', '" + estoque.getM3_ha()
-            + "', '0"       
+            + "', '" + estoque.getTalhadia()
                 
-            +"', '0000"
-            +"', '00-00-0000"
-            +"', '00-00-0000"
-            +"', '00-00-0000"
-            +"', '00-00-0000"
-            +"', '0.0"
-            +"', '0.0"
-            +"', '0.0"
-            +"', '0.0"
-            +"', '---"
-            +"', 'Silvicultura"
-            +"', 'Plantio Futuro"
+            + "', '" + estoque.getAno_rotacao()
+            + "', '" + estoque.getData_plantio()
+            + "', '" + estoque.getData_rotacao_1()
+            + "', '" + estoque.getData_rotacao_2()
+            + "', '" + estoque.getData_rotacao_3()
+            + "', '" + estoque.getIdade_corte1()
+            + "', '" + estoque.getIdade_corte2()
+            + "', '" + estoque.getIdade_corte3()
+            + "', '" + estoque.getIdade_hoje()
+            + "', '" + estoque.getConducao()
+            + "', '" + estoque.getCategoria()
+            + "', '" + estoque.getSituacao()
                 
-            +"', '0.0"
-            +"', '0.0"
-            +"', '"+estoque.getDensidade_madeira()
-            +"', '"+estoque.getDensidade_carvao()
-            +"', '0.0"
-            +"', '0.0"                
-            +"', '" + estoque.getId_operario()
-            +"', '" + estoque.getData_estoque()  
+            + "', '" + estoque.getIma()
+            + "', '" + estoque.getMdc_ha()
+            + "', '" + estoque.getDensidade_madeira()
+            + "', '" + estoque.getDensidade_carvao()
+            + "', '" + estoque.getMad_ton_ha()
+            + "', '" + estoque.getCarv_ton_ha()
+            + "', '" + estoque.getId_operario()
+            + "', '" + estoque.getData_estoque()  
                 
-            +"', '" + estoque.getVol_mad_estimado()
-            +"', '0.00"
-            +"', '" + estoque.getVol_mad_balanco()
-            +"', '" + estoque.getMdc_estimado()
-            +"', '0.00"
-            +"', '" + estoque.getMdc_balanco()
-            +"', '" + estoque.getMad_ton_estimado()
-            +"', '0.00"
-            +"', '" + estoque.getMad_ton_balanco()
-            +"', '" + estoque.getCarv_ton_estimado()
-            +"', '0.00"
-            +"', '" + estoque.getCarv_ton_balanco()
+            + "', '" + estoque.getVol_mad_estimado()
+            + "', '" + estoque.getVol_mad_transp()
+            + "', '" + estoque.getVol_mad_balanco()
+            + "', '" + estoque.getMdc_estimado()
+            + "', '" + estoque.getMdc_transp()
+            + "', '" + estoque.getMdc_balanco()
+            + "', '" + estoque.getMad_ton_estimado()
+            + "', '" + estoque.getMad_ton_transp()
+            + "', '" + estoque.getMad_ton_balanco()
+            + "', '" + estoque.getCarv_ton_estimado()
+            + "', '" + estoque.getCarv_ton_transp()
+            + "', '" + estoque.getCarv_ton_balanco()
                 
-            +"', '0.0"
-            +"', '0.0"
-            +"', '0.0"
-            +"', '0.0"
-            +"', '"+ estoque.getFator_empilalhemto()
+            + "', '" + estoque.getMadeira_praca()
+            + "', '" + estoque.getMadeira_forno()
+            + "', '" + estoque.getRend_grav_estimado()
+            + "', '" + estoque.getRend_grav_real()
+            + "', '"+ estoque.getFator_empilalhemto()
             /*+ "VALUES (" + null
             + ", '" + estoque.getEstado()
             + "', '" + estoque.getBloco()
@@ -178,6 +183,10 @@ public class InserirEstoquePrincipalCtrl {
             +"')";
         
         ExecutarSql execut = new ExecutarSql();
-        execut.executar(query);
+        if(!ControlePrincipal.excel_cmd){
+            execut.executar(query);
+        }else{
+            execut.executar2(query);            
+        }
     }    
 }

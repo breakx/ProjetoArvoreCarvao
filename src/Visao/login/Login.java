@@ -52,7 +52,7 @@ public class Login extends javax.swing.JFrame {
                     String tipo = ControlePrincipal.tipo_u = rs.getString("tipo_usuario");
                     ControlePrincipal.nome = rs.getString("nome_usuario");
                     ControlePrincipal.upc_u = rs.getString("upc_usuario"); 
-                    ControlePrincipal.id_op = tipo+"."+id_u+".upc-"+rs.getString("upc_usuario");     
+                    ControlePrincipal.id_op = tipo+"."+id_u+".upc-"+ControlePrincipal.upc_u;     
                     
                     //JOptionPane.showMessageDialog(null, "Logado!"+login+tipo+usuario.getNome_usuario()+usuario.getId_tipo());  
                     CarregaTela(tipo);                    

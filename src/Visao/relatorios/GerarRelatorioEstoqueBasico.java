@@ -6,8 +6,10 @@
 package Visao.relatorios;
 
 import Controle.ControleEstoquePrincipal;
+import Controle.ControleFazenda;
 import Controle.ControlePrincipal;
 import Controle.estoqueprincipal.InserirEstoquePrincipalCtrl;
+import Controle.fazenda.InserirFazendaCtrl;
 import Modelo.ConexaoBD;
 import Modelo.GerarTabela;
 import Visao.carvao.GerenciarCarvaoForno;
@@ -24,6 +26,8 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,8 +41,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -54,17 +64,24 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private ArrayList linhas;
     private String[] colunas;
     private int tamanho;
-    float areaTotal;
-    float vol_mad_transpTotal;
-    float mdc_transpTotal;
-    float mad_ton_transpTotal;
-    float carv_ton_transpTotal;
-    float madeira_pracaTotal;
-    float madeira_fornoTotal;
-    float mad_ton_totTotal;
-    float carv_ton_totTotal;     
-    float m3_haMedia;
-    float rend_gravMediaPonderada;
+    private float areaTotal;
+    private float vol_mad_transpTotal;
+    private float mdc_transpTotal;
+    private float mad_ton_transpTotal;
+    private float carv_ton_transpTotal;
+    //private float madeira_pracaTotal;
+    //private float madeira_fornoTotal;
+    //private float mad_ton_totTotal;
+    //private float carv_ton_totTotal;     
+    private float m3_haMedia;
+    //private float rend_gravMediaPonderada;
+    private String caminho="";    
+    private JProgressBar progressBar;
+    private JFrame f;
+    private Container content;
+    private Border border;      
+    private int barra=0;
+    private String dado;
     
     /**
      * Creates new form GerarRelatorioEstoquePrincipal
@@ -72,10 +89,9 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
      */
     public GerarRelatorioEstoqueBasico() throws SQLException {
         initComponents();
-        ChangeName();
-        //PreencherTabelaCompleta();
-        PreencherTabelaFiltrada();
         this.setExtendedState(MAXIMIZED_BOTH);
+        ChangeName();
+        PreencherTabelaFiltrada();
     }  
     
     private void ChangeName(){
@@ -95,6 +111,13 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jComboBoxProjeto.addItem("I");
         jComboBoxProjeto.addItem("II");
         jComboBoxProjeto.addItem("III");  
+        jComboBoxProjeto.addItem("IV"); 
+        jComboBoxProjeto.addItem("V"); 
+        jComboBoxProjeto.addItem("VI"); 
+        jComboBoxProjeto.addItem("VII"); 
+        jComboBoxProjeto.addItem("VIII"); 
+        jComboBoxProjeto.addItem("IX"); 
+        jComboBoxProjeto.addItem("X");  
         _carregarFazendas();
     }
     
@@ -154,252 +177,16 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jComboBoxMatGen.addItem("semente");
         jComboBoxMatGen.addItem("Urophylla");
         jComboBoxMatGen.addItem("VM-01");
-        //_carregarFiltros();
     }
-    
-    private void _carregarFiltros(){
-            /*jComboBoxFiltrar.addItem("Estado");
-            jComboBoxFiltrar.addItem("Bloco");
-            jComboBoxFiltrar.addItem("Municipio");
-            jComboBoxFiltrar.addItem("Fazenda");
-            jComboBoxFiltrar.addItem("Projeto");
-            jComboBoxFiltrar.addItem("UPC");
-            jComboBoxFiltrar.addItem("Talhao");
-            jComboBoxFiltrar.addItem("Area");
-            jComboBoxFiltrar.addItem("M3/ha");
-            jComboBoxFiltrar.addItem("Mat.Gen.");
-            jComboBoxFiltrar.addItem("Talhadia");
-            jComboBoxFiltrar.addItem("Ano_Rt");
-            jComboBoxFiltrar.addItem("Data_Plant");
-            jComboBoxFiltrar.addItem("Data_Rt_1");
-            jComboBoxFiltrar.addItem("Data_Rt_2");
-            jComboBoxFiltrar.addItem("Data_Rt_3");
-            jComboBoxFiltrar.addItem("Idade");
-            jComboBoxFiltrar.addItem("Categoria");
-            jComboBoxFiltrar.addItem("Situacao");
-            jComboBoxFiltrar.addItem("IMA");
-            jComboBoxFiltrar.addItem("MdC/ha");
-            jComboBoxFiltrar.addItem("Dens_Md");
-            jComboBoxFiltrar.addItem("Dens_Cv");
-            jComboBoxFiltrar.addItem("Md_Tn_ha");
-            jComboBoxFiltrar.addItem("Cv_Tn_ha");
-            jComboBoxFiltrar.addItem("Id_Op");
-            jComboBoxFiltrar.addItem("Data_Reg");
-            jComboBoxFiltrar.addItem("Vol_Md_Est");
-            jComboBoxFiltrar.addItem("Vol_Md_Transp");
-            jComboBoxFiltrar.addItem("Vol_Md_Bal");
-            jComboBoxFiltrar.addItem("MdC_Est");
-            jComboBoxFiltrar.addItem("MdC_Transp");
-            jComboBoxFiltrar.addItem("MdC_Bal");
-            jComboBoxFiltrar.addItem("Md_Tn_Est");
-            jComboBoxFiltrar.addItem("Md_Tn_Transp");
-            jComboBoxFiltrar.addItem("Md_Tn_Bal");
-            jComboBoxFiltrar.addItem("Cv_Tn_Est");
-            jComboBoxFiltrar.addItem("Cv_Tn_Transp");
-            jComboBoxFiltrar.addItem("Cv_Tn_Bal");
-            jComboBoxFiltrar.addItem("Md_Praca");
-            jComboBoxFiltrar.addItem("Md_Forno");
-            jComboBoxFiltrar.addItem("Md_Tn_Tot");
-            jComboBoxFiltrar.addItem("Cv_Tn_Tot");
-            jComboBoxFiltrar.addItem("RG_Est");
-            jComboBoxFiltrar.addItem("RG_Real");
-            jComboBoxFiltrar.addItem("Fator_Emp");*/
-            
-        /*ArrayList model = new ArrayList();
-        model.add(new Object[]{
-            "Estado",
-            "Bloco",
-            "Municipio",
-            "Fazenda",
-            "Projeto",
-            "UPC",
-            "Talhao",
-            "Area",
-            "M3/ha",
-            "Mat.Gen.",
-            "Talhadia",
-            "Ano_Rt",
-            "Data_Plant",
-            "Data_Rt_1",
-            "Data_Rt_2",
-            "Data_Rt_3",
-            "Idade",
-            "Categoria",
-            "Situacao",
-            "IMA",
-            "MdC/ha",
-            "Dens_Md",
-            "Dens_Cv",
-            "Md_Tn_ha",
-            "Cv_Tn_ha",
-            "Id_Op",
-            "Data_Reg",
-            "Vol_Md_Est",
-            "Vol_Md_Transp",
-            "Vol_Md_Bal",
-            "MdC_Est",
-            "MdC_Transp",
-            "MdC_Bal",
-            "Md_Tn_Est",
-            "Md_Tn_Transp",
-            "Md_Tn_Bal",
-            "Cv_Tn_Est",
-            "Cv_Tn_Transp",
-            "Cv_Tn_Bal",
-            "Md_Praca",
-            "Md_Forno",
-            "Md_Tn_Tot",
-            "Cv_Tn_Tot",
-            "RG_Est",
-            "RG_Real",
-            "Fator_Emp"
-            });*/
-        //jListFiltrar.add("Estado", this);
-        //jListFiltrar.setModel((ListModel) model);
-    }
-    
-    /**
-     * 
-     */
-    private void PreencherTabelaCompleta(){
-        /*linhas = new ArrayList();
-        tamanho = 0;
-        
-        colunas = new String[] {
-            "Id",
-            "Estado",
-            "Bloco",
-            "Municipio",
-            "Fazenda",
-            "Projeto",
-            "UPC",
-            "Talhao",
-            "Area",
-            "M3/ha",
-            "Mat.Gen.",
-            "Talhadia",
-            "Ano_Rt",
-            "Data_Plant",
-            "Data_Rt_1",
-            "Data_Rt_2",
-            "Data_Rt_3",
-            "Idade",
-            "Categoria",
-            "Situacao",
-            "IMA",
-            "MdC/ha",
-            "Dens_Md",
-            "Dens_Cv",
-            "Md_Tn_ha",
-            "Cv_Tn_ha",
-            "Id_Op",
-            "Data_Reg",
-            "Vol_Md_Est",
-            "Vol_Md_Transp",
-            "Vol_Md_Bal",
-            "MdC_Est",
-            "MdC_Transp",
-            "MdC_Bal",
-            "Md_Tn_Est",
-            "Md_Tn_Transp",
-            "Md_Tn_Bal",
-            "Cv_Tn_Est",
-            "Cv_Tn_Transp",
-            "Cv_Tn_Bal",
-            "Md_Praca",
-            "Md_Forno",
-            "Md_Tn_Tot",
-            "Cv_Tn_Tot",
-            "RG_Est",
-            "RG_Real",
-            "Fator_Emp"
-        };
-
-        if(ControlePrincipal.municipio != null && ControlePrincipal.fazenda != null){
-            whereSql = "where municipio like '%"+ControlePrincipal.municipio+"%' and fazenda like '%"+ControlePrincipal.fazenda+"%'";
-        }else if(ControlePrincipal.municipio != null){
-            whereSql = "where municipio like '%"+ControlePrincipal.municipio+"%' ORDER BY `id_estoque_p` DESC";
-        }else if(ControlePrincipal.fazenda != null){
-            whereSql = "where fazenda like '%"+ControlePrincipal.fazenda+"%' ORDER BY `id_estoque_p` DESC";
-        }else {
-            whereSql = "";
-        }
-        
-
-        query = "SELECT * FROM estoque_principal "+ whereSql;
-        //JOptionPane.showMessageDialog(null, "Teste!" + query);
-        rs = con.consultaSql(query);
-
-        try {
-            while(rs.next()){
-                linhas.add(new Object[]{
-                    rs.getString("id_estoque_p"),
-                    rs.getString("estado"),
-                    rs.getString("bloco"),
-                    rs.getString("municipio"),
-                    rs.getString("fazenda"),
-                    rs.getString("projeto"),
-                    rs.getString("upc"),
-                    rs.getString("talhao"),
-                    rs.getString("area"),
-                    rs.getString("m3_ha"),
-                    rs.getString("material_genetico"),
-                    rs.getString("talhadia"),
-                    rs.getString("ano_rotacao"),
-                    rs.getString("data_plantio"),
-                    rs.getString("data_rotacao_1"),
-                    rs.getString("data_rotacao_2"),
-                    rs.getString("data_rotacao_3"),
-                    rs.getString("idade"),
-                    rs.getString("categoria"),
-                    rs.getString("situacao"),
-                    rs.getString("ima"),
-                    rs.getString("mdc_ha"),
-                    rs.getString("densidade_madeira"),
-                    rs.getString("densidade_carvao"),
-                    rs.getString("mad_ton_ha"),
-                    rs.getString("carv_ton_ha"),
-                    rs.getString("id_operario"),
-                    rs.getString("data_estoque"),
-                    rs.getString("vol_mad_estimado"),
-                    rs.getString("vol_mad_transp"),
-                    rs.getString("vol_mad_balanco"),
-                    rs.getString("mdc_estimado"),
-                    rs.getString("mdc_transp"),
-                    rs.getString("mdc_balanco"),
-                    rs.getString("mad_ton_estimado"),
-                    rs.getString("mad_ton_transp"),
-                    rs.getString("mad_ton_balanco"),
-                    rs.getString("carv_ton_estimado"),
-                    rs.getString("carv_ton_transp"),
-                    rs.getString("carv_ton_balanco"),
-                    rs.getString("madeira_praca"),
-                    rs.getString("madeira_forno"),
-                    rs.getString("mad_ton_tot"),
-                    rs.getString("carv_ton_tot"),
-                    rs.getString("rend_grav_estimado"),
-                    rs.getString("rend_grav_real"),
-                    rs.getString("fator_empilalhemto"),
-                });
-                tamanho++;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao Preencher Tabela Completa ! "+ex);
-        }
-        
-        MontarTabela();        
-        con.fecharConexao();*/
-    }    
     
     private void PreencherTabelaFiltrada(){  
-        //JOptionPane.showMessageDialog(null, "Size! " + jListFiltrar.getSelectedIndices().length + jListFiltrar.getModel());
+        JOptionPane.showMessageDialog(null, "Size! " + jListFiltrar.getSelectedIndices().length + jListFiltrar.getModel().getSize());
         DecimalFormat decformat = new DecimalFormat("0.0");
         ConexaoBD con = ConexaoBD.getConexao();
         String query;
         ResultSet rs;
         String whereSql;
-        String dado = jListFiltrar.getSelectedValuesList().toString();
+        dado = jListFiltrar.getSelectedValuesList().toString();
         dado = dado.replaceAll("[\\[\\]]", "");               
         linhas = new ArrayList();
         // busca todos os campos
@@ -440,7 +227,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         //carrega nomes das colunas selecionadas ou todas.
         for(int i = 0; i < tamanho; i++)
         {
-            if(tamanho<46){
+            if(tamanho<jListFiltrar.getModel().getSize()-1){
                //System.out.println(jListFiltrar.getSelectedValuesList().get(i));
                colunas[i] = (String) jListFiltrar.getSelectedValuesList().get(i);
             }else{
@@ -584,75 +371,435 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jTableRelatorioEstoquePrincipal.getTableHeader().setReorderingAllowed(false);
         jTableRelatorioEstoquePrincipal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);        
     }
-      
-    private void CarregarExcel() throws BiffException, IOException{
-        DateFormat data_estoque_principal = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
+    
+    private void CarregarEstoqueExcel() throws BiffException, IOException{      
+        ControlePrincipal.excel_cmd = true;
+        DateFormat data_estoque_principal = new SimpleDateFormat("dd/MM/yyyy"); 
         Date date = new Date();    
         ControleEstoquePrincipal estoque_principal = new ControleEstoquePrincipal();
+        //caminho="C:/Users/crist/Desktop/Nova pasta/Estoque de Madeira-Cadastro.xls";
+        // pega o arquiivo do Excel  
+        Workbook workbook = Workbook.getWorkbook(new File(caminho));  
+
+        // pega a primeira planilha dentro do arquivo XLS 
+        Sheet sheet = workbook.getSheet(0);  
+
+        //Pega a quantidade de linhas da planilha   
+        int total_linhas = sheet.getRows(); 
+        //int total_linhas = 5;
+        JOptionPane.showMessageDialog(null, "Lendo excel, total linhas... "+total_linhas);
+        
+        CarregandoDados();
+        this.setVisible(false);
+        //JOptionPane.showMessageDialog(null, "CarregandoDados...");  
+        for (int i = 1; i < total_linhas; i++) {  
+            barra = (int)((i*100)/total_linhas);
+            /*for (int j = 0; j < 41; j++) {  
+                //celula = sheet.getCell(j, i);//col, lin
+                //System.out.print(sheet.getCell(j, i).getContents()+" - ");  
+                System.out.println("["+j+"]: "+sheet.getCell(j, i).getContents());  
+                //System.out.print(sheet.getCell(j, 1).getContents()+" - ");  
+                //stringa4 += celula.getContents()+", ";               
+            }*/
+            //System.out.println(sheet.getCell(7, i).getContents()));              
+            //System.out.println("importando "+barra);  
+            //System.out.println(sheet.getCell(0, i).getContents());  
+            
+            // pega os valores das células como se numa matriz  
+            /*estoque_principal.setId_estoque_p(sheet.getCell(0, i).getContents()); 
+            estoque_principal.setEstado(sheet.getCell(0, i).getContents()); 
+            estoque_principal.setBloco(sheet.getCell(2, i).getContents());
+            estoque_principal.setMunicipio(sheet.getCell(3, i).getContents());
+            estoque_principal.setFazenda(sheet.getCell(4, i).getContents());
+            estoque_principal.setProjeto(sheet.getCell(5, i).getContents());*/
+            
+            ControlePrincipal.estado = sheet.getCell(0, i).getContents();
+            ControlePrincipal.bloco = sheet.getCell(2, i).getContents();
+            ControlePrincipal.municipio = sheet.getCell(3, i).getContents();
+            ControlePrincipal.fazenda = sheet.getCell(4, i).getContents();
+            ControlePrincipal.projeto = sheet.getCell(5, i).getContents();
+            estoque_principal.setUpc(sheet.getCell(1, i).getContents());
+            //ajusta dados do talhao            
+            dado = sheet.getCell(8, i).getContents();
+            dado = dado.replaceAll(" ", "");  
+            dado = dado.replaceAll("[TABC-]", ""); 
+            
+            //System.out.println("["+i+"]:"+sheet.getCell(8, i).getContents()+"-"+dado);  
+            if(!dado.equals("")){
+                estoque_principal.setTalhao(Integer.parseInt(dado));
+            }else{
+                estoque_principal.setTalhao(0);
+            }
+            
+            if(!sheet.getCell(9, i).getContents().equals("")){
+                estoque_principal.setArea(Float.parseFloat(sheet.getCell(9, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setArea(0f);
+            }
+            
+            estoque_principal.setMaterial_genetico(sheet.getCell(11, i).getContents());
+            
+            if(!sheet.getCell(22, i).getContents().equals("")){
+                estoque_principal.setM3_ha(Float.parseFloat(sheet.getCell(22, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setM3_ha(0f);
+            }
+            
+            //JOptionPane.showMessageDialog(null, "Verificando... "+sheet.getCell(10, i).getContents());
+            if(sheet.getCell(10, i).getContents().equals("0") || sheet.getCell(10, i).getContents().equals("1")){
+                estoque_principal.setTalhadia(Integer.parseInt(sheet.getCell(10, i).getContents()));
+            }else{
+                estoque_principal.setIma(0);
+            }
+            
+            if(!sheet.getCell(7, i).getContents().equals("")){
+                estoque_principal.setAno_rotacao(Integer.parseInt(sheet.getCell(7, i).getContents()));
+            }else{
+                estoque_principal.setAno_rotacao(0);
+            }
+            
+            estoque_principal.setData_plantio(sheet.getCell(12, i).getContents());
+            estoque_principal.setData_rotacao_1(sheet.getCell(13, i).getContents());
+            estoque_principal.setData_rotacao_2("00/00/0000");
+            estoque_principal.setData_rotacao_3("00/00/0000");
+            
+            if(!sheet.getCell(14, i).getContents().equals("")){
+                estoque_principal.setIdade_corte1(Float.parseFloat(sheet.getCell(14, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setIdade_corte1(0f);
+            }
+            estoque_principal.setIdade_corte2(Float.parseFloat("0"));
+            estoque_principal.setIdade_corte3(Float.parseFloat("0"));
+            
+            if(!sheet.getCell(15, i).getContents().equals("")){
+                estoque_principal.setIdade_hoje(Float.parseFloat(sheet.getCell(15, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setIdade_hoje(0f);
+            }
+            
+            estoque_principal.setConducao(sheet.getCell(16, i).getContents());
+            estoque_principal.setCategoria(sheet.getCell(17, i).getContents());
+            estoque_principal.setSituacao(sheet.getCell(18, i).getContents());
+            if(!sheet.getCell(21, i).getContents().equals("")){
+                estoque_principal.setIma(Float.parseFloat(sheet.getCell(21, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setIma(0f);
+            }
+                        
+            if(!sheet.getCell(23, i).getContents().equals("")){
+                estoque_principal.setMdc_ha(Float.parseFloat(sheet.getCell(23, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setMdc_ha(0f);
+            }
+            
+            if(!sheet.getCell(19, i).getContents().equals("")){
+                estoque_principal.setDensidade_madeira(Float.parseFloat(sheet.getCell(19, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setDensidade_madeira(0f);
+            }
+            
+            if(!sheet.getCell(20, i).getContents().equals("")){
+                estoque_principal.setDensidade_carvao(Float.parseFloat(sheet.getCell(20, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setDensidade_carvao(0f);
+            }
+            
+            if(!sheet.getCell(24, i).getContents().equals("")){
+                estoque_principal.setMad_ton_ha(Float.parseFloat(sheet.getCell(24, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setMad_ton_ha(0f);
+            }
+            
+            if(!sheet.getCell(25, i).getContents().equals("")){
+                estoque_principal.setCarv_ton_ha(Float.parseFloat(sheet.getCell(25, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setCarv_ton_ha(0f);
+            }
+            
+            estoque_principal.setId_operario(ControlePrincipal.id_op);
+            estoque_principal.setData_estoque(data_estoque_principal.format(date));
+            
+            if(!sheet.getCell(26, i).getContents().equals("")){
+                estoque_principal.setVol_mad_estimado(Float.parseFloat(sheet.getCell(26, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setVol_mad_estimado(0f);
+            }
+                        
+            if(!sheet.getCell(27, i).getContents().equals("")){
+                estoque_principal.setVol_mad_transp(Float.parseFloat(sheet.getCell(27, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setVol_mad_transp(0f);
+            }
+            
+            if(!sheet.getCell(28, i).getContents().equals("")){
+                estoque_principal.setVol_mad_balanco(Float.parseFloat(sheet.getCell(28, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setVol_mad_balanco(0f);
+            }
+            
+            if(!sheet.getCell(29, i).getContents().equals("")){
+                estoque_principal.setMdc_estimado(Float.parseFloat(sheet.getCell(29, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setMdc_estimado(0f);
+            }
+            
+            if(!sheet.getCell(30, i).getContents().equals("")){
+                estoque_principal.setMdc_transp(Float.parseFloat(sheet.getCell(30, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setMdc_transp(0f);
+            }
+            
+            if(!sheet.getCell(31, i).getContents().equals("")){
+                estoque_principal.setMdc_balanco(Float.parseFloat(sheet.getCell(31, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setMdc_balanco(0f);
+            }
+            
+            if(!sheet.getCell(32, i).getContents().equals("")){
+                estoque_principal.setMad_ton_estimado(Float.parseFloat(sheet.getCell(32, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setMad_ton_estimado(0f);
+            }
+                        
+            if(!sheet.getCell(33, i).getContents().equals("")){
+                estoque_principal.setMad_ton_transp(Float.parseFloat(sheet.getCell(33, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setMad_ton_transp(0f);
+            }
+            
+            if(!sheet.getCell(34, i).getContents().equals("")){
+                estoque_principal.setMad_ton_balanco(Float.parseFloat(sheet.getCell(35, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setMad_ton_balanco(0f);
+            }
+            
+            if(!sheet.getCell(35, i).getContents().equals("")){
+                estoque_principal.setCarv_ton_estimado(Float.parseFloat(sheet.getCell(35, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setCarv_ton_estimado(0f);
+            }
+            
+            if(!sheet.getCell(36, i).getContents().equals("")){
+                estoque_principal.setCarv_ton_transp(Float.parseFloat(sheet.getCell(36, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setCarv_ton_transp(0f);
+            }
+            
+            if(!sheet.getCell(37, i).getContents().equals("")){
+                estoque_principal.setCarv_ton_balanco(Float.parseFloat(sheet.getCell(37, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setCarv_ton_balanco(0f);
+            }
+            
+            estoque_principal.setMadeira_praca(Float.parseFloat("0"));
+            estoque_principal.setMadeira_forno(Float.parseFloat("0"));
+            
+            if(!sheet.getCell(38, i).getContents().equals("")){
+                estoque_principal.setRend_grav_estimado(Float.parseFloat(sheet.getCell(38, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setRend_grav_estimado(0f);
+            }
+            
+            if(!sheet.getCell(27, i).getContents().equals("")){
+                estoque_principal.setRend_grav_real(Float.parseFloat(sheet.getCell(39, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setRend_grav_real(0f);
+            }
+            
+            if(!sheet.getCell(40, i).getContents().equals("")){
+                estoque_principal.setFator_empilalhemto(Float.parseFloat(sheet.getCell(40, i).getContents().replace(",",".")));
+            }else{
+                estoque_principal.setFator_empilalhemto(0f);
+            }
+            //System.out.println("importando "+barra);
+            progressBar.setValue(barra);
+            //JOptionPane.showMessageDialog(null, "importando "+barra); 
+            //try { Thread.sleep (1000); } catch (InterruptedException ex) {}
+            InserirEstoquePrincipalCtrl inserir = new InserirEstoquePrincipalCtrl(estoque_principal);
+        }  
+        //System.out.println("Importado");
+        progressBar.setValue(100);
+        JOptionPane.showMessageDialog(null, "Importação Completa!"); 
+        ControlePrincipal.excel_cmd = false;
+        f.dispose(); 
+        PreencherTabelaFiltrada();
+        this.setVisible(true);            
+    }    
+            
+    private void CarregandoDados(){
+        f = new JFrame("Importando dados");
+        f.setSize(300, 100);
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        content = f.getContentPane();
+        border = BorderFactory.createTitledBorder("Inserindo dados excel...");
+        progressBar = new JProgressBar();
+        progressBar.setMinimum(0);
+        progressBar.setMaximum(100);
+        progressBar.setBorder(border);        
+        progressBar.setStringPainted(true);
+        progressBar.setValue(barra);
+        content.add(progressBar, BorderLayout.NORTH);     
+        /*progressBar.setValue(50);
+        //try { Thread.sleep (5000); } catch (InterruptedException ex) {}  
+        //progressBar.setValue(75);        
+        while (barra <= 100) {
+            barra++;
+            //barra = (int)((barra*100)/500);
+            System.out.println("importando "+barra); 
+            progressBar.setValue(barra);
+            try { Thread.sleep (1000); } catch (InterruptedException ex) {}
+        }*/     
+    }
+    
+    private void CarregarFazendasExcel() throws BiffException, IOException{
+        DateFormat data_registro = new SimpleDateFormat("dd/MM/yyyy"); 
+        Date date = new Date();    
+        ControleFazenda fazenda = new ControleFazenda();     
+ 
         /* pega o arquiivo do Excel */  
-        Workbook workbook = Workbook.getWorkbook(new File("C:/Users/crist/Desktop/Nova pasta/projeto.xls"));  
+        Workbook workbook = Workbook.getWorkbook(new File(caminho));  
 
         /* pega a primeira planilha dentro do arquivo XLS */  
         Sheet sheet = workbook.getSheet(0);  
 
         //Pega a quantidade de linhas da planilha   
-        int linhas = sheet.getRows();  
-        JOptionPane.showMessageDialog(null, "Lendo excel, linhas... "+linhas);
+        int total_linhas = sheet.getRows();  
+        JOptionPane.showMessageDialog(null, "Lendo excel, linhas... "+total_linhas);
         Cell celula = null;
-        for (int i = 1; i < linhas; i++) {  
+        for (int i = 1; i < total_linhas; i++) {  
             String stringa4="";
             /* pega os valores das células como se numa matriz */  
-            /*for (int j = 0; j < 36; j++) {  
+            /*for (int j = 0; j < 41; j++) {  
                 //celula = sheet.getCell(j, i);//col, lin
-                System.out.println(sheet.getCell(j, i).getContents());  
+                //System.out.print(sheet.getCell(j, i).getContents()+" - ");  
+                System.out.println("["+j+"]: "+sheet.getCell(j, i).getContents());  
+                //System.out.print(sheet.getCell(j, 1).getContents()+" - ");  
                 //stringa4 += celula.getContents()+", ";               
-            }
+            }*/
             //System.out.println(sheet.getCell(7, i).getContents()));              
-            System.out.println("importando "+i);  */
-            //System.out.println(sheet.getCell(29, i).getContents()); 
-            estoque_principal.setEstado(sheet.getCell(0, i).getContents());            
-            estoque_principal.setUpc(sheet.getCell(1, i).getContents());
-            estoque_principal.setBloco(sheet.getCell(2, i).getContents());
-            estoque_principal.setMunicipio(sheet.getCell(3, i).getContents());
-            estoque_principal.setFazenda(sheet.getCell(4, i).getContents());
-            estoque_principal.setProjeto(sheet.getCell(5, i).getContents());
-            estoque_principal.setTalhao(Integer.parseInt(sheet.getCell(6, i).getContents()));
-            estoque_principal.setArea(Float.parseFloat(sheet.getCell(7, i).getContents().replace(",",".")));
-            estoque_principal.setM3_ha(Float.parseFloat(sheet.getCell(8, i).getContents().replace(",",".")));
-            estoque_principal.setTalhadia(Integer.parseInt(sheet.getCell(9, i).getContents()));
-            estoque_principal.setMaterial_genetico(sheet.getCell(10, i).getContents());
-            estoque_principal.setAno_rotacao(Integer.parseInt(sheet.getCell(11, i).getContents()));
-            estoque_principal.setData_plantio(sheet.getCell(12, i).getContents());
-            estoque_principal.setData_rotacao_1(sheet.getCell(13, i).getContents());
-            estoque_principal.setData_rotacao_2(sheet.getCell(14, i).getContents());
-            estoque_principal.setData_rotacao_3(sheet.getCell(15, i).getContents());
-            estoque_principal.setIdade_hoje(Float.parseFloat(sheet.getCell(16, i).getContents().replace(",",".")));
-            estoque_principal.setCategoria(sheet.getCell(17, i).getContents());
-            estoque_principal.setIma(Float.parseFloat(sheet.getCell(18, i).getContents().replace(",",".")));
-            estoque_principal.setSituacao(sheet.getCell(19, i).getContents());
-            estoque_principal.setMad_ton_ha(Float.parseFloat(sheet.getCell(20, i).getContents().replace(",",".")));
-            estoque_principal.setCarv_ton_ha(Float.parseFloat(sheet.getCell(21, i).getContents().replace(",",".")));
-            estoque_principal.setMdc_ha(Float.parseFloat(sheet.getCell(22, i).getContents().replace(",",".")));
-            estoque_principal.setDensidade_madeira(Float.parseFloat(sheet.getCell(23, i).getContents().replace(",",".")));
-            estoque_principal.setDensidade_carvao(Float.parseFloat(sheet.getCell(24, i).getContents().replace(",",".")));
-            estoque_principal.setVol_mad_estimado(Float.parseFloat(sheet.getCell(25, i).getContents().replace(",",".")));
-            estoque_principal.setVol_mad_transp(Float.parseFloat(sheet.getCell(26, i).getContents().replace(",",".")));
-            estoque_principal.setVol_mad_balanco(Float.parseFloat(sheet.getCell(27, i).getContents().replace(",",".")));
-            estoque_principal.setMdc_estimado(Float.parseFloat(sheet.getCell(28, i).getContents().replace(",",".")));
-            estoque_principal.setMdc_transp(Float.parseFloat(sheet.getCell(29, i).getContents().replace(",",".")));
-            estoque_principal.setMdc_balanco(Float.parseFloat(sheet.getCell(30, i).getContents().replace(",",".")));
-            estoque_principal.setMad_ton_estimado(Float.parseFloat(sheet.getCell(31, i).getContents().replace(",",".")));
-            estoque_principal.setMad_ton_transp(Float.parseFloat(sheet.getCell(32, i).getContents().replace(",",".")));
-            estoque_principal.setMad_ton_balanco(Float.parseFloat(sheet.getCell(33, i).getContents().replace(",",".")));
-            estoque_principal.setCarv_ton_estimado(Float.parseFloat(sheet.getCell(34, i).getContents().replace(",",".")));
-            estoque_principal.setCarv_ton_transp(Float.parseFloat(sheet.getCell(35, i).getContents().replace(",",".")));
-            estoque_principal.setCarv_ton_balanco(Float.parseFloat(sheet.getCell(36, i).getContents().replace(",",".")));
-
-            estoque_principal.setData_estoque(data_estoque_principal.format(date));
-            estoque_principal.setId_operario(ControlePrincipal.id_op);
-            InserirEstoquePrincipalCtrl inserir = new InserirEstoquePrincipalCtrl(estoque_principal);
+            //System.out.println("importando "+i);  
+            //System.out.println(sheet.getCell(29, i).getContents());     
+            
+            //fazenda.setId_fazenda(sheet.getCell(0, i).getContents());  
+            fazenda.setEstado(sheet.getCell(0, i).getContents());             
+            fazenda.setCod_estado(SelecionaCodigoEstado(sheet.getCell(0, i).getContents()));            
+            fazenda.setBloco(sheet.getCell(2, i).getContents());           
+            fazenda.setCod_bloco(SelecionaCodigoBloco(sheet.getCell(2, i).getContents()));            
+            fazenda.setMunicipio(sheet.getCell(3, i).getContents());            
+            fazenda.setFazenda(sheet.getCell(4, i).getContents());            
+            fazenda.setProjeto(sheet.getCell(8, i).getContents());
+            
+            InserirFazendaCtrl inserir = new InserirFazendaCtrl(fazenda);
         }  
         System.out.println("Importado");  
+    }
+    
+    private int SelecionaCodigoEstado(String UF){
+        int cod=0;
+        switch(UF){
+                case "AC":
+                    cod = 1;
+                    break;
+                case "AL":
+                    cod = 2;
+                    break;
+                case "AP":
+                    cod = 3;
+                    break;
+                case "AM":
+                    cod = 4;
+                    break;
+                case "BA":
+                    cod = 5;
+                    break;
+                case "CE":
+                    cod = 6;
+                    break;
+                case "DF":
+                    cod = 7;
+                    break;
+                case "ES":
+                    cod = 8;
+                    break;
+                case "GO":
+                    cod = 9;
+                    break;
+                case "MA":
+                    cod = 10;
+                    break;
+                case "MT":
+                    cod = 11;
+                    break;
+                case "MS":
+                    cod = 12;
+                    break;
+                case "MG":
+                    cod = 13;
+                    break;
+                case "PA":
+                    cod = 14;
+                    break;
+                case "PB":
+                    cod = 15;
+                    break;
+                case "PR":
+                    cod = 16;
+                    break;
+                case "PE":
+                    cod = 17;
+                    break;
+                case "PI":
+                    cod = 18;
+                    break;
+                case "RJ":
+                    cod = 19;
+                    break;
+                case "RN":
+                    cod = 20;
+                    break;
+                case "RS":
+                    cod = 21;
+                    break;
+                case "RO":
+                    cod = 22;
+                    break;
+                case "RR":
+                    cod = 23;
+                    break;
+                case "SC":
+                    cod = 24;
+                    break;
+                case "SE":
+                    cod = 25;
+                    break;
+                case "SP":
+                    cod = 26;
+                    break;
+                case "TO":
+                    cod = 27;
+                    break;
+            }
+        return cod;
+    }
+    
+    private int SelecionaCodigoBloco(String BL){
+        int cod=0;
+        switch(BL){
+                case "Norte":
+                    cod = 1;
+                    break;
+                case "Sul":
+                    cod = 2;
+                    break;
+                case "Leste":
+                    cod = 3;
+                    break;
+                case "Oeste":
+                    cod = 4;
+                    break;                
+            }
+        return cod;
     }
     
     private void GerarPDF() throws DocumentException, FileNotFoundException {
@@ -705,75 +852,73 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             ControlePrincipal.upc = Integer.parseInt(jTableRelatorioEstoquePrincipal.getValueAt(linha, 6).toString());
             ControlePrincipal.talhao = jTableRelatorioEstoquePrincipal.getValueAt(linha, 7).toString();            
                         
-            if(ControlePrincipal.tipo_u.equals("op_m")){
-                ControlePrincipal.densidade_madeira = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 22).toString());
-                ControlePrincipal.vol_mad_estimado = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 28).toString());
-                ControlePrincipal.vol_mad_transp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 29).toString());
-                ControlePrincipal.vol_mad_balanco = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 30).toString());
-                ControlePrincipal.mad_ton_estimado = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 34).toString());
-                ControlePrincipal.mad_ton_transp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 35).toString());
-                ControlePrincipal.mad_ton_balanco = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 36).toString());
-                ControlePrincipal.madeira_praca = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 40).toString());
-                ControlePrincipal.mad_ton_tot = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 42).toString());
-                ControlePrincipal.fator_emp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 46).toString());
-                if(ControlePrincipal.fator_emp>0){
-                    //JOptionPane.showMessageDialog(null, "InserirMadeiraPraca");
-                    new InserirMadeiraPraca().setVisible(true);
-                    this.setVisible(false);
-                    dispose();
-                }else {
-                    JOptionPane.showMessageDialog(null, "Talhão "+ControlePrincipal.talhao+" sem fator empilhamento definido!");
-                }
-            }else if(ControlePrincipal.tipo_u.equals("op_c")){                
-                ControlePrincipal.densidade_carvao = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 23).toString());
-                ControlePrincipal.mdc_estimado = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 31).toString());
-                ControlePrincipal.mdc_transp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 32).toString());
-                ControlePrincipal.mdc_balanco = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 33).toString());
-                ControlePrincipal.carv_ton_estimado = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 37).toString());
-                ControlePrincipal.carv_ton_transp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 38).toString());
-                ControlePrincipal.carv_ton_balanco = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 39).toString());
-                ControlePrincipal.madeira_praca = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 40).toString());
-                ControlePrincipal.madeira_forno = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 41).toString());
-                ControlePrincipal.carv_ton_tot = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 43).toString());
-                ControlePrincipal.rend_grav_real = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 45).toString());
-                if(ControlePrincipal.madeira_praca>0){
-                    //JOptionPane.showMessageDialog(null, "InserirMadeiraForno");
-                    new InserirMadeiraForno().setVisible(true);
-                    this.setVisible(false);
-                    dispose();
-                }else {
-                    JOptionPane.showMessageDialog(null, "Talhão "+ControlePrincipal.talhao+" sem estoque na praça!");
-                }
-            }else if(ControlePrincipal.tipo_u.equals("op_s")){ 
-                /*try {
-                    new GerenciarEstoquePrincipal().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
-                }*/
+            switch (ControlePrincipal.tipo_u) {
+                case "op_m":
+                    ControlePrincipal.densidade_madeira = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 22).toString());
+                    ControlePrincipal.vol_mad_estimado = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 28).toString());
+                    ControlePrincipal.vol_mad_transp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 29).toString());
+                    ControlePrincipal.vol_mad_balanco = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 30).toString());
+                    ControlePrincipal.mad_ton_estimado = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 34).toString());
+                    ControlePrincipal.mad_ton_transp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 35).toString());
+                    ControlePrincipal.mad_ton_balanco = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 36).toString());
+                    ControlePrincipal.madeira_praca = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 40).toString());
+                    ControlePrincipal.mad_ton_tot = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 42).toString());
+                    ControlePrincipal.fator_emp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 46).toString());
+                    if(ControlePrincipal.fator_emp>0){
+                        //JOptionPane.showMessageDialog(null, "InserirMadeiraPraca");
+                        new InserirMadeiraPraca().setVisible(true);
+                        this.setVisible(false);
+                        dispose();
+                    }else {
+                        JOptionPane.showMessageDialog(null, "Talhão "+ControlePrincipal.talhao+" sem fator empilhamento definido!");
+                    }   break;
+                case "op_c":
+                    ControlePrincipal.densidade_carvao = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 23).toString());
+                    ControlePrincipal.mdc_estimado = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 31).toString());
+                    ControlePrincipal.mdc_transp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 32).toString());
+                    ControlePrincipal.mdc_balanco = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 33).toString());
+                    ControlePrincipal.carv_ton_estimado = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 37).toString());
+                    ControlePrincipal.carv_ton_transp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 38).toString());
+                    ControlePrincipal.carv_ton_balanco = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 39).toString());
+                    ControlePrincipal.madeira_praca = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 40).toString());
+                    ControlePrincipal.madeira_forno = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 41).toString());
+                    ControlePrincipal.carv_ton_tot = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 43).toString());
+                    ControlePrincipal.rend_grav_real = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 45).toString());
+                    if(ControlePrincipal.madeira_praca>0){
+                        //JOptionPane.showMessageDialog(null, "InserirMadeiraForno");
+                        new InserirMadeiraForno().setVisible(true);
+                        this.setVisible(false);
+                        dispose();
+                    }else {
+                        JOptionPane.showMessageDialog(null, "Talhão "+ControlePrincipal.talhao+" sem estoque na praça!");
+                }   break;
+                case "op_s":
+                    break;
             }            
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
         //this.setVisible(false);
     }
     
     private void VoltarMenu(){        
-        if(ControlePrincipal.tipo_u.equals("op_m")){
-            try {
-                new GerenciarMadeiraPraca().setVisible(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }else if(ControlePrincipal.tipo_u.equals("op_c")){
-            try {
-                new GerenciarCarvaoForno().setVisible(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }else if(ControlePrincipal.tipo_u.equals("op_s")){
-            try {
-                new GerenciarUsuarios().setVisible(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        switch (ControlePrincipal.tipo_u) {
+            case "op_m":
+                try {
+                    new GerenciarMadeiraPraca().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+                }   break;
+            case "op_c":
+                try {
+                    new GerenciarCarvaoForno().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            }   break;
+            case "op_s":
+                try {
+                    new GerenciarUsuarios().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            }   break;
         }
         this.setVisible(false);
         dispose();
@@ -823,7 +968,8 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItemGerarPDF = new javax.swing.JMenuItem();
-        jMenuItemCarregarExcel = new javax.swing.JMenuItem();
+        jMenuItemCarregarEstoqueExcel = new javax.swing.JMenuItem();
+        jMenuItemCarregarFazendaExcel = new javax.swing.JMenuItem();
         jMenuItemLogout = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
@@ -920,7 +1066,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jLabel5.setText("Filtrar por:");
 
         jListFiltrar.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "-", "estado", "bloco", "municipio", "fazenda", "projeto", "upc", "talhao", "area", "m3_ha", "material_genetico", "talhadia", "ano_rotacao", "data_plantio", "data_rotacao_1", "data_rotacao_2", "data_rotacao_3", "idade_hoje", "idade_corte1", "idade_corte2", "idade_corte3", "categoria", "situacao", "ima", "mdc_ha", "densidade_madeira", "densidade_carvao", "mad_ton_ha", "carv_ton_ha", "id_operario", "data_estoque", "vol_mad_estimado", "vol_mad_transp", "vol_mad_balanco", "mdc_estimado", "mdc_transp", "mdc_balanco", "mad_ton_estimado", "mad_ton_transp", "mad_ton_balanco", "carv_ton_estimado", "carv_ton_transp", "carv_ton_balanco", "madeira_praca", "madeira_forno", "rend_grav_estimado", "rend_grav_real", "fator_empilalhemto" };
+            String[] strings = { "-", "estado", "bloco", "municipio", "fazenda", "projeto", "upc", "talhao", "area", "m3_ha", "material_genetico", "talhadia", "ano_rotacao", "data_plantio", "data_rotacao_1", "data_rotacao_2", "data_rotacao_3", "idade_hoje", "idade_corte1", "idade_corte2", "idade_corte3", "conducao", "categoria", "situacao", "ima", "mdc_ha", "densidade_madeira", "densidade_carvao", "mad_ton_ha", "carv_ton_ha", "id_operario", "data_estoque", "vol_mad_estimado", "vol_mad_transp", "vol_mad_balanco", "mdc_estimado", "mdc_transp", "mdc_balanco", "mad_ton_estimado", "mad_ton_transp", "mad_ton_balanco", "carv_ton_estimado", "carv_ton_transp", "carv_ton_balanco", "madeira_praca", "madeira_forno", "rend_grav_estimado", "rend_grav_real", "fator_empilalhemto" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -999,7 +1145,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
                 .addGap(13, 13, 13)
                 .addComponent(jButtonFiltrar)
                 .addGap(18, 18, 18)
@@ -1019,7 +1165,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 646, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
         );
         jPanel3Layout.setVerticalGroup(
@@ -1089,13 +1235,21 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItemGerarPDF);
 
-        jMenuItemCarregarExcel.setText("Carregar Excel");
-        jMenuItemCarregarExcel.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemCarregarEstoqueExcel.setText("Carregar Estoque Excel");
+        jMenuItemCarregarEstoqueExcel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemCarregarExcelActionPerformed(evt);
+                jMenuItemCarregarEstoqueExcelActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItemCarregarExcel);
+        jMenu1.add(jMenuItemCarregarEstoqueExcel);
+
+        jMenuItemCarregarFazendaExcel.setText("Carregar Fazenda Excel");
+        jMenuItemCarregarFazendaExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCarregarFazendaExcelActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItemCarregarFazendaExcel);
 
         jMenuItemLogout.setText("Logout");
         jMenuItemLogout.addActionListener(new java.awt.event.ActionListener() {
@@ -1128,7 +1282,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(10, 10, 10))
         );
@@ -1141,13 +1295,13 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
                         .addGap(10, 10, 10)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)))
                 .addGap(10, 10, 10))
         );
 
@@ -1163,15 +1317,28 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         //JOptionPane.showMessageDialog(null, jListFiltrar.getSelectedValuesList());
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
-    private void jMenuItemCarregarExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCarregarExcelActionPerformed
+    private void jMenuItemCarregarEstoqueExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCarregarEstoqueExcelActionPerformed
         try {
-            CarregarExcel();
+            JFileChooser abrir = new JFileChooser();   
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos Excel .xls","xls");   
+            abrir.addChoosableFileFilter(filter);  
+            abrir.setAcceptAllFileFilterUsed(false);              
+            int retorno = abrir.showOpenDialog(null);              
+            if (retorno==JFileChooser.APPROVE_OPTION) { 
+                
+                caminho = abrir.getSelectedFile().getAbsolutePath();  
+                CarregarEstoqueExcel();
+            }
+            //try { Thread.sleep (1000); } catch (InterruptedException ex) {}
+            //CarregarEstoqueExcel();
         } catch (BiffException ex) {
-            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, "Carregar Estoque Excel Error: "+ex);
+            JOptionPane.showMessageDialog(null, "Carregar Estoque Excel Error: "+ex);
         } catch (IOException ex) {
-            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jMenuItemCarregarExcelActionPerformed
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, "Carregar Estoque Excel Error: "+ex);
+            JOptionPane.showMessageDialog(null, "Carregar Estoque Excel Error: "+ex);
+        }        
+    }//GEN-LAST:event_jMenuItemCarregarEstoqueExcelActionPerformed
 
     private void jMenuItemGerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerarPDFActionPerformed
         try {
@@ -1180,8 +1347,10 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             GerarPDF();
         } catch (DocumentException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Gerar PDF Error: "+ex);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Gerar PDF Error: "+ex);
         }
     }//GEN-LAST:event_jMenuItemGerarPDFActionPerformed
 
@@ -1200,6 +1369,27 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             jSpinnerUPC.setEnabled(true);
         }
     }//GEN-LAST:event_jCheckBoxUTMActionPerformed
+
+    private void jMenuItemCarregarFazendaExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCarregarFazendaExcelActionPerformed
+        
+            try {
+                JFileChooser abrir = new JFileChooser();   
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos Excel .xls","xls");   
+                abrir.addChoosableFileFilter(filter);  
+                abrir.setAcceptAllFileFilterUsed(false);              
+                int retorno = abrir.showOpenDialog(null);              
+                if (retorno==JFileChooser.APPROVE_OPTION) { 
+                    caminho = abrir.getSelectedFile().getAbsolutePath();  
+                    CarregarFazendasExcel();
+                }
+            } catch (BiffException ex) {
+                Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Carregar Fazenda Excel Error: "+ex);
+            } catch (IOException ex) {
+                Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Carregar Fazenda Excel Error: "+ex);
+            }
+    }//GEN-LAST:event_jMenuItemCarregarFazendaExcelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1269,7 +1459,8 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItemCarregarExcel;
+    private javax.swing.JMenuItem jMenuItemCarregarEstoqueExcel;
+    private javax.swing.JMenuItem jMenuItemCarregarFazendaExcel;
     private javax.swing.JMenuItem jMenuItemGerarPDF;
     private javax.swing.JMenuItem jMenuItemLogout;
     private javax.swing.JPanel jPanel1;

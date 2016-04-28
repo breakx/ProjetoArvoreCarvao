@@ -17,7 +17,7 @@ public class ControleFazenda {
     private String bloco; 
     private String municipio; 
     private String fazenda; 
-    private int projeto; 
+    private String projeto; 
 
     /**
      * @return the id_fazenda
@@ -120,14 +120,14 @@ public class ControleFazenda {
     /**
      * @return the projeto
      */
-    public int getProjeto() {
+    public String getProjeto() {
         return projeto;
     }
 
     /**
      * @param projeto the projeto to set
      */
-    public void setProjeto(int projeto) {
+    public void setProjeto(String projeto) {
         this.projeto = projeto;
     }
     
