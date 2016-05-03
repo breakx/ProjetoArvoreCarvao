@@ -165,11 +165,11 @@ public class AlterarMadeiraPraca extends javax.swing.JFrame {
 
         try {
             new GerenciarMadeiraPraca().setVisible(true);
+            this.setVisible(false);
+            dispose();
         } catch (SQLException ex) {
             Logger.getLogger(InserirMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.setVisible(false);
-        dispose();
     }
     
     private void CarregarNome(){
@@ -180,11 +180,11 @@ public class AlterarMadeiraPraca extends javax.swing.JFrame {
     private void VoltarMenu(){
         try {   
             new GerenciarMadeiraPraca().setVisible(true);
+            this.setVisible(false);
+            dispose();
         } catch (SQLException ex) {
             Logger.getLogger(AlterarMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.setVisible(false);
-        dispose();
     }
 
     /**

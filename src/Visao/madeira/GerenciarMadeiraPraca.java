@@ -11,6 +11,8 @@ import Modelo.ConexaoBD;
 import Modelo.GerarTabela;
 import Visao.login.Login;
 import Visao.relatorios.GerarRelatorioEstoquePrincipal;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,11 +47,7 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
     private void PreencherTabela(){
         ArrayList dados = new ArrayList();
         String[] colunas = new String[] { 
-            "id_controle_madeira", 
-            "id_estoque_p", 
-            "id_operario", 
             "talhao", 
-            "data_entrega", 
             "mad_volume_m_stereo", 
             "mad_volume_m3", 
             "altura1_t", 
@@ -63,7 +61,11 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
             "altura3_bt", 
             "comprimento_bt", 
             "largura_bt", 
-            "peso_bt"
+            "peso_bt",
+            "data_entrega", 
+            "id_controle_madeira", 
+            "id_estoque_p", 
+            "id_operario"
         };
         int tamanho = 0;    
         String query;
@@ -79,11 +81,7 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
         try {
             while(rs.next()){
                 dados.add(new Object[]{
-                    rs.getString("id_controle_madeira"),
-                    rs.getString("id_estoque_p"),
-                    rs.getString("id_operario"),
                     rs.getString("talhao"),
-                    rs.getString("data_entrega"),
                     rs.getString("mad_volume_m_stereo"),
                     rs.getString("mad_volume_m3"),
                     rs.getString("altura1_t"),
@@ -97,7 +95,11 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
                     rs.getString("altura3_bt"),
                     rs.getString("comprimento_bt"),
                     rs.getString("largura_bt"),
-                    rs.getString("peso_bt")
+                    rs.getString("peso_bt"),
+                    rs.getString("data_entrega"),
+                    rs.getString("id_controle_madeira"),
+                    rs.getString("id_estoque_p"),
+                    rs.getString("id_operario")
                 });
                 tamanho++;
             }
@@ -116,12 +118,27 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
             }else{
                 jTableMadeira.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*8);
             }
-            jTableMadeira.getColumnModel().getColumn(i).setResizable(false);
+            if(i>14){
+                jTableMadeira.getColumnModel().getColumn(i).setMinWidth(0);     
+                jTableMadeira.getColumnModel().getColumn(i).setPreferredWidth(0);  
+                jTableMadeira.getColumnModel().getColumn(i).setMaxWidth(0);
+                jTableMadeira.getColumnModel().getColumn(i).setResizable(false);
+            }
             //System.out.println("Indice: "+i+" - "+ colunas[i].length()*200);
         }
         jTableMadeira.getTableHeader().setReorderingAllowed(false);
         jTableMadeira.setAutoResizeMode(jTableMadeira.AUTO_RESIZE_OFF);
         jTableMadeira.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        //duplo click
+        jTableMadeira.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                    if(e.getClickCount() == 2){
+                        //System.out.println("duplo-clique detectado");
+                        AlterarInfo();
+                    }
+                }
+            }); 
         con.fecharConexao();
     }      
     

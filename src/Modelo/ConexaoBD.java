@@ -17,14 +17,15 @@ public class ConexaoBD {
 
     private ConexaoBD()
     {
-        String database = "appmadeira";
+        /*String database = "appmadeira";
         String url = "jdbc:mysql://localhost/"+database;
         String usuario_bd = "root";
-        String senha_bd = "";
-        /*String database = "appmadeiracarvao";
+        String senha_bd = "";*/
+        
+        String database = "appmadeiracarvao";
         String url = "jdbc:mysql://db4free.net:3306/"+database;
         String usuario_bd = "crgddev";
-        String senha_bd = "duarte1207";*/
+        String senha_bd = "duarte1207";
         try
         {
             //Class.forName("org.gjt.mm.mysql.Driver").newInstance();

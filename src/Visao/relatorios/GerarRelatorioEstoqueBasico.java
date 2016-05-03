@@ -20,9 +20,11 @@ import Visao.madeira.InserirMadeiraPraca;
 import Visao.usuario.GerenciarUsuarios;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -64,16 +66,21 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private ArrayList linhas;
     private String[] colunas;
     private int tamanho;
-    private float areaTotal;
+    private float areaTotal;  
+    private float m3_haMedia;  
+    private float mdc_haMedia;
     private float vol_mad_transpTotal;
+    private float vol_mad_estTotal;
     private float mdc_transpTotal;
+    private float mdc_estTotal;
     private float mad_ton_transpTotal;
+    private float mad_ton_estTotal;
     private float carv_ton_transpTotal;
+    private float carv_ton_estTotal;
     //private float madeira_pracaTotal;
     //private float madeira_fornoTotal;
     //private float mad_ton_totTotal;
-    //private float carv_ton_totTotal;     
-    private float m3_haMedia;
+    //private float carv_ton_totTotal;   
     //private float rend_gravMediaPonderada;
     private String caminho="";    
     private JProgressBar progressBar;
@@ -82,6 +89,13 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private Border border;      
     private int barra=0;
     private String dado;
+    
+    private String filtro_upc;
+    private String filtro_cat;
+    private String filtro_talhadia;
+    private String filtro_matgen;
+    private String filtro_proj;
+    private String filtro_faz;
     
     /**
      * Creates new form GerarRelatorioEstoquePrincipal
@@ -92,6 +106,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         ChangeName();
         PreencherTabelaFiltrada();
+        jButtonVoltar.setVisible(false);
     }  
     
     private void ChangeName(){
@@ -101,13 +116,26 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     }
     
     private void _carregarCategoria(){
+        jComboBoxCategoria.removeAllItems();
+        jComboBoxCategoria.addItem("-");
         jComboBoxCategoria.addItem("Colheita");
         jComboBoxCategoria.addItem("Silvicultura");
         jComboBoxCategoria.addItem("UTM");  
+        _carregarTalhadia();
+    }
+    
+    private void _carregarTalhadia(){
+        jComboBoxTalhadia.removeAllItems();
+        jComboBoxTalhadia.addItem("-");
+        jComboBoxTalhadia.addItem("1");
+        jComboBoxTalhadia.addItem("2");
+        jComboBoxTalhadia.addItem("3");  
         _carregarProjetos();
     }
     
     private void _carregarProjetos(){
+        jComboBoxProjeto.removeAllItems();
+        jComboBoxProjeto.addItem("-");
         jComboBoxProjeto.addItem("I");
         jComboBoxProjeto.addItem("II");
         jComboBoxProjeto.addItem("III");  
@@ -122,6 +150,8 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     }
     
     private void _carregarFazendas(){ 
+        jComboBoxFazenda.removeAllItems();
+        jComboBoxFazenda.addItem("-");
         ConexaoBD con = ConexaoBD.getConexao();
         String query;
         ResultSet rs;
@@ -129,7 +159,6 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         query = "SELECT fazenda FROM estoque_principal";
         //JOptionPane.showMessageDialog(null, "Teste!" + query);
         rs = con.consultaSql(query);
-        jComboBoxFazenda.addItem("-");
         try {
             while(rs.next()){
                 int i=0;
@@ -146,12 +175,14 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao Preencher Tabela Completa ! "+ex);
+            JOptionPane.showMessageDialog(null, "Erro ao carregar fazendas! "+ex);
         }        
         _carregarMaterialGenetico();
     }
     
     private void _carregarMaterialGenetico(){
+        jComboBoxMatGen.removeAllItems();
+        jComboBoxMatGen.addItem("-");
         jComboBoxMatGen.addItem("1270");
         jComboBoxMatGen.addItem("2486");
         jComboBoxMatGen.addItem("3281");
@@ -176,11 +207,12 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jComboBoxMatGen.addItem("nd");
         jComboBoxMatGen.addItem("semente");
         jComboBoxMatGen.addItem("Urophylla");
-        jComboBoxMatGen.addItem("VM-01");
+        jComboBoxMatGen.addItem("VM-01");        
+        //PreencherTabelaFiltrada();
     }
     
     private void PreencherTabelaFiltrada(){  
-        JOptionPane.showMessageDialog(null, "Size! " + jListFiltrar.getSelectedIndices().length + jListFiltrar.getModel().getSize());
+        //JOptionPane.showMessageDialog(null, "Size! " + jListFiltrar.getSelectedIndices().length + jListFiltrar.getModel().getSize());
         DecimalFormat decformat = new DecimalFormat("0.0");
         ConexaoBD con = ConexaoBD.getConexao();
         String query;
@@ -207,10 +239,24 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         }
         if(!dado.contains("carv_ton_transp")){
             dado+= ", carv_ton_transp";
-        }  
-        
+        } 
         if(!dado.contains("m3_ha")){
             dado+= ", m3_ha";
+        }
+        if(!dado.contains("mdc_ha")){
+            dado+= ", mdc_ha";
+        }
+        if(!dado.contains("vol_mad_estimado")){
+            dado+= ", vol_mad_estimado";
+        }
+        if(!dado.contains("mdc_estimado")){
+            dado+= ", mdc_estimado";
+        }
+        if(!dado.contains("mad_ton_estimado")){
+            dado+= ", mad_ton_estimado";
+        }
+        if(!dado.contains("carv_ton_estimado")){
+            dado+= ", carv_ton_estimado";
         }
         
         //JOptionPane.showMessageDialog(null, "Dado sql: "+dado);
@@ -237,16 +283,11 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         }
         
         //Controle e definição das variaveis da clausula where like. Filtros
-        String filtro_upc;
-        String filtro_cat;
-        String filtro_matgen;
-        String filtro_proj;
-        String filtro_faz;
         if(jSpinnerUPC.getValue().equals(0)){
             if(jCheckBoxUTM.isSelected()){
                 filtro_upc="UTM"; 
             }else{
-                filtro_upc="%%";    
+                filtro_upc="";    
             }
         }else{
             filtro_upc=jSpinnerUPC.getValue().toString();
@@ -258,6 +299,12 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             filtro_cat=jComboBoxCategoria.getSelectedItem().toString();
         }
         
+        if(jComboBoxTalhadia.getSelectedItem().equals("-")){
+            filtro_talhadia="";
+        }else{
+            filtro_talhadia=jComboBoxTalhadia.getSelectedItem().toString();
+        }
+        
         if(jComboBoxMatGen.getSelectedItem().equals("-")){
             filtro_matgen="";
         }else{
@@ -267,9 +314,8 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         if(jComboBoxProjeto.getSelectedItem().equals("-")){
             filtro_proj="";
         }else{
-            filtro_proj = String.valueOf(jComboBoxProjeto.getSelectedIndex());
-        }
-        
+            filtro_proj = String.valueOf(jComboBoxProjeto.getSelectedItem());
+        }        
         
         if(jComboBoxFazenda.getSelectedItem().equals("-")){
             filtro_faz="";
@@ -278,8 +324,8 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         }
         
         //faz busca a partir dos filtros acima
-        if(!filtro_upc.equals("%%") || !filtro_cat.equals("") || !filtro_matgen.equals("") || !filtro_proj.equals("") || !filtro_faz.equals("")){
-            whereSql = "where upc like '"+filtro_upc+"' and material_genetico like '%"+filtro_matgen+"%' and categoria like '%"+filtro_cat+"%' and projeto like '%"+filtro_proj+"%' and fazenda like '%"+filtro_faz+"%'";
+        if(!filtro_upc.equals("") || !filtro_cat.equals("") || !filtro_talhadia.equals("") || !filtro_matgen.equals("") || !filtro_proj.equals("") || !filtro_faz.equals("")){
+            whereSql = "where upc like '%"+filtro_upc+"%' and material_genetico like '%"+filtro_matgen+"%' and categoria like '%"+filtro_cat+"%' and talhadia like '%"+filtro_talhadia+"%' and projeto like '%"+filtro_proj+"%' and fazenda like '%"+filtro_faz+"%'";
         }else{
             whereSql = "";
         }
@@ -293,11 +339,20 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         //carrega dados do banco de dados dependendo da consulta sql
         rs = con.consultaSql(query);
         areaTotal=0;
-        vol_mad_transpTotal=0;
-        mdc_transpTotal=0;
-        mad_ton_transpTotal=0;
-        carv_ton_transpTotal=0;
         m3_haMedia=0;
+        mdc_haMedia=0;
+        vol_mad_transpTotal=0;
+        vol_mad_estTotal=0;
+        mdc_transpTotal=0;
+        mdc_estTotal=0;
+        mad_ton_transpTotal=0;
+        mad_ton_estTotal=0;
+        carv_ton_transpTotal=0;
+        carv_ton_estTotal=0;
+        ArrayList val = new ArrayList();
+        ArrayList prod = new ArrayList();
+        int cntr = 0;
+        int cont=0;
         try {            
             while(rs.next()){
                 //cria um objeto coluna de acordo com as colunas selecionadas para cada linha encontrada na consulta
@@ -309,37 +364,85 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                     coluna[i] = rs.getString(colunas[i]);
                     //System.out.println("Add Dados ["+i+"]: "+ob[i]);
                 }
+                //area total
                 if(rs.getString("area")!=null){
                     areaTotal += Float.valueOf(rs.getString("area"));
                 }
+                //media aritmetica  m3/ha
+                if(rs.getString("m3_ha")!=null && Float.valueOf(rs.getString("m3_ha"))>0){
+                    m3_haMedia += Float.valueOf(rs.getString("m3_ha"));
+                    cont++;
+                } 
+                
+                //media aritmetica mdc/ha
+                if(rs.getString("mdc_ha")!=null && Float.valueOf(rs.getString("mdc_ha"))>0 ){
+                    mdc_haMedia += Float.valueOf(rs.getString("mdc_ha")) * Float.valueOf(rs.getString("area"));
+                }
+                
+                //Volumes totais de madeira
                 if(rs.getString("vol_mad_transp")!=null){
                     vol_mad_transpTotal += Float.valueOf(rs.getString("vol_mad_transp"));
                 }
+                if(rs.getString("vol_mad_estimado")!=null){
+                    vol_mad_estTotal += Float.valueOf(rs.getString("vol_mad_estimado"));
+                }
+                
+                //Volumes totais de carvao
                 if(rs.getString("mdc_transp")!=null){
                     mdc_transpTotal += Float.valueOf(rs.getString("mdc_transp"));
                 }
+                if(rs.getString("mdc_estimado")!=null){
+                    mdc_estTotal += Float.valueOf(rs.getString("mdc_estimado"));
+                }
+                
+                //Toneladas totais de madeira
                 if(rs.getString("mad_ton_transp")!=null){
                     mad_ton_transpTotal += Float.valueOf(rs.getString("mad_ton_transp"));
                 }
+                if(rs.getString("mad_ton_estimado")!=null){
+                    mad_ton_estTotal += Float.valueOf(rs.getString("mad_ton_estimado"));
+                }
+                
+                //Toneladas totais de carvao
                 if(rs.getString("carv_ton_transp")!=null){
                     carv_ton_transpTotal += Float.valueOf(rs.getString("carv_ton_transp"));
-                }   
-                
-                if(rs.getString("m3_ha")!=null){
-                    m3_haMedia += Float.valueOf(rs.getString("m3_ha"));
                 }
+                if(rs.getString("carv_ton_estimado")!=null){
+                    carv_ton_estTotal += Float.valueOf(rs.getString("carv_ton_estimado"));
+                }               
+                
                 //System.out.printf("\nCalculo m3ha: "+ m3_haMedia); 
                 //adiciona a cada linha os valores de cada objeto coluna
                 linhas.add(coluna);
             }
+            
+            //para media ponderada
+            /*for(int i=0; i<prod.size();i++){
+                System.out.printf("\nCalculo prod["+i+"]: "+ Integer.valueOf(prod.get(i).toString())); 
+                m3_haMedia += Integer.valueOf(prod.get(i).toString());
+                System.out.printf("\nMedia Ponderada: "+ m3_haMedia);
+            }*/
+            
             //System.out.printf("\nCalculo 2 m3ha: "+ m3_haMedia+ "linhas "+linhas.size());
-            m3_haMedia = m3_haMedia/linhas.size();
+            //m3_haMedia = m3_haMedia/linhas.size();
+            mdc_haMedia = mdc_haMedia/areaTotal;
+            m3_haMedia = m3_haMedia/cont;
+            
             jLabelAreaTotal.setText("Area total: "+decformat.format(areaTotal)+" m³");
-            jLabelVolumeMadeiraTotal.setText("Volume madeira total: "+decformat.format(vol_mad_transpTotal)+" m³");
-            jLabelVolumeCarvaoTotal.setText("Volume carvão Total: "+decformat.format(mdc_transpTotal)+" m³");
-            jLabelToneladaMadeiraTotal.setText("Toneladas de madeira totais: "+decformat.format(mad_ton_transpTotal)+" m³");
-            jLabelToneladaCarvaoTotal.setText("Toneladas de carvão totais: "+decformat.format(carv_ton_transpTotal)+" m³");
+            jLabelMDC_ha.setText("Media ponderada mdc/ha: "+decformat.format(mdc_haMedia)+" m³");
             jLabelM3_ha.setText("Media geral m³/ha: "+decformat.format(m3_haMedia)+" m³");
+            
+            jLabelVolumeMadeiraTranspTotal.setText("Volume madeira transportada total: "+decformat.format(vol_mad_transpTotal)+" m³");
+            jLabelVolumeMadeiraEstTotal.setText("Volume madeira estimada total: "+decformat.format(vol_mad_estTotal)+" m³");
+            
+            jLabelVolumeCarvaoTranspTotal.setText("Volume carvão transportado total: "+decformat.format(mdc_transpTotal)+" m³");
+            jLabelVolumeCarvaoEstTotal.setText("Volume carvão estimado total: "+decformat.format(mdc_estTotal)+" m³");
+            
+            jLabelToneladaMadeiraTranspTotal.setText("Toneladas de madeira transportada totais: "+decformat.format(mad_ton_transpTotal)+" m³");
+            jLabelToneladaMadeiraEstTotal.setText("Toneladas de madeira estimada totais: "+decformat.format(mad_ton_estTotal)+" m³");
+            
+            jLabelToneladaCarvaoTranspTotal.setText("Toneladas de carvão transportado totais: "+decformat.format(carv_ton_transpTotal)+" m³");
+            jLabelToneladaCarvaoEstTotal.setText("Toneladas de carvão estimado totais: "+decformat.format(carv_ton_estTotal)+" m³");
             /*int n = dados.size(); 
             for (int i=0; i<n; i++) { 
                 System.out.printf("Posição %d- %s\n", i, dados.get(i)); 
@@ -369,7 +472,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             //System.out.println("Indice: "+i+" - "+ colunas[i].length());
         }
         jTableRelatorioEstoquePrincipal.getTableHeader().setReorderingAllowed(false);
-        jTableRelatorioEstoquePrincipal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);        
+        jTableRelatorioEstoquePrincipal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     
     private void CarregarEstoqueExcel() throws BiffException, IOException{      
@@ -386,7 +489,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
 
         //Pega a quantidade de linhas da planilha   
         int total_linhas = sheet.getRows(); 
-        //int total_linhas = 5;
+        //int total_linhas = 100;
         JOptionPane.showMessageDialog(null, "Lendo excel, total linhas... "+total_linhas);
         
         CarregandoDados();
@@ -652,11 +755,18 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         }*/     
     }
     
+    /**
+     * Carrega dados do excel com dados referente a fazendas
+     * @throws BiffException
+     * @throws IOException 
+     */
     private void CarregarFazendasExcel() throws BiffException, IOException{
+        ControlePrincipal.excel_cmd=true;
         DateFormat data_registro = new SimpleDateFormat("dd/MM/yyyy"); 
         Date date = new Date();    
         ControleFazenda fazenda = new ControleFazenda();     
- 
+        //caminho="C:/Users/crist/Desktop/Nova pasta/Estoque de Madeira-Cadastro.xls";
+        
         /* pega o arquiivo do Excel */  
         Workbook workbook = Workbook.getWorkbook(new File(caminho));  
 
@@ -665,10 +775,51 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
 
         //Pega a quantidade de linhas da planilha   
         int total_linhas = sheet.getRows();  
-        JOptionPane.showMessageDialog(null, "Lendo excel, linhas... "+total_linhas);
-        Cell celula = null;
+        //JOptionPane.showMessageDialog(null, "Lendo excel, linhas... "+total_linhas);
+        System.out.println("Total linhas: "+total_linhas);
+        Cell celula = null;  
+        
+        ArrayList faz = new ArrayList();
+        ArrayList proj = new ArrayList();
+        int cntr=0;
         for (int i = 1; i < total_linhas; i++) {  
-            String stringa4="";
+            if(sheet.getCell(4, i).getContents()!=null){
+                System.out.println("\nval vazio: "+ faz.isEmpty()+" tam: "+faz.size()); 
+                if(faz.isEmpty() && proj.isEmpty()){
+                    faz.add(sheet.getCell(4, i).getContents());
+                    proj.add(sheet.getCell(5, i).getContents());
+                    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>Add faz["+0+"]: "+ faz.get(0)+" e proj["+0+"]: "+ proj.get(0)); 
+                    
+                    fazenda.setEstado(sheet.getCell(0, i).getContents());                        
+                    fazenda.setBloco(sheet.getCell(2, i).getContents());                      
+                    fazenda.setMunicipio(sheet.getCell(3, i).getContents());            
+                    fazenda.setFazenda(sheet.getCell(4, i).getContents());            
+                    fazenda.setProjeto(sheet.getCell(5, i).getContents());
+                    InserirFazendaCtrl inserir = new InserirFazendaCtrl(fazenda);
+                }else {
+                    for(int j=0; j<faz.size(); j++){
+                        System.out.println("Lendo faz[excel]: "+ sheet.getCell(4, i).getContents()+" = faz["+j+"]: "+faz.get(j)+" e proj[excel]: "+ sheet.getCell(5, i).getContents()+" = proj["+j+"]: "+proj.get(j)+"?"); 
+                        if((sheet.getCell(4, i).getContents().equals(faz.get(j)))&&(sheet.getCell(5, i).getContents().equals(proj.get(j)))){
+                            cntr++;
+                        }
+                    }
+                    if(cntr==0){                            
+                        faz.add(sheet.getCell(4, i).getContents());
+                        proj.add(sheet.getCell(5, i).getContents());
+                        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>Add nova faz: "+sheet.getCell(4, i).getContents()+ ", novo proj: "+sheet.getCell(5, i).getContents());
+                        
+                        //insert
+                        //fazenda.setId_fazenda(sheet.getCell(0, i).getContents());  
+                        fazenda.setEstado(sheet.getCell(0, i).getContents());                        
+                        fazenda.setBloco(sheet.getCell(2, i).getContents());                      
+                        fazenda.setMunicipio(sheet.getCell(3, i).getContents());            
+                        fazenda.setFazenda(sheet.getCell(4, i).getContents());            
+                        fazenda.setProjeto(sheet.getCell(5, i).getContents());
+                        InserirFazendaCtrl inserir = new InserirFazendaCtrl(fazenda);
+                    }
+                    cntr=0;
+                }
+            }
             /* pega os valores das células como se numa matriz */  
             /*for (int j = 0; j < 41; j++) {  
                 //celula = sheet.getCell(j, i);//col, lin
@@ -679,20 +830,10 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             }*/
             //System.out.println(sheet.getCell(7, i).getContents()));              
             //System.out.println("importando "+i);  
-            //System.out.println(sheet.getCell(29, i).getContents());     
-            
-            //fazenda.setId_fazenda(sheet.getCell(0, i).getContents());  
-            fazenda.setEstado(sheet.getCell(0, i).getContents());             
-            fazenda.setCod_estado(SelecionaCodigoEstado(sheet.getCell(0, i).getContents()));            
-            fazenda.setBloco(sheet.getCell(2, i).getContents());           
-            fazenda.setCod_bloco(SelecionaCodigoBloco(sheet.getCell(2, i).getContents()));            
-            fazenda.setMunicipio(sheet.getCell(3, i).getContents());            
-            fazenda.setFazenda(sheet.getCell(4, i).getContents());            
-            fazenda.setProjeto(sheet.getCell(8, i).getContents());
-            
-            InserirFazendaCtrl inserir = new InserirFazendaCtrl(fazenda);
+            //System.out.println(sheet.getCell(29, i).getContents());                
         }  
         System.out.println("Importado");  
+        ControlePrincipal.excel_cmd=false;
     }
     
     private int SelecionaCodigoEstado(String UF){
@@ -803,43 +944,166 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     }
     
     private void GerarPDF() throws DocumentException, FileNotFoundException {
-        if(jTableRelatorioEstoquePrincipal.getSelectedRow()>=0) { 
-            int linha = jTableRelatorioEstoquePrincipal.getSelectedRow();
-            Document document = new Document(PageSize.A4, 50, 50, 50, 50);
-            //System.out.println(new File(".").getAbsolutePath());
-            String arquivo = new File("Relatorio.").getAbsolutePath()+"pdf";
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(arquivo));
-            document.open();
-            document.add(new Paragraph("Documento teste!!!"));
-            document.add(new Paragraph("Municipio: "+jTableRelatorioEstoquePrincipal.getValueAt(linha, 3).toString()));
-            document.close();
-            //JOptionPane.showMessageDialog(null, "PDF: "+writer);
-        }else {
-            //Document document = new Document(PageSize.A4, 72, 72, 72, 72);
-            Rectangle rect = new Rectangle(1200, 595);
-            Document document = new Document(rect);
-            String arquivo = new File("Relatorio.").getAbsolutePath()+"pdf";
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(arquivo));
-            document.open();
-            PdfPTable table = new PdfPTable(colunas.length);
-            PdfPCell header = new PdfPCell(new Paragraph("Relatorio"));
-            header.setColspan(841);
-            table.addCell(header);	
-            
-            for (String coluna : colunas) {
-                table.addCell(coluna);
-            }
-            
-            for(int i=0;i<tamanho;i++){//linha
-                for(int j=0;j<colunas.length;j++){//coluna
-                    table.addCell(jTableRelatorioEstoquePrincipal.getValueAt(i, j).toString());
+        try {
+            /*if(jTableRelatorioEstoquePrincipal.getSelectedRow()>=0) { 
+                int linha = jTableRelatorioEstoquePrincipal.getSelectedRow();
+                Document document = new Document(PageSize.A4, 10, 10, 10, 10);
+                //System.out.println(new File(".").getAbsolutePath());
+                String arquivo = new File("RelatorioFaz.").getAbsolutePath()+"pdf";            
+                PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(arquivo));
+                document.open();
+                Font font = new Font(FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+                //String titulo = jTableRelatorioEstoquePrincipal.getValueAt(linha, 3).toString()+ " "+jTableRelatorioEstoquePrincipal.getValueAt(linha, 2).toString()+"-"+jTableRelatorioEstoquePrincipal.getValueAt(linha, 0).toString();
+                String titulo = "";
+                if(!filtro_matgen.equals("")){
+                    titulo = "do material genetico "+filtro_matgen;
                 }
-            }
-            
-            document.add(table);
-            document.close();
-            JOptionPane.showMessageDialog(null, "Selecione uma linha!");
+                Paragraph pgt = new Paragraph("Relatorio "+titulo, font);
+                pgt.setAlignment(Element.ALIGN_CENTER);
+                document.add(pgt);
+                document.add(new Paragraph(" "));
+                //System.out.println("Colunas "+colunas.length);
+                //for(int i=4; i<colunas.length; i++){
+                    //document.add(new Paragraph(colunas[i]+": "+jTableRelatorioEstoquePrincipal.getValueAt(linha, i).toString()));
+                //}           
+                //document.add(new Paragraph("Municipio: "+jTableRelatorioEstoquePrincipal.getValueAt(linha, 3).toString()));
+
+                PdfPTable table = new PdfPTable(colunas.length);
+                // Definindo uma fonte, com tamanho 20 e negrito
+                PdfPCell header = new PdfPCell(new Paragraph("Relatorio "+titulo,font));
+                header.setColspan(colunas.length);
+                table.addCell(header);
+                table.setWidthPercentage(100.0f);
+                table.setHorizontalAlignment(Element.ALIGN_JUSTIFIED_ALL);
+                //System.out.println("Tamanho: "+linhas.size());
+                font = new Font(FontFamily.TIMES_ROMAN, 4, Font.NORMAL);
+                for (String coluna : colunas) {
+                    table.addCell(new Paragraph(coluna,font));
+                }
+
+                //Linha selecionada
+                //for(int j=0;j<colunas.length;j++){//coluna
+                    //table.addCell(jTableRelatorioEstoquePrincipal.getValueAt(linha, j).toString());
+                    //table.addCell(new Paragraph(jTableRelatorioEstoquePrincipal.getValueAt(linha, j).toString(),font));
+                //}
+
+                //varias linhas
+                for(int i=0;i<linhas.size();i++){//linha
+                    for(int j=0;j<colunas.length;j++){//coluna
+                        //table.addCell(jTableRelatorioEstoquePrincipal.getValueAt(i, j).toString());
+                        table.addCell(new Paragraph(jTableRelatorioEstoquePrincipal.getValueAt(i, j).toString(),font));
+                    }
+                }
+
+                document.add(table);
+                
+                document.add(new Paragraph("Relatorio Geral"));
+                document.add(new Paragraph(" "));
+                document.add(new Paragraph(jLabelAreaTotal.getText()));
+                document.add(new Paragraph(jLabelM3_ha.getText()));
+                document.add(new Paragraph(jLabelMDC_ha.getText()));
+
+                document.add(new Paragraph(jLabelVolumeMadeiraEstTotal.getText()));
+                document.add(new Paragraph(jLabelVolumeMadeiraTranspTotal.getText()));
+                document.add(new Paragraph(jLabelVolumeCarvaoEstTotal.getText()));
+                document.add(new Paragraph(jLabelVolumeCarvaoTranspTotal.getText()));
+
+                document.add(new Paragraph(jLabelToneladaMadeiraEstTotal.getText()));
+                document.add(new Paragraph(jLabelToneladaMadeiraTranspTotal.getText()));
+                document.add(new Paragraph(jLabelToneladaCarvaoEstTotal.getText()));
+                document.add(new Paragraph(jLabelToneladaCarvaoTranspTotal.getText()));
+                document.close();
+                JOptionPane.showMessageDialog(null, "PDF: "+arquivo+" gerado!");
+            }else {
+                //Document document = new Document(PageSize.A4, 72, 72, 72, 72);
+                Rectangle rect = new Rectangle(1200, 595);
+                Document document = new Document(rect);
+                String arquivo = new File("RelatorioGeral.").getAbsolutePath()+"pdf";
+                PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(arquivo));
+                document.open();
+                document.add(new Paragraph("Relatorio Geral"));
+                document.add(new Paragraph(" "));
+                document.add(new Paragraph(jLabelAreaTotal.getText()));
+                document.add(new Paragraph(jLabelM3_ha.getText()));
+                document.add(new Paragraph(jLabelMDC_ha.getText()));
+
+                document.add(new Paragraph(jLabelVolumeMadeiraEstTotal.getText()));
+                document.add(new Paragraph(jLabelVolumeMadeiraTranspTotal.getText()));
+                document.add(new Paragraph(jLabelVolumeCarvaoEstTotal.getText()));
+                document.add(new Paragraph(jLabelVolumeCarvaoTranspTotal.getText()));
+
+                document.add(new Paragraph(jLabelToneladaMadeiraEstTotal.getText()));
+                document.add(new Paragraph(jLabelToneladaMadeiraTranspTotal.getText()));
+                document.add(new Paragraph(jLabelToneladaCarvaoEstTotal.getText()));
+                document.add(new Paragraph(jLabelToneladaCarvaoTranspTotal.getText()));
+
+                document.close();
+                JOptionPane.showMessageDialog(null, "PDF: "+arquivo+" gerado!");
+            }*/
+            int linha = jTableRelatorioEstoquePrincipal.getSelectedRow();
+                Document document = new Document(PageSize.A4, 10, 10, 10, 10);
+                //System.out.println(new File(".").getAbsolutePath());
+                String arquivo = new File("RelatorioFaz.").getAbsolutePath()+"pdf";            
+                PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(arquivo));
+                document.open();
+                Font font = new Font(FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+                //String titulo = jTableRelatorioEstoquePrincipal.getValueAt(linha, 3).toString()+ " "+jTableRelatorioEstoquePrincipal.getValueAt(linha, 2).toString()+"-"+jTableRelatorioEstoquePrincipal.getValueAt(linha, 0).toString();
+                String titulo = "Relatorio";                
+                Paragraph pgt = new Paragraph(titulo, font);
+                pgt.setAlignment(Element.ALIGN_CENTER);
+                document.add(pgt);
+                document.add(new Paragraph(" "));
+                if(!filtro_matgen.equals("")){
+                    titulo = "Material genetico "+filtro_matgen;
+                }
+                PdfPTable table = new PdfPTable(colunas.length);
+                // Definindo uma fonte, com tamanho 20 e negrito
+                PdfPCell header = new PdfPCell(new Paragraph(titulo,font));
+                header.setColspan(colunas.length);
+                table.addCell(header);
+                table.setWidthPercentage(100.0f);
+                table.setHorizontalAlignment(Element.ALIGN_JUSTIFIED_ALL);
+                //System.out.println("Tamanho: "+linhas.size());
+                font = new Font(FontFamily.TIMES_ROMAN, 4, Font.NORMAL);
+                for (String coluna : colunas) {
+                    table.addCell(new Paragraph(coluna,font));
+                }
+
+                //varias linhas
+                for(int i=0;i<linhas.size();i++){//linha
+                    for(int j=0;j<colunas.length;j++){//coluna
+                        //table.addCell(jTableRelatorioEstoquePrincipal.getValueAt(i, j).toString());
+                        table.addCell(new Paragraph(jTableRelatorioEstoquePrincipal.getValueAt(i, j).toString(),font));
+                    }
+                }
+
+                document.add(table);
+                
+                document.add(new Paragraph(" "));
+                
+                font = new Font(FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+                document.add(new Paragraph("Dados Totais",font));
+                font = new Font(FontFamily.TIMES_ROMAN, 8, Font.NORMAL);
+                document.add(new Paragraph(jLabelAreaTotal.getText(),font));
+                document.add(new Paragraph(jLabelM3_ha.getText(),font));
+                document.add(new Paragraph(jLabelMDC_ha.getText(),font));
+
+                document.add(new Paragraph(jLabelVolumeMadeiraEstTotal.getText(),font));
+                document.add(new Paragraph(jLabelVolumeMadeiraTranspTotal.getText(),font));
+                document.add(new Paragraph(jLabelVolumeCarvaoEstTotal.getText(),font));
+                document.add(new Paragraph(jLabelVolumeCarvaoTranspTotal.getText(),font));
+
+                document.add(new Paragraph(jLabelToneladaMadeiraEstTotal.getText(),font));
+                document.add(new Paragraph(jLabelToneladaMadeiraTranspTotal.getText(),font));
+                document.add(new Paragraph(jLabelToneladaCarvaoEstTotal.getText(),font));
+                document.add(new Paragraph(jLabelToneladaCarvaoTranspTotal.getText(),font));
+                document.close();
+                JOptionPane.showMessageDialog(null, "PDF: "+arquivo+" gerado!");
+        } catch (Exception ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, "Erro ao gerar pdf: "+ex);
+            JOptionPane.showMessageDialog(null, "Erro ao gerar pdf: "+ex);
         }
+        
     }
     
     private void SelecionarTalhao(){
@@ -955,16 +1219,23 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jComboBoxProjeto = new javax.swing.JComboBox();
         jComboBoxFazenda = new javax.swing.JComboBox();
+        jLabel8 = new javax.swing.JLabel();
+        jComboBoxTalhadia = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableRelatorioEstoquePrincipal = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jLabelAreaTotal = new javax.swing.JLabel();
         jLabelM3_ha = new javax.swing.JLabel();
-        jLabelVolumeCarvaoTotal = new javax.swing.JLabel();
-        jLabelVolumeMadeiraTotal = new javax.swing.JLabel();
-        jLabelToneladaMadeiraTotal = new javax.swing.JLabel();
-        jLabelToneladaCarvaoTotal = new javax.swing.JLabel();
+        jLabelVolumeCarvaoTranspTotal = new javax.swing.JLabel();
+        jLabelVolumeMadeiraTranspTotal = new javax.swing.JLabel();
+        jLabelToneladaMadeiraTranspTotal = new javax.swing.JLabel();
+        jLabelToneladaCarvaoTranspTotal = new javax.swing.JLabel();
+        jLabelMDC_ha = new javax.swing.JLabel();
+        jLabelVolumeMadeiraEstTotal = new javax.swing.JLabel();
+        jLabelVolumeCarvaoEstTotal = new javax.swing.JLabel();
+        jLabelToneladaMadeiraEstTotal = new javax.swing.JLabel();
+        jLabelToneladaCarvaoEstTotal = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItemGerarPDF = new javax.swing.JMenuItem();
@@ -972,9 +1243,10 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jMenuItemCarregarFazendaExcel = new javax.swing.JMenuItem();
         jMenuItemLogout = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItemMadeiraPraca = new javax.swing.JMenuItem();
+        jMenuItemCarvao = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1024, 780));
 
         jLabelTitulo.setFont(new java.awt.Font("Serif", 1, 36)); // NOI18N
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1039,10 +1311,6 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
 
         jSpinnerUPC.setModel(new javax.swing.SpinnerNumberModel(0, 0, 9, 1));
 
-        jComboBoxCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-" }));
-
-        jComboBoxMatGen.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-" }));
-
         jCheckBoxUTM.setText("UTM");
         jCheckBoxUTM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1076,7 +1344,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
 
         jLabel7.setText("FAZENDAS");
 
-        jComboBoxProjeto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-" }));
+        jLabel8.setText("Talhadia");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -1110,12 +1378,16 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                         .addComponent(jComboBoxFazenda, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(10, 10, 10)
                         .addComponent(jScrollPane3))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jComboBoxProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jComboBoxProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(53, 53, 53)
+                        .addComponent(jComboBoxTalhadia, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -1130,7 +1402,11 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jComboBoxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jComboBoxTalhadia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxMatGen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
@@ -1144,9 +1420,12 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                     .addComponent(jComboBoxFazenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
-                .addGap(13, 13, 13)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(13, 13, 13)))
                 .addComponent(jButtonFiltrar)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1163,67 +1442,112 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 646, Short.MAX_VALUE)
-                .addGap(10, 10, 10))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1)
-                .addGap(10, 10, 10))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
+        jLabelAreaTotal.setFont(jLabelAreaTotal.getFont());
         jLabelAreaTotal.setText("Area Total: 0 m³");
+        jLabelAreaTotal.setPreferredSize(new java.awt.Dimension(100, 15));
 
+        jLabelM3_ha.setFont(jLabelM3_ha.getFont());
         jLabelM3_ha.setText("Media Geral m³/ha: 0 m³");
+        jLabelM3_ha.setPreferredSize(new java.awt.Dimension(100, 15));
 
-        jLabelVolumeCarvaoTotal.setText("Volume carvão Total: 0 m³");
+        jLabelVolumeCarvaoTranspTotal.setFont(jLabelVolumeCarvaoTranspTotal.getFont());
+        jLabelVolumeCarvaoTranspTotal.setText("Volume carvão transportado total: 0 m³");
+        jLabelVolumeCarvaoTranspTotal.setPreferredSize(new java.awt.Dimension(100, 15));
 
-        jLabelVolumeMadeiraTotal.setText("Volume madeira total: 0 m³");
+        jLabelVolumeMadeiraTranspTotal.setFont(jLabelVolumeMadeiraTranspTotal.getFont());
+        jLabelVolumeMadeiraTranspTotal.setText("Volume madeira transportada total: 0 m³");
+        jLabelVolumeMadeiraTranspTotal.setMaximumSize(new java.awt.Dimension(100, 15));
+        jLabelVolumeMadeiraTranspTotal.setPreferredSize(new java.awt.Dimension(100, 15));
 
-        jLabelToneladaMadeiraTotal.setText("Toneladas de madeira totais: 0 m³");
+        jLabelToneladaMadeiraTranspTotal.setFont(jLabelToneladaMadeiraTranspTotal.getFont());
+        jLabelToneladaMadeiraTranspTotal.setText("Toneladas de madeira transportada totais: 0 m³");
+        jLabelToneladaMadeiraTranspTotal.setPreferredSize(new java.awt.Dimension(100, 15));
 
-        jLabelToneladaCarvaoTotal.setText("Toneladas de carvão totais: 0 m³");
+        jLabelToneladaCarvaoTranspTotal.setFont(jLabelToneladaCarvaoTranspTotal.getFont());
+        jLabelToneladaCarvaoTranspTotal.setText("Toneladas de carvão transportado totais: 0 m³");
+        jLabelToneladaCarvaoTranspTotal.setPreferredSize(new java.awt.Dimension(100, 15));
+
+        jLabelMDC_ha.setFont(jLabelMDC_ha.getFont());
+        jLabelMDC_ha.setText("Media geral mdc/ha: 0 m³");
+        jLabelMDC_ha.setMaximumSize(new java.awt.Dimension(100, 15));
+        jLabelMDC_ha.setPreferredSize(new java.awt.Dimension(100, 15));
+
+        jLabelVolumeMadeiraEstTotal.setFont(jLabelVolumeMadeiraEstTotal.getFont());
+        jLabelVolumeMadeiraEstTotal.setText("Volume madeira estimada total: 0 m³");
+        jLabelVolumeMadeiraEstTotal.setMaximumSize(new java.awt.Dimension(100, 15));
+        jLabelVolumeMadeiraEstTotal.setPreferredSize(new java.awt.Dimension(100, 15));
+
+        jLabelVolumeCarvaoEstTotal.setFont(jLabelVolumeCarvaoEstTotal.getFont());
+        jLabelVolumeCarvaoEstTotal.setText("Volume carvão estimado total: 0 m³");
+        jLabelVolumeCarvaoEstTotal.setPreferredSize(new java.awt.Dimension(100, 15));
+
+        jLabelToneladaMadeiraEstTotal.setFont(jLabelToneladaMadeiraEstTotal.getFont());
+        jLabelToneladaMadeiraEstTotal.setText("Toneladas de madeira estimada totais: 0 m³");
+        jLabelToneladaMadeiraEstTotal.setPreferredSize(new java.awt.Dimension(100, 15));
+
+        jLabelToneladaCarvaoEstTotal.setFont(jLabelToneladaCarvaoEstTotal.getFont());
+        jLabelToneladaCarvaoEstTotal.setText("Toneladas de carvão estimado totais: 0 m³");
+        jLabelToneladaCarvaoEstTotal.setPreferredSize(new java.awt.Dimension(100, 15));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelM3_ha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabelAreaTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelM3_ha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jLabelMDC_ha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelVolumeMadeiraEstTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabelVolumeCarvaoTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabelToneladaCarvaoTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabelVolumeMadeiraTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabelToneladaMadeiraTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jLabelVolumeMadeiraTranspTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(14, 14, 14))
+                    .addComponent(jLabelVolumeCarvaoEstTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelVolumeCarvaoTranspTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelToneladaCarvaoEstTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelToneladaMadeiraEstTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelToneladaMadeiraTranspTotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelToneladaCarvaoTranspTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelAreaTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelVolumeMadeiraTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
-                    .addComponent(jLabelToneladaMadeiraTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(17, 17, 17)
+                    .addComponent(jLabelVolumeMadeiraTranspTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelToneladaMadeiraTranspTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelAreaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelM3_ha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelVolumeCarvaoTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
-                    .addComponent(jLabelToneladaCarvaoTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabelVolumeMadeiraEstTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelToneladaMadeiraEstTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelMDC_ha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelToneladaCarvaoTranspTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelVolumeCarvaoTranspTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelM3_ha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelVolumeCarvaoEstTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelToneladaCarvaoEstTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10))
         );
+
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabelToneladaCarvaoEstTotal, jLabelToneladaCarvaoTranspTotal, jLabelToneladaMadeiraEstTotal, jLabelToneladaMadeiraTranspTotal, jLabelVolumeCarvaoEstTotal, jLabelVolumeCarvaoTranspTotal, jLabelVolumeMadeiraEstTotal, jLabelVolumeMadeiraTranspTotal});
 
         jMenu1.setText("Arquivo");
 
@@ -1261,7 +1585,24 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Relatorios");
+
+        jMenuItemMadeiraPraca.setText("Madeira/Praça");
+        jMenuItemMadeiraPraca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemMadeiraPracaActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItemMadeiraPraca);
+
+        jMenuItemCarvao.setText("Carvão");
+        jMenuItemCarvao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCarvaoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItemCarvao);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -1293,15 +1634,14 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                 .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(10, 10, 10))
         );
 
@@ -1313,7 +1653,8 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonVoltarActionPerformed
 
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
-        PreencherTabelaFiltrada();
+        PreencherTabelaFiltrada();        
+        _carregarCategoria();
         //JOptionPane.showMessageDialog(null, jListFiltrar.getSelectedValuesList());
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
@@ -1391,6 +1732,26 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_jMenuItemCarregarFazendaExcelActionPerformed
 
+    private void jMenuItemMadeiraPracaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMadeiraPracaActionPerformed
+        try {
+            new GerarRelatorioMadeiraPraca().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jMenuItemMadeiraPracaActionPerformed
+
+    private void jMenuItemCarvaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCarvaoActionPerformed
+        try {
+            new GerarRelatorioCarvao().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jMenuItemCarvaoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1439,6 +1800,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private javax.swing.JComboBox jComboBoxFazenda;
     private javax.swing.JComboBox jComboBoxMatGen;
     private javax.swing.JComboBox jComboBoxProjeto;
+    private javax.swing.JComboBox jComboBoxTalhadia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1446,23 +1808,31 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelAreaTotal;
     private javax.swing.JLabel jLabelIdTipo;
     private javax.swing.JLabel jLabelM3_ha;
+    private javax.swing.JLabel jLabelMDC_ha;
     private javax.swing.JLabel jLabelNome;
     private javax.swing.JLabel jLabelTitulo;
-    private javax.swing.JLabel jLabelToneladaCarvaoTotal;
-    private javax.swing.JLabel jLabelToneladaMadeiraTotal;
-    private javax.swing.JLabel jLabelVolumeCarvaoTotal;
-    private javax.swing.JLabel jLabelVolumeMadeiraTotal;
+    private javax.swing.JLabel jLabelToneladaCarvaoEstTotal;
+    private javax.swing.JLabel jLabelToneladaCarvaoTranspTotal;
+    private javax.swing.JLabel jLabelToneladaMadeiraEstTotal;
+    private javax.swing.JLabel jLabelToneladaMadeiraTranspTotal;
+    private javax.swing.JLabel jLabelVolumeCarvaoEstTotal;
+    private javax.swing.JLabel jLabelVolumeCarvaoTranspTotal;
+    private javax.swing.JLabel jLabelVolumeMadeiraEstTotal;
+    private javax.swing.JLabel jLabelVolumeMadeiraTranspTotal;
     private javax.swing.JList jListFiltrar;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItemCarregarEstoqueExcel;
     private javax.swing.JMenuItem jMenuItemCarregarFazendaExcel;
+    private javax.swing.JMenuItem jMenuItemCarvao;
     private javax.swing.JMenuItem jMenuItemGerarPDF;
     private javax.swing.JMenuItem jMenuItemLogout;
+    private javax.swing.JMenuItem jMenuItemMadeiraPraca;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

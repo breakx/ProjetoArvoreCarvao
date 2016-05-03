@@ -113,14 +113,13 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
         //JOptionPane.showMessageDialog(null, "Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_transp+" carv: "+ControlePrincipal.volume_carvao_transp);
                         
         InserirMadeiraCtrl inserir = new InserirMadeiraCtrl(madeira);
-
+        this.setVisible(false);
+        dispose();
         try {
             new GerenciarMadeiraPraca().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(InserirMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
         }        
-        this.setVisible(false);
-        dispose();
     }   
     
     private void CarregarNome(){
@@ -131,11 +130,11 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
     private void VoltarMenu(){
         try {   
             new GerenciarMadeiraPraca().setVisible(true);
+            this.setVisible(false);
+            dispose();
         } catch (SQLException ex) {
             Logger.getLogger(InserirMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.setVisible(false);
-        dispose();
     }
 
     /**

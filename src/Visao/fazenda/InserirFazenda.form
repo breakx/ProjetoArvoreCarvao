@@ -217,78 +217,78 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace min="-2" pref="175" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="2" attributes="0">
                       <Group type="102" alignment="2" attributes="0">
                           <Component id="jLabel7" linkSize="5" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="32" pref="32" max="32" attributes="0"/>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="jLabelProjeto" linkSize="5" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="2" attributes="0">
                           <Component id="jLabel1" linkSize="5" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="jComboBoxEstado" linkSize="5" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="2" attributes="0">
                           <Component id="jLabel3" linkSize="5" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="32" pref="32" max="32" attributes="0"/>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="jComboBoxBloco" linkSize="5" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="2" attributes="0">
                           <Component id="jLabel4" linkSize="5" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="32" pref="32" max="32" attributes="0"/>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="jTextFieldMunicipio" linkSize="5" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="2" attributes="0">
                           <Component id="jLabel5" linkSize="5" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="32" pref="32" max="32" attributes="0"/>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="jTextFieldFazenda" linkSize="5" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="2" attributes="0">
                           <Component id="jButtonCadastrar" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="jButtonVoltar" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="113" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel1" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jComboBoxEstado" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jComboBoxBloco" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel4" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jTextFieldMunicipio" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel5" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jTextFieldFazenda" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel7" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabelProjeto" linkSize="6" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jButtonCadastrar" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jButtonVoltar" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="321" max="32767" attributes="0"/>
+                  <EmptySpace pref="424" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

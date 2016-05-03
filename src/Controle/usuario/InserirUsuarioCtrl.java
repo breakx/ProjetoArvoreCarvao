@@ -19,14 +19,15 @@ public class InserirUsuarioCtrl {
               + "`id_usuario`, "
               + "`login_usuario`, "
               + "`senha_usuario`, "
-              + "`tipo_usuario`, `nome_usuario`, "
+              + "`tipo_usuario`, "
+              + "`nome_usuario`, "
               + "`upc_usuario`) "
               + "values (" + null 
               + ", '" + usuario.getLogin_usuario()
               + "', '" + usuario.getSenha_usuario()
               + "', '" + usuario.getTipo_usuario()
-              + "', '" + usuario.getUpc_usuario()
               + "', '" + usuario.getNome_usuario()
+              + "', '" + usuario.getUpc_usuario()
               + "')";
       ExecutarSql execut = new ExecutarSql();
       execut.executar(query);

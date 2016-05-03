@@ -8,7 +8,6 @@ package Visao.relatorios;
 import Controle.ControlePrincipal;
 import Modelo.ConexaoBD;
 import Modelo.GerarTabela;
-import Visao.carvao.GerenciarCarvaoForno;
 import Visao.carvao.InserirMadeiraForno;
 import Visao.login.Login;
 import java.sql.ResultSet;
@@ -18,15 +17,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Cristiano GD
  */
 public class GerarRelatorioCarvao extends javax.swing.JFrame {
-
-    String WhereSql;
+    
+    private String filtro_op_u;
     /**
      * Creates new form GerarRelatorioCarvao
      * @throws java.sql.SQLException
@@ -34,7 +32,38 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     public GerarRelatorioCarvao() throws SQLException {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
+        jButtonLogout.setVisible(false);
         ChangeName();
+        _carregarUsuarios();
+    }   
+    
+    private void _carregarUsuarios(){ 
+        jComboBoxUsuario.removeAllItems();
+        jComboBoxUsuario.addItem("-");
+        ConexaoBD con = ConexaoBD.getConexao();
+        String query;
+        ResultSet rs;
+        query = "SELECT id_operario FROM controle_carvao";
+        //JOptionPane.showMessageDialog(null, "Teste!" + query);
+        rs = con.consultaSql(query);
+        try {
+            while(rs.next()){
+                int i=0;
+                for (int j=0; j<jComboBoxUsuario.getItemCount(); j++) {
+                    if (jComboBoxUsuario.getItemAt(j).equals(rs.getString("id_operario"))) {
+                        i++; 
+                        //System.out.println("i: "+i);       
+                    }
+                }
+                if(i==0){
+                    //System.out.println("Add: "+i+" f "+rs.getString("id_operario"));
+                    jComboBoxUsuario.addItem(rs.getString("id_operario"));
+                }               
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao carregar usuarios! "+ex);
+        }             
         PreencherTabela();
     }
     
@@ -44,40 +73,58 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     private void PreencherTabela(){
         ArrayList dados = new ArrayList();
         String[] colunas = new String[] { 
-            "Id_controle_carvao",
-            "Talhao",
-            "Forno",
-            "Id_operario_mad",
-            "Volume_madeira",
-            "Data_entrada_madeira_forno",
-            "Id_operario_carv",
-            "Volume_carvao",
-            "Data_saida_carvao_forno",
-            "Fator"
+            //"id_controle_carvao",
+            "id_estoque_p",
+            "id_operario",
+            "talhao",
+            "forno",
+            "volume_madeira",
+            "data_entrada_madeira_forno",
+            "volume_carvao",
+            "data_saida_carvao_forno",
+            "rend_grav_forno"
         };
         int tamanho = 0;    
         String query;
-        if(ControlePrincipal.tipo_u.equals("op_s")){
+        /*if(ControlePrincipal.tipo_u.equals("op_s")){
             query = "Select * from controle_carvao";
         }else{
             query = "Select * from controle_carvao where id_operario = '" +ControlePrincipal.id_op+"'";
+        }*/
+        
+        String whereSql;
+        
+        //Controle e definição das variaveis da clausula where like. Filtros
+        if(jComboBoxUsuario.getSelectedItem().equals("-")){
+            filtro_op_u="%%";
+        }else{
+            filtro_op_u=jComboBoxUsuario.getSelectedItem().toString();
         }
+        
+        //faz busca a partir dos filtros acima
+        if(!filtro_op_u.equals("%%")){
+            whereSql = "where id_operario like '"+filtro_op_u+"'";
+        }else{
+            whereSql = "";
+        }
+        
+        query = "Select * from controle_carvao "+whereSql;
         ConexaoBD con = ConexaoBD.getConexao();         
         ResultSet rs = con.consultaSql(query);
         
         try {
             while(rs.next()){
                 dados.add(new Object[]{
-                    rs.getString("id_controle_carvao"),
+                    //rs.getString("id_controle_carvao"),
+                    rs.getString("id_estoque_p"),
+                    rs.getString("id_operario"),
                     rs.getString("talhao"),
                     rs.getString("forno"),
-                    rs.getString("id_operario_mad"),
                     rs.getString("volume_madeira"),
                     rs.getString("data_entrada_madeira_forno"),
-                    rs.getString("id_operario_carv"),
                     rs.getString("volume_carvao"),
                     rs.getString("data_saida_carvao_forno"),
-                    rs.getString("fator")
+                    rs.getString("rend_grav_forno")
                 });
                 tamanho++;
             }
@@ -124,7 +171,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     
     private void VoltarMenu(){        
         try {
-            new GerenciarCarvaoForno().setVisible(true);
+            new GerarRelatorioEstoqueBasico().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioCarvao.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -149,6 +196,9 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jButtonLogout = new javax.swing.JButton();
         jButtonVoltar = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jComboBoxUsuario = new javax.swing.JComboBox();
+        jButtonFiltrar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableRelatorioCarvao = new javax.swing.JTable();
@@ -226,26 +276,58 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
             }
         });
 
+        jLabel7.setText("Usuario");
+        jLabel7.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jComboBoxUsuario.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jButtonFiltrar.setText("Filtrar");
+        jButtonFiltrar.setPreferredSize(new java.awt.Dimension(100, 25));
+        jButtonFiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFiltrarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(100, 100, 100)
+                                .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(10, 10, 10))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jButtonVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(83, 83, 83)
+                .addGap(11, 11, 11)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
                 .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
-                .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10))
         );
 
@@ -258,7 +340,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,7 +359,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE))
                     .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
@@ -291,23 +373,28 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
+        _carregarUsuarios();
+        //JOptionPane.showMessageDialog(null, jListFiltrar.getSelectedValuesList());
+    }//GEN-LAST:event_jButtonFiltrarActionPerformed
+
+    private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
+        VoltarMenu();
+    }//GEN-LAST:event_jButtonVoltarActionPerformed
+
     private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
         new Login().setVisible(true);
         this.setVisible(false);
         dispose();
     }//GEN-LAST:event_jButtonLogoutActionPerformed
-
-    private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
-        VoltarMenu();
-    }//GEN-LAST:event_jButtonVoltarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -349,9 +436,12 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonFiltrar;
     private javax.swing.JButton jButtonLogout;
     private javax.swing.JButton jButtonVoltar;
+    private javax.swing.JComboBox jComboBoxUsuario;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabelIdTipo;
     private javax.swing.JLabel jLabelNome;
     private javax.swing.JLabel jLabelTitulo;

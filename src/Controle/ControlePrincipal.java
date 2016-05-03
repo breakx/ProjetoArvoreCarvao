@@ -13,7 +13,7 @@ public class ControlePrincipal {
     public static String nome;
     public static String tipo_u;
     public static String id_op;
-    public static String upc_u;
+    public static int upc_u;
     public static String data_inicio;
     public static String data_fim;
     public static String forno;
@@ -27,7 +27,8 @@ public class ControlePrincipal {
     public static String municipio;
     public static String fazenda;
     public static String projeto;
-    public static String bloco;   
+    public static String bloco;  
+    public static String situacao;  
     
     public static float fator_emp;    
     public static float densidade_madeira;

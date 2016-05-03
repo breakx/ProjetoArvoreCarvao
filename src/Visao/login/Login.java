@@ -16,6 +16,7 @@ import Modelo.ConexaoBD;
 import Visao.usuario.GerenciarUsuarios;
 import Visao.carvao.GerenciarCarvaoForno;
 import Visao.madeira.GerenciarMadeiraPraca;
+import Visao.relatorios.GerarRelatorioEstoqueBasico;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -51,7 +52,7 @@ public class Login extends javax.swing.JFrame {
                     String login = rs.getString("login_usuario");
                     String tipo = ControlePrincipal.tipo_u = rs.getString("tipo_usuario");
                     ControlePrincipal.nome = rs.getString("nome_usuario");
-                    ControlePrincipal.upc_u = rs.getString("upc_usuario"); 
+                    ControlePrincipal.upc_u = Integer.valueOf(rs.getString("upc_usuario")); 
                     ControlePrincipal.id_op = tipo+"."+id_u+".upc-"+ControlePrincipal.upc_u;     
                     
                     //JOptionPane.showMessageDialog(null, "Logado!"+login+tipo+usuario.getNome_usuario()+usuario.getId_tipo());  
@@ -69,8 +70,7 @@ public class Login extends javax.swing.JFrame {
         if(tipo.equals("op_c")){
             try
             {
-                GerenciarCarvaoForno gcf = new GerenciarCarvaoForno();
-                gcf.setVisible(true);
+                new GerenciarCarvaoForno().setVisible(true);
                 //gcf.ChangeName(nome, id_op);
             } catch (SQLException ex) {
                 Logger.getLogger(GerenciarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
@@ -78,8 +78,7 @@ public class Login extends javax.swing.JFrame {
         }else if(tipo.equals("op_m")){
             try
             {
-                GerenciarMadeiraPraca gmtp = new GerenciarMadeiraPraca();
-                gmtp.setVisible(true);
+                new GerenciarMadeiraPraca().setVisible(true);
                 //gmtp.ChangeName(nome, id_op);
             } catch (SQLException ex) {
                 Logger.getLogger(GerenciarMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
@@ -87,11 +86,16 @@ public class Login extends javax.swing.JFrame {
         }else if(tipo.equals("op_s")){
             try
             {
-                GerenciarUsuarios gu = new GerenciarUsuarios();
-                gu.setVisible(true);
+                new GerenciarUsuarios().setVisible(true);
                 //gu.ChangeName(nome, id_op);
             } catch (SQLException ex) {
                 Logger.getLogger(GerenciarUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else if(tipo.equals("op_d")){
+            try {
+                new GerarRelatorioEstoqueBasico().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         this.setVisible(false);

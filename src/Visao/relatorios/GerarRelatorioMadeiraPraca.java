@@ -16,22 +16,55 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author LK
  */
-public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
-
+public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
+    
+    private String filtro_op_u;
     /**
      * Creates new form SelecionarEstoqueMadeiraPraca
      */
-    public GerarRelatorioEstoqueMadeiraPraca() throws SQLException {
+    public GerarRelatorioMadeiraPraca() throws SQLException {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
+        jButtonLogout.setVisible(false);
         ChangeName();
-    }    
+        _carregarUsuarios();
+    }   
+    
+    private void _carregarUsuarios(){ 
+        jComboBoxUsuario.removeAllItems();
+        jComboBoxUsuario.addItem("-");
+        ConexaoBD con = ConexaoBD.getConexao();
+        String query;
+        ResultSet rs;
+        String whereSql;
+        query = "SELECT id_operario FROM controle_madeira";
+        //JOptionPane.showMessageDialog(null, "Teste!" + query);
+        rs = con.consultaSql(query);
+        try {
+            while(rs.next()){
+                int i=0;
+                for (int j=0; j<jComboBoxUsuario.getItemCount(); j++) {
+                    if (jComboBoxUsuario.getItemAt(j).equals(rs.getString("id_operario"))) {
+                        i++; 
+                        //System.out.println("i: "+i);       
+                    }
+                }
+                if(i==0){
+                    //System.out.println("Add: "+i+" f "+rs.getString("id_operario"));
+                    jComboBoxUsuario.addItem(rs.getString("id_operario"));
+                }               
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao carregar usuarios! "+ex);
+        }           
+        PreencherTabela();
+    }
     
     /**
      * 
@@ -39,56 +72,76 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
     private void PreencherTabela(){
         ArrayList dados = new ArrayList();
         String[] colunas = new String[] { 
-            "id_controle_madeira",
+            //"id_controle_madeira",
+            "id_estoque_p",
             "id_operario",
             "talhao",
-            "saida_volume_talhao",
-            "data_talhao",
+            "data_entrega",
+            "mad_volume_m_stereo",
+            "mad_volume_m3",
             "altura1_t",
             "altura2_t",
             "altura3_t",
             "comprimento_t",
             "largura_t",
-            "entrada_volume_praca",
-            "data_praca",
-            "altura1_p",
-            "altura2_p",
-            "altura3_p",
-            "comprimento_p",
-            "largura_p",
-            "fator"
+            "peso_t",
+            "altura1_bt",
+            "altura2_bt",
+            "altura3_bt",
+            "comprimento_bt",
+            "largura_bt",
+            "peso_bt"
         };
         int tamanho = 0;    
         String query;
-        if(ControlePrincipal.tipo_u.equals("op_s")){
+        
+        /*if(ControlePrincipal.tipo_u.equals("op_s")){
             query = "Select * from controle_madeira";
         }else{
             query = "Select * from controle_madeira where id_operario = '" +ControlePrincipal.id_op+"'";
+        }*/
+        
+        String whereSql;
+        
+        //Controle e definição das variaveis da clausula where like. Filtros
+        if(jComboBoxUsuario.getSelectedItem().equals("-")){
+            filtro_op_u="%%";
+        }else{
+            filtro_op_u=jComboBoxUsuario.getSelectedItem().toString();
         }
+        
+        //faz busca a partir dos filtros acima
+        if(!filtro_op_u.equals("%%")){
+            whereSql = "where id_operario like '"+filtro_op_u+"'";
+        }else{
+            whereSql = "";
+        }
+        query = "Select * from controle_madeira "+whereSql;
         ConexaoBD con = ConexaoBD.getConexao();         
         ResultSet rs = con.consultaSql(query);
         
         try {
             while(rs.next()){
                 dados.add(new Object[]{
-                    rs.getString("id_controle_madeira"),
+                    //rs.getString("id_controle_madeira"),
+                    rs.getString("id_estoque_p"),
                     rs.getString("id_operario"),
                     rs.getString("talhao"),
-                    rs.getString("saida_volume_talhao"),
-                    rs.getString("data_talhao"),
+                    rs.getString("data_entrega"),
+                    rs.getString("mad_volume_m_stereo"),
+                    rs.getString("mad_volume_m3"),
                     rs.getString("altura1_t"),
                     rs.getString("altura2_t"),
                     rs.getString("altura3_t"),
                     rs.getString("comprimento_t"),
                     rs.getString("largura_t"),
-                    rs.getString("entrada_volume_praca"),
-                    rs.getString("data_praca"),
-                    rs.getString("altura1_p"),
-                    rs.getString("altura2_p"),
-                    rs.getString("altura3_p"),
-                    rs.getString("comprimento_p"),
-                    rs.getString("largura_p"),
-                    rs.getString("fator")
+                    rs.getString("peso_t"),
+                    rs.getString("altura1_bt"),
+                    rs.getString("altura2_bt"),
+                    rs.getString("altura3_bt"),
+                    rs.getString("comprimento_bt"),
+                    rs.getString("largura_bt"),
+                    rs.getString("peso_bt")
                 });
                 tamanho++;
             }
@@ -140,6 +193,16 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
         ControlePrincipal.tela_anterior = "madeira";
         //JOptionPane.showMessageDialog(null, "Tela: "+ControlePrincipal.tela_anterior);
     } 
+    
+    private void VoltarMenu(){        
+        try {
+            new GerarRelatorioEstoqueBasico().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioCarvao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        dispose();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -156,7 +219,10 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
         jLabelNome = new javax.swing.JLabel();
         jLabelIdTipo = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jButtonSelecionar = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jComboBoxUsuario = new javax.swing.JComboBox();
+        jButtonFiltrar = new javax.swing.JButton();
+        jButtonVoltar = new javax.swing.JButton();
         jButtonLogout = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -166,7 +232,7 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
 
         jLabelTitulo.setFont(new java.awt.Font("Serif", 1, 36)); // NOI18N
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitulo.setText("Gerenciar Madeira");
+        jLabelTitulo.setText("Relatorio Madeira/Praca");
         jLabelTitulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabelTitulo.setPreferredSize(new java.awt.Dimension(275, 60));
 
@@ -220,11 +286,23 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
         jPanel2.setBorder(new javax.swing.border.MatteBorder(null));
         jPanel2.setPreferredSize(new java.awt.Dimension(270, 350));
 
-        jButtonSelecionar.setFont(jButtonSelecionar.getFont().deriveFont(jButtonSelecionar.getFont().getSize()+1f));
-        jButtonSelecionar.setText("Selecionar");
-        jButtonSelecionar.addActionListener(new java.awt.event.ActionListener() {
+        jLabel7.setText("Usuario");
+        jLabel7.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jComboBoxUsuario.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jButtonFiltrar.setText("Filtrar");
+        jButtonFiltrar.setPreferredSize(new java.awt.Dimension(100, 25));
+        jButtonFiltrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSelecionarActionPerformed(evt);
+                jButtonFiltrarActionPerformed(evt);
+            }
+        });
+
+        jButtonVoltar.setText("Voltar");
+        jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVoltarActionPerformed(evt);
             }
         });
 
@@ -241,22 +319,35 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButtonSelecionar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBoxUsuario, 0, 158, Short.MAX_VALUE)))
+                    .addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jButtonVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(269, Short.MAX_VALUE)
-                .addComponent(jButtonSelecionar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(96, 96, 96)
-                .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 278, Short.MAX_VALUE)
+                .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10))
         );
 
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
@@ -300,22 +391,26 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
-                        .addGap(10, 10, 10))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
-                        .addGap(10, 10, 10))))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSelecionarActionPerformed
-        SelecionarInfo();
-    }//GEN-LAST:event_jButtonSelecionarActionPerformed
+    private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
+        _carregarUsuarios();
+        //JOptionPane.showMessageDialog(null, jListFiltrar.getSelectedValuesList());
+    }//GEN-LAST:event_jButtonFiltrarActionPerformed
+
+    private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
+        VoltarMenu();
+    }//GEN-LAST:event_jButtonVoltarActionPerformed
 
     private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
         new Login().setVisible(true);
+        this.setVisible(false);
         dispose();
     }//GEN-LAST:event_jButtonLogoutActionPerformed
 
@@ -336,14 +431,16 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GerarRelatorioEstoqueMadeiraPraca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GerarRelatorioMadeiraPraca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GerarRelatorioEstoqueMadeiraPraca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GerarRelatorioMadeiraPraca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GerarRelatorioEstoqueMadeiraPraca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GerarRelatorioMadeiraPraca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GerarRelatorioEstoqueMadeiraPraca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GerarRelatorioMadeiraPraca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
@@ -351,18 +448,21 @@ public class GerarRelatorioEstoqueMadeiraPraca extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new GerarRelatorioEstoqueMadeiraPraca().setVisible(true);
+                    new GerarRelatorioMadeiraPraca().setVisible(true);
                 } catch (SQLException ex) {
-                    Logger.getLogger(GerarRelatorioEstoqueMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(GerarRelatorioMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonFiltrar;
     private javax.swing.JButton jButtonLogout;
-    private javax.swing.JButton jButtonSelecionar;
+    private javax.swing.JButton jButtonVoltar;
+    private javax.swing.JComboBox jComboBoxUsuario;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabelIdTipo;
     private javax.swing.JLabel jLabelNome;
     private javax.swing.JLabel jLabelTitulo;

@@ -6,6 +6,7 @@
 package Controle.fazenda;
 
 import Controle.ControleFazenda;
+import Controle.ControlePrincipal;
 import Modelo.ExecutarSql;
 
 /**
@@ -15,7 +16,14 @@ import Modelo.ExecutarSql;
 public class InserirFazendaCtrl {
 
     public InserirFazendaCtrl(ControleFazenda fazenda) {
-        String query = "INSERT INTO fazenda (`id_fazenda`, `estado`, `bloco`, `municipio`, `fazenda`, `projeto`) "
+        String query = "INSERT INTO fazenda ("
+                + "`id_fazenda`, "
+                + "`estado`, "
+                + "`bloco`, "
+                + "`municipio`, "
+                + "`fazenda`, "
+                + "`projeto"
+                + "`) "
               + "VALUES (" + null
               + ", '" + fazenda.getEstado()
               + "', '" + fazenda.getBloco()
@@ -25,7 +33,11 @@ public class InserirFazendaCtrl {
               //+ "', '1"
               +"')";
         ExecutarSql execut = new ExecutarSql();
-        execut.executar(query);
+        if(!ControlePrincipal.excel_cmd){
+            execut.executar(query);
+        }else{
+            execut.executar2(query);            
+        }
     }
     
 }

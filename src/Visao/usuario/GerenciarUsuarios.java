@@ -40,6 +40,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         initComponents(); 
         this.setExtendedState(MAXIMIZED_BOTH);
         jButtonExcluir.setVisible(false);       
+        jButtonRelatorio.setVisible(false);
         CarregarNome();
         PreencherTabela();
     }
@@ -87,7 +88,10 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
             }else{
                 jTableUsuario.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*15);
             }
-            jTableUsuario.getColumnModel().getColumn(i).setResizable(false);
+            jTableUsuario.getColumnModel().getColumn(0).setMinWidth(0);     
+            jTableUsuario.getColumnModel().getColumn(0).setPreferredWidth(0);  
+            jTableUsuario.getColumnModel().getColumn(0).setMaxWidth(0);
+            jTableUsuario.getColumnModel().getColumn(0).setResizable(false);
             //System.out.println("Indice: "+i+" - "+ colunas[i].length());
         }
         jTableUsuario.getTableHeader().setReorderingAllowed(false);
@@ -133,7 +137,8 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
     
     private void BuscarEstoque(){
         try {
-            new GerenciarEstoquePrincipal().setVisible(true);
+            new GerarRelatorioEstoquePrincipal().setVisible(true);
+            //new GerenciarEstoquePrincipal().setVisible(true);
             //new BuscarRelatorioMadeiraEstoquePrincipal().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(GerenciarUsuarios.class.getName()).log(Level.SEVERE, null, ex);

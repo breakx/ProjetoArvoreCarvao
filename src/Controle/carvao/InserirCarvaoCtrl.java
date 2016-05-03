@@ -17,12 +17,11 @@ public class InserirCarvaoCtrl {
         String query = "INSERT INTO controle_carvao ("
                 + "`id_controle_carvao`, "
                 + "`id_estoque_p`, "
-                + "`id_operario_mad`, "
+                + "`id_operario`, "
                 + "`talhao`, "
                 + "`forno`, "
                 + "`volume_madeira`, "
                 + "`data_entrada_madeira_forno`, "
-                + "`id_operario_carv`, "
                 + "`volume_carvao`, "
                 + "`data_saida_carvao_forno`, "                
                 + "`rend_grav_forno`"
@@ -34,7 +33,6 @@ public class InserirCarvaoCtrl {
               + "', '" + carvao.getForno()
               + "', '" + carvao.getVolume_madeira()
               + "', '" + carvao.getData_entrada_madeira_forno()
-              +"', '---"
               +"', '0.0"
               +"', '00/00/0000 00:00:00"
               +"', '0.0"

@@ -133,18 +133,14 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         jLabelTalhadia.setForeground(Color.BLACK );
         jLabelSituacao.setForeground(Color.BLACK );       
         
-        /*if(!jTextFieldDataPlantio.getText().equals("00/00/0000") && !jTextFieldDataRotacao1.getText().equals("00/00/0000") && !jTextFieldDataRotacao2.getText().equals("00/00/0000") && !jTextFieldDataRotacao3.getText().equals("00/00/0000")){
-            talhadia = 3;
-            CalcularIdade(jTextFieldDataRotacao3.getText());                        
+        if(!jTextFieldDataPlantio.getText().equals("00/00/0000") && !jTextFieldDataRotacao1.getText().equals("00/00/0000") && !jTextFieldDataRotacao2.getText().equals("00/00/0000") && !jTextFieldDataRotacao3.getText().equals("00/00/0000")){
+            talhadia = 3;                        
         }else if(!jTextFieldDataPlantio.getText().equals("00/00/0000") && !jTextFieldDataRotacao1.getText().equals("00/00/0000") && !jTextFieldDataRotacao2.getText().equals("00/00/0000") && jTextFieldDataRotacao3.getText().equals("00/00/0000")){
-            talhadia = 2;
-            CalcularIdade(jTextFieldDataRotacao2.getText());            
+            talhadia = 2;            
         }else if(!jTextFieldDataPlantio.getText().equals("00/00/0000") && !jTextFieldDataRotacao1.getText().equals("00/00/0000") && jTextFieldDataRotacao2.getText().equals("00/00/0000") && jTextFieldDataRotacao3.getText().equals("00/00/0000")){
             talhadia = 1;
-            CalcularIdade(jTextFieldDataRotacao1.getText());
         }else if(!jTextFieldDataPlantio.getText().equals("00/00/0000") && jTextFieldDataRotacao1.getText().equals("00/00/0000") && jTextFieldDataRotacao2.getText().equals("00/00/0000") && jTextFieldDataRotacao3.getText().equals("00/00/0000")){
             talhadia = 0;
-            CalcularIdade(jTextFieldDataPlantio.getText());
         }else {
             jLabelIdadeHoje.setForeground(Color.red );
             jLabelIdadeHoje.setText("Idade: Erro Data"); 
@@ -152,8 +148,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
             jLabelTalhadia.setText("Talhadia: Erro Data");
             jLabelSituacao.setForeground(Color.red );
             jLabelSituacao.setText("Situação: Erro Data");
-        }*/
-        
+        }        
         CalcularIdade(jTextFieldDataRotacao1.getText(), jTextFieldDataRotacao2.getText(), jTextFieldDataRotacao3.getText(), jTextFieldDataPlantio.getText());
     }
     
@@ -242,6 +237,10 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         idade_corte1 = dias2/1000;
         idade_corte2 = dias3/1000;
         idade_corte3 = dias4/1000;
+        
+        if(idade_hoje<0){
+            idade_hoje=0;
+        }
         
         jLabelIdadeHoje.setText("Idade Hoje: "+decformat.format(idade_hoje)+" anos."); 
         

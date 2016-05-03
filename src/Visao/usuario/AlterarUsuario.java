@@ -50,6 +50,7 @@ public class AlterarUsuario extends javax.swing.JFrame {
         jComboBoxTipo.addItem("op_c");
         jComboBoxTipo.addItem("op_m");
         jComboBoxTipo.addItem("op_s");  
+        jComboBoxTipo.addItem("op_d"); 
         _carregarUPC_Op();
     }
     

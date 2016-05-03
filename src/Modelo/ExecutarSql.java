@@ -39,7 +39,7 @@ public class ExecutarSql {
             }
             catch( java.sql.SQLException e )
             {
-                System.err.printf("\nExceção: %s\n"+comando, e);
+                //System.err.printf("\nExceção: %s\n"+comando, e);
                 throw new java.lang.RuntimeException(e.getMessage());
             }
             JOptionPane.showMessageDialog(null, "Executando...");
@@ -61,7 +61,7 @@ public class ExecutarSql {
         }
         catch( java.sql.SQLException e )
         {
-            System.err.printf("\nExceção: %s\n"+comando, e);
+            //System.err.printf("\nExceção: %s\n"+comando, e);
             throw new java.lang.RuntimeException(e.getMessage());
         }       
     }
@@ -87,8 +87,8 @@ public class ExecutarSql {
                 + "', `rend_grav_real` = '"+ControlePrincipal.rend_grav_real
                 + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
         }
-        
-        //JOptionPane.showMessageDialog(null, "Executar Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_transp+" carv: "+ControlePrincipal.volume_carvao_transp);
+        //System.out.println("SQL= "+query);
+        //JOptionPane.showMessageDialog(null, "Executar Talhao: "+query);
         
         try {
             ConexaoBD conexao = ConexaoBD.getConexao();

@@ -10,8 +10,9 @@ import Modelo.ConexaoBD;
 import Modelo.GerarTabela;
 import Visao.login.Login;
 import Visao.buscas.BuscarRelatorioCarvaoPraca;
-import Visao.buscas.BuscarRelatorioMadeiraEstoquePrincipal;
 import Visao.relatorios.GerarRelatorioEstoquePrincipal;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         jButtonExcluir.setVisible(false);
+        jButtonGerarRelatorio.setVisible(false);
         CarregarNome();
         PreencherTabela();
     }   
@@ -44,14 +46,23 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
     private void PreencherTabela(){
         ArrayList dados = new ArrayList();
         String[] colunas = new String[] { 
-            "id_controle_carvao", "id_estoque_p", "talhao", "forno", "id_operario_mad", "volume_madeira", "data_entrada_madeira_forno", "id_operario_carv", "volume_carvao", "data_saida_carvao_forno", "rend_grav_forno"
+            "talhao", 
+            "forno", 
+            "volume_madeira", 
+            "volume_carvao", 
+            "data_entrada_madeira_forno",  
+            "data_saida_carvao_forno", 
+            "id_controle_carvao", 
+            "id_estoque_p", 
+            "id_operario", 
+            "rend_grav_forno"
         };
         String query;
         int tamanho = 0;
         if("op_s".equals(ControlePrincipal.tipo_u)){
             query = "Select * from controle_carvao";
         }else{
-            query = "Select * from controle_carvao where id_operario_mad = '" +ControlePrincipal.id_op+"' or id_operario_carv = '"+ControlePrincipal.id_op+"'";
+            query = "Select * from controle_carvao where id_operario = '" +ControlePrincipal.id_op+"'";
         }
         
         ConexaoBD con = ConexaoBD.getConexao();
@@ -60,17 +71,16 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
         try {
             while(rs.next()){
                 dados.add(new Object[]{
-                    rs.getString("id_controle_carvao"),
-                rs.getString("id_estoque_p"),
-                rs.getString("talhao"),
-                rs.getString("forno"),
-                rs.getString("id_operario_mad"),
-                rs.getString("volume_madeira"),                
-                rs.getString("data_entrada_madeira_forno"),
-                rs.getString("id_operario_carv"),
-                rs.getString("volume_carvao"),
-                rs.getString("data_saida_carvao_forno"),
-                rs.getString("rend_grav_forno")
+                    rs.getString("talhao"),//0
+                    rs.getString("forno"),//1
+                    rs.getString("volume_madeira"),//2              
+                    rs.getString("volume_carvao"),//3
+                    rs.getString("data_entrada_madeira_forno"),//4
+                    rs.getString("data_saida_carvao_forno"),//5
+                    rs.getString("id_estoque_p"),//6
+                    rs.getString("id_operario"),//7
+                    rs.getString("rend_grav_forno"),//8
+                    rs.getString("id_controle_carvao")//9
                 });
                 tamanho++;
             }
@@ -89,12 +99,27 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
             }else{
                 jTableCarvao.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*8);
             }
-            jTableCarvao.getColumnModel().getColumn(i).setResizable(false);
+            if(i>3){
+                jTableCarvao.getColumnModel().getColumn(i).setMinWidth(0);     
+                jTableCarvao.getColumnModel().getColumn(i).setPreferredWidth(0);  
+                jTableCarvao.getColumnModel().getColumn(i).setMaxWidth(0);
+                jTableCarvao.getColumnModel().getColumn(i).setResizable(false);
+            }
             //System.out.println("Indice: "+i+" - "+ colunas[i].length()*200);
         }
         jTableCarvao.getTableHeader().setReorderingAllowed(false);
         jTableCarvao.setAutoResizeMode(jTableCarvao.AUTO_RESIZE_OFF);
         jTableCarvao.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        //duplo click
+        jTableCarvao.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                    if(e.getClickCount() == 2){
+                        //System.out.println("duplo-clique detectado");
+                        AlterarInfo();
+                    }
+                }
+            }); 
         con.fecharConexao();
     }    
     
@@ -102,21 +127,23 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
         if(jTableCarvao.getSelectedRow()>=0)//verifica se a linha a ser alterada esta marcada
         {
             int linha = jTableCarvao.getSelectedRow();
-            String id_controle_carvao = jTableCarvao.getValueAt(linha, 0).toString();
-            String id_estoque = jTableCarvao.getValueAt(linha, 1).toString();
-            //String talhao = jTableCarvao.getValueAt(linha, 2).toString();
-            //String forno = jTableCarvao.getValueAt(linha, 3).toString();
-            //String id_operario_mad = jTableCarvao.getValueAt(linha, 4).toString();
-            String volume_madeira = jTableCarvao.getValueAt(linha, 5).toString();
+            String id_controle_carvao = jTableCarvao.getValueAt(linha, 9).toString();
+            String id_estoque = jTableCarvao.getValueAt(linha, 6).toString();
+            //String talhao = jTableCarvao.getValueAt(linha, 0).toString();
+            //String forno = jTableCarvao.getValueAt(linha, 1).toString();
+            String volume_madeira = jTableCarvao.getValueAt(linha, 2).toString();
             //String data_entrada_madeira_forno = jTableCarvao.getValueAt(linha, 6).toString();
-            String id_operario_carv = jTableCarvao.getValueAt(linha, 7).toString();
-            String volume_carvao = jTableCarvao.getValueAt(linha, 8).toString();
-            String data_saida_carvao_forno = jTableCarvao.getValueAt(linha, 9).toString();
+            String id_operario = jTableCarvao.getValueAt(linha, 7).toString();
+            String volume_carvao = jTableCarvao.getValueAt(linha, 3).toString();
+            String data_saida_carvao_forno = jTableCarvao.getValueAt(linha, 5).toString();
             //String rend_grav_forno = jTableCarvao.getValueAt(linha, 10).toString();
                         
+            /*for(int i=0; i<10;i++){                
+                System.out.println("coluna["+i+"]: "+jTableCarvao.getValueAt(linha, i).toString());
+            }*/
             if(volume_carvao.equals("0")){
                 try {
-                    new Alterar_RetirarCarvaoForno(id_controle_carvao, id_estoque, id_operario_carv, volume_carvao, data_saida_carvao_forno, volume_madeira).setVisible(true);
+                    new Alterar_RetirarCarvaoForno(id_controle_carvao, id_estoque, volume_madeira).setVisible(true);
                 } catch (SQLException ex) {
                     Logger.getLogger(GerenciarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
                 }          
@@ -394,7 +421,7 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonBuscarEstoqueActionPerformed
 
     private void jButtonGerarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerarRelatorioActionPerformed
-        new BuscarRelatorioCarvaoPraca().setVisible(true);
+        //new BuscarRelatorioCarvaoPraca().setVisible(true);
         this.setVisible(false);
         dispose();
     }//GEN-LAST:event_jButtonGerarRelatorioActionPerformed
