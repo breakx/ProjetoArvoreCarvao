@@ -22,8 +22,7 @@ import javax.swing.ListSelectionModel;
  * @author LK
  */
 public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
-    
-    private String filtro_op_u;
+        
     /**
      * Creates new form SelecionarEstoqueMadeiraPraca
      */
@@ -75,6 +74,7 @@ public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
             //"id_controle_madeira",
             "id_estoque_p",
             "id_operario",
+            "upc_m",
             "talhao",
             "data_entrega",
             "mad_volume_m_stereo",
@@ -95,7 +95,7 @@ public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
         int tamanho = 0;    
         String query;
         
-        /*if(ControlePrincipal.tipo_u.equals("op_s")){
+        /*if(ControlePrincipal.tipo_u.equals("op_scv")){
             query = "Select * from controle_madeira";
         }else{
             query = "Select * from controle_madeira where id_operario = '" +ControlePrincipal.id_op+"'";
@@ -104,18 +104,34 @@ public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
         String whereSql;
         
         //Controle e definição das variaveis da clausula where like. Filtros
+        String filtro_op_u;
+        String filtro_upc;
+        String filtro_talhao;
         if(jComboBoxUsuario.getSelectedItem().equals("-")){
-            filtro_op_u="%%";
+            filtro_op_u="";
         }else{
             filtro_op_u=jComboBoxUsuario.getSelectedItem().toString();
         }
         
+        if(jSpinnerUPC.getValue().equals(0)){
+            filtro_upc=""; 
+        }else{
+            filtro_upc=jSpinnerUPC.getValue().toString();
+        }
+        
+        if(jSpinnerTalhao.getValue().equals(0)){
+            filtro_talhao=""; 
+        }else{
+            filtro_talhao=jSpinnerTalhao.getValue().toString();
+        }
+        
         //faz busca a partir dos filtros acima
-        if(!filtro_op_u.equals("%%")){
-            whereSql = "where id_operario like '"+filtro_op_u+"'";
+        if(!filtro_op_u.equals("") ||!filtro_upc.equals("") ||!filtro_talhao.equals("")){
+            whereSql = "where id_operario like '%"+filtro_op_u+"%' and upc_m like '%"+filtro_upc+"%' and talhao like '%"+filtro_talhao+"%'";
         }else{
             whereSql = "";
         }
+        
         query = "Select * from controle_madeira "+whereSql;
         ConexaoBD con = ConexaoBD.getConexao();         
         ResultSet rs = con.consultaSql(query);
@@ -126,6 +142,7 @@ public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
                     //rs.getString("id_controle_madeira"),
                     rs.getString("id_estoque_p"),
                     rs.getString("id_operario"),
+                    rs.getString("upc_m"),
                     rs.getString("talhao"),
                     rs.getString("data_entrega"),
                     rs.getString("mad_volume_m_stereo"),
@@ -224,6 +241,10 @@ public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
         jButtonFiltrar = new javax.swing.JButton();
         jButtonVoltar = new javax.swing.JButton();
         jButtonLogout = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jSpinnerTalhao = new javax.swing.JSpinner();
+        jSpinnerUPC = new javax.swing.JSpinner();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableMadeiraEstoquePraca = new javax.swing.JTable();
@@ -314,6 +335,22 @@ public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getSize()+1f));
+        jLabel2.setText("UPC");
+        jLabel2.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jLabel9.setFont(jLabel9.getFont().deriveFont(jLabel9.getFont().getSize()+1f));
+        jLabel9.setText("Talhao");
+        jLabel9.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jSpinnerTalhao.setFont(jSpinnerTalhao.getFont().deriveFont(jSpinnerTalhao.getFont().getSize()+1f));
+        jSpinnerTalhao.setModel(new javax.swing.SpinnerNumberModel(0, 0, 9, 1));
+        jSpinnerTalhao.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jSpinnerUPC.setFont(jSpinnerUPC.getFont().deriveFont(jSpinnerUPC.getFont().getSize()+1f));
+        jSpinnerUPC.setModel(new javax.swing.SpinnerNumberModel(0, 0, 9, 1));
+        jSpinnerUPC.setPreferredSize(new java.awt.Dimension(150, 25));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -326,13 +363,20 @@ public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
                         .addGap(10, 10, 10)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBoxUsuario, 0, 158, Short.MAX_VALUE)))
-                    .addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jComboBoxUsuario, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
-                .addComponent(jButtonVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(10, 10, 10))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerUPC, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -341,9 +385,17 @@ public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerUPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41)
                 .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 278, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
                 .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -462,7 +514,9 @@ public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
     private javax.swing.JButton jButtonVoltar;
     private javax.swing.JComboBox jComboBoxUsuario;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelIdTipo;
     private javax.swing.JLabel jLabelNome;
     private javax.swing.JLabel jLabelTitulo;
@@ -470,6 +524,8 @@ public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSpinner jSpinnerTalhao;
+    private javax.swing.JSpinner jSpinnerUPC;
     private javax.swing.JTable jTableMadeiraEstoquePraca;
     // End of variables declaration//GEN-END:variables
 }

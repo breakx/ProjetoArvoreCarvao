@@ -18,6 +18,7 @@ public class InserirCarvaoCtrl {
                 + "`id_controle_carvao`, "
                 + "`id_estoque_p`, "
                 + "`id_operario`, "
+                + "`upc_c`, "
                 + "`talhao`, "
                 + "`forno`, "
                 + "`volume_madeira`, "
@@ -29,6 +30,7 @@ public class InserirCarvaoCtrl {
               + "VALUES (" + null
               + ", '" + carvao.getId_estoque()
               + "', '" + carvao.getId_operario()
+              + "', '" + carvao.getUpc_c()
               + "', '" + carvao.getTalhao()
               + "', '" + carvao.getForno()
               + "', '" + carvao.getVolume_madeira()

@@ -68,7 +68,7 @@ public class ExecutarSql {
     
     private void UpdateEstoque(){
         String query = "";
-        if(ControlePrincipal.tipo_u.equals("op_m")){
+        if(ControlePrincipal.tipo_u.equals("op_smd")){
             query = "UPDATE estoque_principal SET "
                 + "`vol_mad_transp` = '"+ControlePrincipal.vol_mad_transp
                 + "', `vol_mad_balanco` = '"+ControlePrincipal.vol_mad_balanco
@@ -76,7 +76,7 @@ public class ExecutarSql {
                 + "', `mad_ton_balanco` = '"+ControlePrincipal.mad_ton_balanco
                 + "', `madeira_praca` = '"+ControlePrincipal.madeira_praca 
                 + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
-        }else if(ControlePrincipal.tipo_u.equals("op_c")){
+        }else if(ControlePrincipal.tipo_u.equals("op_scv")){
             query = "UPDATE estoque_principal SET "
                 + "`mdc_transp` = '"+ControlePrincipal.mdc_transp
                 + "', `mdc_balanco` = '"+ControlePrincipal.mdc_balanco

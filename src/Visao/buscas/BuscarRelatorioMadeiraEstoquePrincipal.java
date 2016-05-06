@@ -58,20 +58,20 @@ public class BuscarRelatorioMadeiraEstoquePrincipal extends javax.swing.JFrame {
     }
     
     private void VoltarMenu(){        
-        if(ControlePrincipal.tipo_u.equals("op_c")){
+        if(ControlePrincipal.tipo_u.equals("op_scv")){
             try {
                 new GerenciarCarvaoForno().setVisible(true);
             } catch (SQLException ex) {
                 Logger.getLogger(BuscarRelatorioMadeiraEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else if(ControlePrincipal.tipo_u.equals("op_m")){
+        }else if(ControlePrincipal.tipo_u.equals("op_smd")){
             try {
                 //GerenciarMadeiraTalhaoPraca gmtp = new GerenciarMadeiraPraca();
                 new GerenciarMadeiraPraca().setVisible(true);
             } catch (SQLException ex) {
                 Logger.getLogger(BuscarRelatorioMadeiraEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else if(ControlePrincipal.tipo_u.equals("op_s")){
+        }else if(ControlePrincipal.tipo_u.equals("op_scv")){
             try {
                 new GerenciarUsuarios().setVisible(true);
             } catch (SQLException ex) {

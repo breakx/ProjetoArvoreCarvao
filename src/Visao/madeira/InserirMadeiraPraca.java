@@ -37,23 +37,21 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
     
     public void CalcularVolumeTalhao(){
         if(jCheckBoxBT.isSelected()){
-            if(!jTextFieldTranporteA_H1.getText().equals("0") && !jTextFieldTranporteA_H2.getText().equals("0") && !jTextFieldTranporteA_H3.getText().equals("0") && !jTextFieldTranporteA_Largura.getText().equals("0")&& !jTextFieldTranporteA_Comprimento.getText().equals("0") && 
-                    !jTextFieldTranporteA_H1.getText().equals("0") && !jTextFieldTranporteA_H2.getText().equals("0") && !jTextFieldTranporteA_H3.getText().equals("0") && !jTextFieldTranporteA_Largura.getText().equals("0")&& !jTextFieldTranporteA_Comprimento.getText().equals("0")){
-                volumeMadeiraMStereo = (((Float.parseFloat(jTextFieldTranporteA_H1.getText()) * Float.parseFloat(jTextFieldTranporteA_H2.getText()) * Float.parseFloat(jTextFieldTranporteA_H3.getText()))/3)
-                    *(Float.parseFloat(jTextFieldTranporteA_Largura.getText()) * Float.parseFloat(jTextFieldTranporteA_Comprimento.getText())) +
-                        ((Float.parseFloat(jTextFieldTranporteBT_H1.getText()) * Float.parseFloat(jTextFieldTranporteBT_H2.getText()) * Float.parseFloat(jTextFieldTranporteBT_H3.getText()))/3)
-                    *(Float.parseFloat(jTextFieldTranporteBT_Largura.getText()) * Float.parseFloat(jTextFieldTranporteBT_Comprimento.getText())));
+            if(!jSpinnerTranporteT_H1.getValue().equals("0") && !jSpinnerTranporteT_H2.getValue().equals("0") && !jSpinnerTranporteT_H3.getValue().equals("0") && !jSpinnerTranporteT_Largura.getValue().equals("0")&& !jSpinnerTranporteT_Comprimento.getValue().equals("0") && 
+                    !jSpinnerTranporteBT_H1.getValue().equals("0") && !jSpinnerTranporteT_H2.getValue().equals("0") && !jSpinnerTranporteT_H3.getValue().equals("0") && !jSpinnerTranporteT_Largura.getValue().equals("0")&& !jSpinnerTranporteT_Comprimento.getValue().equals("0")){
+                
+                volumeMadeiraMStereo = (((float)jSpinnerTranporteT_H1.getValue() * (float)jSpinnerTranporteT_H2.getValue() * (float)jSpinnerTranporteT_H3.getValue())/3)
+                    *((float)jSpinnerTranporteT_Largura.getValue() * (float)jSpinnerTranporteT_Comprimento.getValue()) +
+                        (((float)jSpinnerTranporteBT_H1.getValue() * (float)jSpinnerTranporteBT_H2.getValue() * (float)jSpinnerTranporteBT_H3.getValue())/3)
+                    *((float)jSpinnerTranporteBT_Largura.getValue() * (float)jSpinnerTranporteBT_Comprimento.getValue());
                     //JOptionPane.showMessageDialog(null, "Dados ok: "+volumePraca);   
             }
         }else{
-            if(!jTextFieldTranporteA_H1.getText().equals("0") && !jTextFieldTranporteA_H2.getText().equals("0") && !jTextFieldTranporteA_H3.getText().equals("0") && !jTextFieldTranporteA_Largura.getText().equals("0")&& !jTextFieldTranporteA_Comprimento.getText().equals("0")){
-                volumeMadeiraMStereo = ((Float.parseFloat(jTextFieldTranporteA_H1.getText()) * Float.parseFloat(jTextFieldTranporteA_H2.getText()) * Float.parseFloat(jTextFieldTranporteA_H3.getText()))/3)
-                    *(Float.parseFloat(jTextFieldTranporteA_Largura.getText()) * Float.parseFloat(jTextFieldTranporteA_Comprimento.getText()));
+            if(!jSpinnerTranporteT_H1.getValue().equals("0") && !jSpinnerTranporteT_H2.getValue().equals("0") && !jSpinnerTranporteT_H3.getValue().equals("0") && !jSpinnerTranporteT_Largura.getValue().equals("0")&& !jSpinnerTranporteT_Comprimento.getValue().equals("0")){
+                
+                volumeMadeiraMStereo = (((float)jSpinnerTranporteT_H1.getValue() * (float)jSpinnerTranporteT_H2.getValue() * (float)jSpinnerTranporteT_H3.getValue())/3)
+                    *((float)jSpinnerTranporteT_Largura.getValue() * (float)jSpinnerTranporteT_Comprimento.getValue());
                     //JOptionPane.showMessageDialog(null, "Dados ok: "+volumePraca);   
-            }else{
-                JOptionPane.showMessageDialog(null, "Campo em branco ou 0!");
-                jCheckBoxBT.setSelected(false);
-                //CalcularVolumeTalhao();
             }
         }
         jLabelVolumeMadeiraMSt.setText("Volume madeira: "+volumeMadeiraMStereo+" mst"); 
@@ -92,21 +90,21 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
         madeira.setData_entrega(data_entrega.format(date));
         madeira.setMad_volume_m_stereo(volumeMadeiraMStereo);
         madeira.setMad_volume_m3(volumeMadeiraM3);
-        madeira.setAltura1_t(Float.parseFloat(jTextFieldTranporteA_H1.getText()));
-        madeira.setAltura2_t(Float.parseFloat(jTextFieldTranporteA_H2.getText()));
-        madeira.setAltura3_t(Float.parseFloat(jTextFieldTranporteA_H3.getText()));
-        madeira.setComprimento_t(Float.parseFloat(jTextFieldTranporteA_Comprimento.getText()));
-        madeira.setLargura_t(Float.parseFloat(jTextFieldTranporteA_Largura.getText()));
-        madeira.setPeso_t(Float.parseFloat(jTextFieldTranporteA_Peso.getText()));
+        madeira.setAltura1_t((float)jSpinnerTranporteT_H1.getValue());
+        madeira.setAltura2_t((float)jSpinnerTranporteT_H2.getValue());
+        madeira.setAltura3_t((float)jSpinnerTranporteT_H3.getValue());
+        madeira.setComprimento_t((float)jSpinnerTranporteT_Comprimento.getValue());
+        madeira.setLargura_t((float)jSpinnerTranporteT_Largura.getValue());
+        madeira.setPeso_t((float)jSpinnerTranporteT_Peso.getValue());
         
         if(jCheckBoxBT.isSelected()){
-            madeira.setAltura1_bt(Float.parseFloat(jTextFieldTranporteBT_H1.getText()));
-            madeira.setAltura2_bt(Float.parseFloat(jTextFieldTranporteBT_H2.getText()));
-            madeira.setAltura3_bt(Float.parseFloat(jTextFieldTranporteBT_H3.getText()));
-            madeira.setComprimento_bt(Float.parseFloat(jTextFieldTranporteBT_Comprimento.getText()));
-            madeira.setLargura_bt(Float.parseFloat(jTextFieldTranporteBT_Largura.getText()));
-            madeira.setPeso_bt(Float.parseFloat(jTextFieldTranporteBT_Peso.getText()));
-        }    
+            madeira.setAltura1_bt((float)jSpinnerTranporteBT_H1.getValue());
+            madeira.setAltura2_bt((float)jSpinnerTranporteBT_H2.getValue());
+            madeira.setAltura3_bt((float)jSpinnerTranporteBT_H3.getValue());
+            madeira.setComprimento_bt((float)jSpinnerTranporteBT_Comprimento.getValue());
+            madeira.setLargura_bt((float)jSpinnerTranporteBT_Largura.getValue());
+            madeira.setPeso_bt((float)jSpinnerTranporteBT_Peso.getValue());
+        }
         
         madeira.setId_estoque(ControlePrincipal.id_estoque_principal);
         
@@ -115,11 +113,15 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
         InserirMadeiraCtrl inserir = new InserirMadeiraCtrl(madeira);
         this.setVisible(false);
         dispose();
-        try {
+        
+        /*try {
             new GerenciarMadeiraPraca().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(InserirMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }         
+        this.setVisible(false);
+        dispose();
+        */       
     }   
     
     private void CarregarNome(){
@@ -130,11 +132,11 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
     private void VoltarMenu(){
         try {   
             new GerenciarMadeiraPraca().setVisible(true);
-            this.setVisible(false);
-            dispose();
         } catch (SQLException ex) {
             Logger.getLogger(InserirMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.setVisible(false);
+        dispose();
     }
 
     /**
@@ -155,28 +157,28 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
         jButtonLogout = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextFieldTranporteA_H1 = new javax.swing.JTextField();
-        jTextFieldTranporteA_H2 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextFieldTranporteA_H3 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabelVolumeMadeiraMSt = new javax.swing.JLabel();
-        jTextFieldTranporteA_Peso = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextFieldTranporteA_Comprimento = new javax.swing.JTextField();
-        jTextFieldTranporteA_Largura = new javax.swing.JTextField();
         jCheckBoxBT = new javax.swing.JCheckBox();
-        jTextFieldTranporteBT_H3 = new javax.swing.JTextField();
-        jTextFieldTranporteBT_Peso = new javax.swing.JTextField();
-        jTextFieldTranporteBT_H1 = new javax.swing.JTextField();
-        jTextFieldTranporteBT_Comprimento = new javax.swing.JTextField();
-        jTextFieldTranporteBT_H2 = new javax.swing.JTextField();
-        jTextFieldTranporteBT_Largura = new javax.swing.JTextField();
         jLabelVolumeMadeiraM3 = new javax.swing.JLabel();
         jButtonCargaTalhao = new javax.swing.JButton();
         jButtonVoltar = new javax.swing.JButton();
+        jSpinnerTranporteT_H1 = new javax.swing.JSpinner();
+        jSpinnerTranporteT_H2 = new javax.swing.JSpinner();
+        jSpinnerTranporteT_H3 = new javax.swing.JSpinner();
+        jSpinnerTranporteT_Comprimento = new javax.swing.JSpinner();
+        jSpinnerTranporteT_Largura = new javax.swing.JSpinner();
+        jSpinnerTranporteT_Peso = new javax.swing.JSpinner();
+        jSpinnerTranporteBT_Peso = new javax.swing.JSpinner();
+        jSpinnerTranporteBT_Largura = new javax.swing.JSpinner();
+        jSpinnerTranporteBT_Comprimento = new javax.swing.JSpinner();
+        jSpinnerTranporteBT_H3 = new javax.swing.JSpinner();
+        jSpinnerTranporteBT_H2 = new javax.swing.JSpinner();
+        jSpinnerTranporteBT_H1 = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -264,102 +266,51 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
 
+        jLabel1.setFont(jLabel1.getFont().deriveFont(jLabel1.getFont().getSize()+1f));
         jLabel1.setText("Altura-1");
         jLabel1.setPreferredSize(new java.awt.Dimension(100, 25));
 
-        jTextFieldTranporteA_H1.setText("0");
-        jTextFieldTranporteA_H1.setPreferredSize(new java.awt.Dimension(200, 25));
-        jTextFieldTranporteA_H1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldTranporteA_H1ActionPerformed(evt);
-            }
-        });
-
-        jTextFieldTranporteA_H2.setText("0");
-        jTextFieldTranporteA_H2.setPreferredSize(new java.awt.Dimension(100, 20));
-
+        jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getSize()+1f));
         jLabel2.setText("Altura-2");
         jLabel2.setPreferredSize(new java.awt.Dimension(100, 25));
 
+        jLabel3.setFont(jLabel3.getFont().deriveFont(jLabel3.getFont().getSize()+1f));
         jLabel3.setText("Altura-3");
         jLabel3.setPreferredSize(new java.awt.Dimension(100, 25));
 
-        jTextFieldTranporteA_H3.setText("0");
-        jTextFieldTranporteA_H3.setPreferredSize(new java.awt.Dimension(100, 20));
-
+        jLabel4.setFont(jLabel4.getFont().deriveFont(jLabel4.getFont().getSize()+1f));
         jLabel4.setText("Comprimento");
         jLabel4.setPreferredSize(new java.awt.Dimension(100, 25));
 
+        jLabel5.setFont(jLabel5.getFont().deriveFont(jLabel5.getFont().getSize()+1f));
         jLabel5.setText("Largura");
         jLabel5.setPreferredSize(new java.awt.Dimension(100, 25));
 
+        jLabelVolumeMadeiraMSt.setFont(jLabelVolumeMadeiraMSt.getFont().deriveFont(jLabelVolumeMadeiraMSt.getFont().getSize()+1f));
         jLabelVolumeMadeiraMSt.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelVolumeMadeiraMSt.setText("Volume madeira: 0 mst");
         jLabelVolumeMadeiraMSt.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabelVolumeMadeiraMSt.setPreferredSize(new java.awt.Dimension(100, 25));
 
-        jTextFieldTranporteA_Peso.setText("0");
-        jTextFieldTranporteA_Peso.setPreferredSize(new java.awt.Dimension(100, 20));
-        jTextFieldTranporteA_Peso.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldTranporteA_PesoActionPerformed(evt);
-            }
-        });
-
+        jLabel7.setFont(jLabel7.getFont().deriveFont(jLabel7.getFont().getSize()+1f));
         jLabel7.setText("Peso");
         jLabel7.setPreferredSize(new java.awt.Dimension(100, 25));
 
-        jTextFieldTranporteA_Comprimento.setText("0");
-        jTextFieldTranporteA_Comprimento.setPreferredSize(new java.awt.Dimension(100, 20));
-
-        jTextFieldTranporteA_Largura.setText("0");
-        jTextFieldTranporteA_Largura.setPreferredSize(new java.awt.Dimension(100, 20));
-
+        jCheckBoxBT.setFont(jCheckBoxBT.getFont().deriveFont(jCheckBoxBT.getFont().getSize()+1f));
         jCheckBoxBT.setText("bitrem");
+        jCheckBoxBT.setPreferredSize(new java.awt.Dimension(200, 25));
         jCheckBoxBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxBTActionPerformed(evt);
             }
         });
 
-        jTextFieldTranporteBT_H3.setText("0");
-        jTextFieldTranporteBT_H3.setEnabled(false);
-        jTextFieldTranporteBT_H3.setPreferredSize(new java.awt.Dimension(100, 20));
-
-        jTextFieldTranporteBT_Peso.setText("0");
-        jTextFieldTranporteBT_Peso.setEnabled(false);
-        jTextFieldTranporteBT_Peso.setPreferredSize(new java.awt.Dimension(100, 20));
-        jTextFieldTranporteBT_Peso.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldTranporteBT_PesoActionPerformed(evt);
-            }
-        });
-
-        jTextFieldTranporteBT_H1.setText("0");
-        jTextFieldTranporteBT_H1.setEnabled(false);
-        jTextFieldTranporteBT_H1.setPreferredSize(new java.awt.Dimension(200, 25));
-        jTextFieldTranporteBT_H1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldTranporteBT_H1ActionPerformed(evt);
-            }
-        });
-
-        jTextFieldTranporteBT_Comprimento.setText("0");
-        jTextFieldTranporteBT_Comprimento.setEnabled(false);
-        jTextFieldTranporteBT_Comprimento.setPreferredSize(new java.awt.Dimension(100, 20));
-
-        jTextFieldTranporteBT_H2.setText("0");
-        jTextFieldTranporteBT_H2.setEnabled(false);
-        jTextFieldTranporteBT_H2.setPreferredSize(new java.awt.Dimension(100, 20));
-
-        jTextFieldTranporteBT_Largura.setText("0");
-        jTextFieldTranporteBT_Largura.setEnabled(false);
-        jTextFieldTranporteBT_Largura.setPreferredSize(new java.awt.Dimension(100, 20));
-
+        jLabelVolumeMadeiraM3.setFont(jLabelVolumeMadeiraM3.getFont().deriveFont(jLabelVolumeMadeiraM3.getFont().getSize()+1f));
         jLabelVolumeMadeiraM3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelVolumeMadeiraM3.setText("Volume madeira: 0m³");
         jLabelVolumeMadeiraM3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        jButtonCargaTalhao.setFont(jButtonCargaTalhao.getFont().deriveFont(jButtonCargaTalhao.getFont().getSize()+1f));
         jButtonCargaTalhao.setText("Registrar");
         jButtonCargaTalhao.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonCargaTalhao.addActionListener(new java.awt.event.ActionListener() {
@@ -368,6 +319,7 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
             }
         });
 
+        jButtonVoltar.setFont(jButtonVoltar.getFont().deriveFont(jButtonVoltar.getFont().getSize()+1f));
         jButtonVoltar.setText("Voltar");
         jButtonVoltar.setPreferredSize(new java.awt.Dimension(100, 50));
         jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -376,72 +328,125 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
             }
         });
 
+        jSpinnerTranporteT_H1.setFont(jSpinnerTranporteT_H1.getFont().deriveFont(jSpinnerTranporteT_H1.getFont().getSize()+1f));
+        jSpinnerTranporteT_H1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_H1.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        jSpinnerTranporteT_H2.setFont(jSpinnerTranporteT_H2.getFont().deriveFont(jSpinnerTranporteT_H2.getFont().getSize()+1f));
+        jSpinnerTranporteT_H2.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_H2.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        jSpinnerTranporteT_H3.setFont(jSpinnerTranporteT_H3.getFont().deriveFont(jSpinnerTranporteT_H3.getFont().getSize()+1f));
+        jSpinnerTranporteT_H3.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_H3.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        jSpinnerTranporteT_Comprimento.setFont(jSpinnerTranporteT_Comprimento.getFont().deriveFont(jSpinnerTranporteT_Comprimento.getFont().getSize()+1f));
+        jSpinnerTranporteT_Comprimento.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_Comprimento.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        jSpinnerTranporteT_Largura.setFont(jSpinnerTranporteT_Largura.getFont().deriveFont(jSpinnerTranporteT_Largura.getFont().getSize()+1f));
+        jSpinnerTranporteT_Largura.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_Largura.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        jSpinnerTranporteT_Peso.setFont(jSpinnerTranporteT_Peso.getFont().deriveFont(jSpinnerTranporteT_Peso.getFont().getSize()+1f));
+        jSpinnerTranporteT_Peso.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_Peso.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        jSpinnerTranporteBT_Peso.setFont(jSpinnerTranporteBT_Peso.getFont().deriveFont(jSpinnerTranporteBT_Peso.getFont().getSize()+1f));
+        jSpinnerTranporteBT_Peso.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_Peso.setEnabled(false);
+        jSpinnerTranporteBT_Peso.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        jSpinnerTranporteBT_Largura.setFont(jSpinnerTranporteBT_Largura.getFont().deriveFont(jSpinnerTranporteBT_Largura.getFont().getSize()+1f));
+        jSpinnerTranporteBT_Largura.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_Largura.setEnabled(false);
+        jSpinnerTranporteBT_Largura.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        jSpinnerTranporteBT_Comprimento.setFont(jSpinnerTranporteBT_Comprimento.getFont().deriveFont(jSpinnerTranporteBT_Comprimento.getFont().getSize()+1f));
+        jSpinnerTranporteBT_Comprimento.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_Comprimento.setEnabled(false);
+        jSpinnerTranporteBT_Comprimento.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        jSpinnerTranporteBT_H3.setFont(jSpinnerTranporteBT_H3.getFont().deriveFont(jSpinnerTranporteBT_H3.getFont().getSize()+1f));
+        jSpinnerTranporteBT_H3.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_H3.setEnabled(false);
+        jSpinnerTranporteBT_H3.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        jSpinnerTranporteBT_H2.setFont(jSpinnerTranporteBT_H2.getFont().deriveFont(jSpinnerTranporteBT_H2.getFont().getSize()+1f));
+        jSpinnerTranporteBT_H2.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_H2.setEnabled(false);
+        jSpinnerTranporteBT_H2.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        jSpinnerTranporteBT_H1.setFont(jSpinnerTranporteBT_H1.getFont().deriveFont(jSpinnerTranporteBT_H1.getFont().getSize()+1f));
+        jSpinnerTranporteBT_H1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_H1.setEnabled(false);
+        jSpinnerTranporteBT_H1.setPreferredSize(new java.awt.Dimension(200, 25));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabelVolumeMadeiraM3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelVolumeMadeiraMSt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(10, 10, 10))
-            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(jTextFieldTranporteA_Peso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(5, 5, 5)
-                                .addComponent(jTextFieldTranporteBT_Peso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(jTextFieldTranporteA_Largura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(jTextFieldTranporteBT_Largura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(129, 129, 129)
+                        .addComponent(jButtonCargaTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(92, 92, 92)
+                        .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
-                                .addComponent(jTextFieldTranporteA_Comprimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jSpinnerTranporteT_Comprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
-                                .addComponent(jTextFieldTranporteBT_Comprimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jSpinnerTranporteBT_Comprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
-                                .addComponent(jTextFieldTranporteA_H3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jSpinnerTranporteT_H3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
-                                .addComponent(jTextFieldTranporteBT_H3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(jTextFieldTranporteA_H2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(jTextFieldTranporteBT_H2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jSpinnerTranporteBT_H3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
-                                .addComponent(jTextFieldTranporteA_H1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jSpinnerTranporteT_H1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBoxBT, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextFieldTranporteBT_H1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(jCheckBoxBT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jSpinnerTranporteBT_H1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(5, 5, 5)
+                                .addComponent(jSpinnerTranporteT_H2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(5, 5, 5)
+                                .addComponent(jSpinnerTranporteBT_H2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(134, 134, 134)
-                        .addComponent(jButtonCargaTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(92, 92, 92)
-                        .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(200, Short.MAX_VALUE))
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabelVolumeMadeiraM3, javax.swing.GroupLayout.DEFAULT_SIZE, 742, Short.MAX_VALUE)
+                                .addComponent(jLabelVolumeMadeiraMSt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(jSpinnerTranporteT_Largura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(jSpinnerTranporteT_Peso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(5, 5, 5)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jSpinnerTranporteBT_Largura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jSpinnerTranporteBT_Peso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(5, 5, 5)))))
+                .addGap(5, 5, 5))
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextFieldTranporteA_Comprimento, jTextFieldTranporteA_H1, jTextFieldTranporteA_H2, jTextFieldTranporteA_H3, jTextFieldTranporteA_Largura, jTextFieldTranporteA_Peso});
-
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel7});
-
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextFieldTranporteBT_Comprimento, jTextFieldTranporteBT_H1, jTextFieldTranporteBT_H2, jTextFieldTranporteBT_H3, jTextFieldTranporteBT_Largura, jTextFieldTranporteBT_Peso});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel4, jLabel5, jLabel7});
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonCargaTalhao, jButtonVoltar});
 
@@ -449,55 +454,51 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(jCheckBoxBT)
+                .addComponent(jCheckBoxBT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTranporteA_H1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTranporteBT_H1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinnerTranporteBT_H1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerTranporteT_H1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTranporteA_H2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTranporteBT_H2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinnerTranporteT_H2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerTranporteBT_H2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTranporteA_H3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTranporteBT_H3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinnerTranporteT_H3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerTranporteBT_H3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTranporteA_Comprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTranporteBT_Comprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinnerTranporteT_Comprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerTranporteBT_Comprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldTranporteA_Largura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTranporteBT_Largura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerTranporteT_Largura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerTranporteBT_Largura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldTranporteA_Peso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTranporteBT_Peso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
+                    .addComponent(jSpinnerTranporteT_Peso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerTranporteBT_Peso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
                 .addComponent(jLabelVolumeMadeiraMSt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addGap(5, 5, 5)
                 .addComponent(jLabelVolumeMadeiraM3)
-                .addGap(18, 18, 18)
+                .addGap(5, 5, 5)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCargaTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(316, Short.MAX_VALUE))
+                .addContainerGap(337, Short.MAX_VALUE))
         );
-
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jTextFieldTranporteA_Comprimento, jTextFieldTranporteA_H1, jTextFieldTranporteA_H2, jTextFieldTranporteA_H3, jTextFieldTranporteA_Largura, jTextFieldTranporteA_Peso});
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel7});
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonCargaTalhao, jButtonVoltar});
-
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jTextFieldTranporteBT_Comprimento, jTextFieldTranporteBT_H1, jTextFieldTranporteBT_H2, jTextFieldTranporteBT_H3, jTextFieldTranporteBT_Largura, jTextFieldTranporteBT_Peso});
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabelVolumeMadeiraM3, jLabelVolumeMadeiraMSt});
 
@@ -513,7 +514,7 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE))
                     .addComponent(jLabelName1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -536,10 +537,6 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldTranporteA_H1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTranporteA_H1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTranporteA_H1ActionPerformed
-
     private void jButtonCargaTalhaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargaTalhaoActionPerformed
         CalcularVolumeTalhao();
         //RegistrarCargaTalhao();
@@ -550,37 +547,25 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
         //dispose();
     }//GEN-LAST:event_jButtonLogoutActionPerformed
 
-    private void jTextFieldTranporteA_PesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTranporteA_PesoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTranporteA_PesoActionPerformed
-
     private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
         VoltarMenu();
     }//GEN-LAST:event_jButtonVoltarActionPerformed
 
-    private void jTextFieldTranporteBT_PesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTranporteBT_PesoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTranporteBT_PesoActionPerformed
-
-    private void jTextFieldTranporteBT_H1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTranporteBT_H1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTranporteBT_H1ActionPerformed
-
     private void jCheckBoxBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxBTActionPerformed
         if(jCheckBoxBT.isSelected()){
-            jTextFieldTranporteBT_H1.setEnabled(true);
-            jTextFieldTranporteBT_H2.setEnabled(true);
-            jTextFieldTranporteBT_H3.setEnabled(true);
-            jTextFieldTranporteBT_Comprimento.setEnabled(true);
-            jTextFieldTranporteBT_Largura.setEnabled(true);
-            jTextFieldTranporteBT_Peso.setEnabled(true);
+            jSpinnerTranporteBT_H1.setEnabled(true);
+            jSpinnerTranporteBT_H2.setEnabled(true);
+            jSpinnerTranporteBT_H3.setEnabled(true);
+            jSpinnerTranporteBT_Comprimento.setEnabled(true);
+            jSpinnerTranporteBT_Largura.setEnabled(true);
+            jSpinnerTranporteBT_Peso.setEnabled(true);
         }else{
-            jTextFieldTranporteBT_H1.setEnabled(false);
-            jTextFieldTranporteBT_H2.setEnabled(false);
-            jTextFieldTranporteBT_H3.setEnabled(false);
-            jTextFieldTranporteBT_Comprimento.setEnabled(false);
-            jTextFieldTranporteBT_Largura.setEnabled(false);
-            jTextFieldTranporteBT_Peso.setEnabled(false);
+            jSpinnerTranporteBT_H1.setEnabled(false);
+            jSpinnerTranporteBT_H2.setEnabled(false);
+            jSpinnerTranporteBT_H3.setEnabled(false);
+            jSpinnerTranporteBT_Comprimento.setEnabled(false);
+            jSpinnerTranporteBT_Largura.setEnabled(false);
+            jSpinnerTranporteBT_Peso.setEnabled(false);
         }
     }//GEN-LAST:event_jCheckBoxBTActionPerformed
 
@@ -646,17 +631,17 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextFieldTranporteA_Comprimento;
-    private javax.swing.JTextField jTextFieldTranporteA_H1;
-    private javax.swing.JTextField jTextFieldTranporteA_H2;
-    private javax.swing.JTextField jTextFieldTranporteA_H3;
-    private javax.swing.JTextField jTextFieldTranporteA_Largura;
-    private javax.swing.JTextField jTextFieldTranporteA_Peso;
-    private javax.swing.JTextField jTextFieldTranporteBT_Comprimento;
-    private javax.swing.JTextField jTextFieldTranporteBT_H1;
-    private javax.swing.JTextField jTextFieldTranporteBT_H2;
-    private javax.swing.JTextField jTextFieldTranporteBT_H3;
-    private javax.swing.JTextField jTextFieldTranporteBT_Largura;
-    private javax.swing.JTextField jTextFieldTranporteBT_Peso;
+    private javax.swing.JSpinner jSpinnerTranporteBT_Comprimento;
+    private javax.swing.JSpinner jSpinnerTranporteBT_H1;
+    private javax.swing.JSpinner jSpinnerTranporteBT_H2;
+    private javax.swing.JSpinner jSpinnerTranporteBT_H3;
+    private javax.swing.JSpinner jSpinnerTranporteBT_Largura;
+    private javax.swing.JSpinner jSpinnerTranporteBT_Peso;
+    private javax.swing.JSpinner jSpinnerTranporteT_Comprimento;
+    private javax.swing.JSpinner jSpinnerTranporteT_H1;
+    private javax.swing.JSpinner jSpinnerTranporteT_H2;
+    private javax.swing.JSpinner jSpinnerTranporteT_H3;
+    private javax.swing.JSpinner jSpinnerTranporteT_Largura;
+    private javax.swing.JSpinner jSpinnerTranporteT_Peso;
     // End of variables declaration//GEN-END:variables
 }

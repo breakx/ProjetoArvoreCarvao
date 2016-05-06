@@ -56,7 +56,7 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
         jLabelTalhao.setText("Talhão: "+talhao);
         jLabelFazenda.setText("Fazenda "+ControlePrincipal.fazenda);
         jLabelProjeto.setText("Projeto "+ControlePrincipal.projeto);
-        if(ControlePrincipal.tipo_u.equals("op_s")){
+        if(ControlePrincipal.tipo_u.equals("op_scv")){
             jSpinnerUpc.setValue(ControlePrincipal.upc_u);
             jSpinnerUpc.setEnabled(false);
         }else{
@@ -145,7 +145,7 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
         DateFormat data_estoque_principal = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); 
         Date date = new Date();        
         
-        estoque_principal.setUpc(jSpinnerUpc.getValue().toString());
+        estoque_principal.setUpc((int)jSpinnerUpc.getValue());
         estoque_principal.setTalhao(talhao);
         estoque_principal.setMaterial_genetico(jTextFieldMaterialGenetico.getText()); 
         estoque_principal.setArea(Float.parseFloat(jSpinnerArea.getValue().toString())); 
@@ -336,6 +336,7 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButtonVoltar.setFont(jButtonVoltar.getFont().deriveFont(jButtonVoltar.getFont().getSize()+1f));
         jButtonVoltar.setText("Voltar");
         jButtonVoltar.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -348,11 +349,11 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
         jLabel3.setText("Material Genetico");
         jLabel3.setPreferredSize(new java.awt.Dimension(100, 16));
 
-        jLabelFazenda.setFont(jLabelFazenda.getFont().deriveFont((jLabelFazenda.getFont().getStyle() | java.awt.Font.ITALIC) | java.awt.Font.BOLD, jLabelFazenda.getFont().getSize()+4));
+        jLabelFazenda.setFont(jLabelFazenda.getFont().deriveFont(jLabelFazenda.getFont().getSize()+4f));
         jLabelFazenda.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelFazenda.setText("Fazenda --- ");
 
-        jLabelProjeto.setFont(jLabelProjeto.getFont().deriveFont((jLabelProjeto.getFont().getStyle() | java.awt.Font.ITALIC) | java.awt.Font.BOLD, jLabelProjeto.getFont().getSize()+4));
+        jLabelProjeto.setFont(jLabelProjeto.getFont().deriveFont(jLabelProjeto.getFont().getSize()+4f));
         jLabelProjeto.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelProjeto.setText("Projeto ---");
 
@@ -360,12 +361,15 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
         jLabel4.setText("Area");
         jLabel4.setPreferredSize(new java.awt.Dimension(100, 16));
 
+        jSpinnerUpc.setFont(jSpinnerUpc.getFont().deriveFont(jSpinnerUpc.getFont().getSize()+1f));
         jSpinnerUpc.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(0), null, Integer.valueOf(1)));
         jSpinnerUpc.setPreferredSize(new java.awt.Dimension(200, 25));
 
+        jSpinnerArea.setFont(jSpinnerArea.getFont().deriveFont(jSpinnerArea.getFont().getSize()+1f));
         jSpinnerArea.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(0.1f)));
         jSpinnerArea.setPreferredSize(new java.awt.Dimension(200, 25));
 
+        jTextFieldMaterialGenetico.setFont(jTextFieldMaterialGenetico.getFont().deriveFont(jTextFieldMaterialGenetico.getFont().getSize()+1f));
         jTextFieldMaterialGenetico.setPreferredSize(new java.awt.Dimension(200, 25));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -375,24 +379,14 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabelFazenda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGap(0, 0, Short.MAX_VALUE))
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabelProjeto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGap(0, 0, Short.MAX_VALUE))
-                        .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jLabelTalhao, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel3Layout.createSequentialGroup()
                                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(10, 10, 10)
                                     .addComponent(jSpinnerArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGap(10, 10, 10)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(45, 45, 45)
                                 .addComponent(jButtonCargaTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -406,7 +400,10 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jSpinnerUpc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jTextFieldMaterialGenetico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(10, 10, 10))))
+                        .addGap(0, 390, Short.MAX_VALUE))
+                    .addComponent(jLabelProjeto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelFazenda, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -435,8 +432,6 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
                     .addComponent(jButtonCargaTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(403, 403, 403))
         );
-
-        jButtonCargaTalhao.getAccessibleContext().setAccessibleName("<html>Inserir<br>Talhão</html>");
 
         javax.swing.GroupLayout jPanelMainLayout = new javax.swing.GroupLayout(jPanelMain);
         jPanelMain.setLayout(jPanelMainLayout);

@@ -14,6 +14,9 @@ import Modelo.ConexaoBD;
 import Modelo.GerarTabela;
 import Visao.carvao.GerenciarCarvaoForno;
 import Visao.carvao.InserirMadeiraForno;
+import Visao.estoqueprincipal.AlterarEstoquePrincipal;
+import Visao.estoqueprincipal.GerenciarEstoquePrincipal;
+import Visao.fazenda.GerenciarFazenda;
 import Visao.login.Login;
 import Visao.madeira.GerenciarMadeiraPraca;
 import Visao.madeira.InserirMadeiraPraca;
@@ -30,6 +33,8 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -106,7 +111,6 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         ChangeName();
         PreencherTabelaFiltrada();
-        jButtonVoltar.setVisible(false);
     }  
     
     private void ChangeName(){
@@ -472,7 +476,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             //System.out.println("Indice: "+i+" - "+ colunas[i].length());
         }
         jTableRelatorioEstoquePrincipal.getTableHeader().setReorderingAllowed(false);
-        jTableRelatorioEstoquePrincipal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTableRelatorioEstoquePrincipal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); 
     }
     
     private void CarregarEstoqueExcel() throws BiffException, IOException{      
@@ -521,7 +525,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             ControlePrincipal.municipio = sheet.getCell(3, i).getContents();
             ControlePrincipal.fazenda = sheet.getCell(4, i).getContents();
             ControlePrincipal.projeto = sheet.getCell(5, i).getContents();
-            estoque_principal.setUpc(sheet.getCell(1, i).getContents());
+            estoque_principal.setUpc(Integer.parseInt(sheet.getCell(1, i).getContents()));
             //ajusta dados do talhao            
             dado = sheet.getCell(8, i).getContents();
             dado = dado.replaceAll(" ", "");  
@@ -1114,10 +1118,10 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             ControlePrincipal.fazenda = jTableRelatorioEstoquePrincipal.getValueAt(linha, 4).toString();
             ControlePrincipal.projeto = jTableRelatorioEstoquePrincipal.getValueAt(linha, 5).toString();
             ControlePrincipal.upc = Integer.parseInt(jTableRelatorioEstoquePrincipal.getValueAt(linha, 6).toString());
-            ControlePrincipal.talhao = jTableRelatorioEstoquePrincipal.getValueAt(linha, 7).toString();            
+            ControlePrincipal.talhao = Integer.parseInt(jTableRelatorioEstoquePrincipal.getValueAt(linha, 7).toString());            
                         
             switch (ControlePrincipal.tipo_u) {
-                case "op_m":
+                case "op_smd":
                     ControlePrincipal.densidade_madeira = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 22).toString());
                     ControlePrincipal.vol_mad_estimado = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 28).toString());
                     ControlePrincipal.vol_mad_transp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 29).toString());
@@ -1136,7 +1140,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                     }else {
                         JOptionPane.showMessageDialog(null, "Talhão "+ControlePrincipal.talhao+" sem fator empilhamento definido!");
                     }   break;
-                case "op_c":
+                case "op_scv":
                     ControlePrincipal.densidade_carvao = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 23).toString());
                     ControlePrincipal.mdc_estimado = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 31).toString());
                     ControlePrincipal.mdc_transp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 32).toString());
@@ -1156,7 +1160,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                     }else {
                         JOptionPane.showMessageDialog(null, "Talhão "+ControlePrincipal.talhao+" sem estoque na praça!");
                 }   break;
-                case "op_s":
+                case "op_dir":
                     break;
             }            
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
@@ -1165,19 +1169,19 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     
     private void VoltarMenu(){        
         switch (ControlePrincipal.tipo_u) {
-            case "op_m":
+            case "op_smd":
                 try {
                     new GerenciarMadeiraPraca().setVisible(true);
                 } catch (SQLException ex) {
                     Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
                 }   break;
-            case "op_c":
+            case "op_scv":
                 try {
                     new GerenciarCarvaoForno().setVisible(true);
                 } catch (SQLException ex) {
                     Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
             }   break;
-            case "op_s":
+            case "op_dir":
                 try {
                     new GerenciarUsuarios().setVisible(true);
                 } catch (SQLException ex) {
@@ -1203,7 +1207,6 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jLabelNome = new javax.swing.JLabel();
         jLabelIdTipo = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jButtonVoltar = new javax.swing.JButton();
         jSpinnerUPC = new javax.swing.JSpinner();
         jComboBoxCategoria = new javax.swing.JComboBox();
         jComboBoxMatGen = new javax.swing.JComboBox();
@@ -1245,6 +1248,12 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenuItemMadeiraPraca = new javax.swing.JMenuItem();
         jMenuItemCarvao = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItemUsuarios = new javax.swing.JMenuItem();
+        jMenuItemFazendas = new javax.swing.JMenuItem();
+        jMenuItemMadeiraPraça = new javax.swing.JMenuItem();
+        jMenuItemCarvaoForno = new javax.swing.JMenuItem();
+        jMenuItemEstoque = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -1276,41 +1285,40 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-                                .addGap(53, 53, 53))
-                            .addComponent(jLabelNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(94, 94, 94))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabelIdTipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                    .addComponent(jLabelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabelIdTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabelIdTipo, jLabelNome});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabelNome, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                .addGap(37, 37, 37)
-                .addComponent(jLabelIdTipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(jLabelIdTipo)
                 .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel1, jLabelIdTipo, jLabelNome});
 
         jPanel2.setBorder(new javax.swing.border.MatteBorder(null));
         jPanel2.setPreferredSize(new java.awt.Dimension(270, 350));
 
-        jButtonVoltar.setText("Voltar");
-        jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonVoltarActionPerformed(evt);
-            }
-        });
-
+        jSpinnerUPC.setFont(jSpinnerUPC.getFont().deriveFont(jSpinnerUPC.getFont().getSize()+1f));
         jSpinnerUPC.setModel(new javax.swing.SpinnerNumberModel(0, 0, 9, 1));
 
+        jComboBoxCategoria.setFont(jComboBoxCategoria.getFont().deriveFont(jComboBoxCategoria.getFont().getSize()+1f));
+
+        jComboBoxMatGen.setFont(jComboBoxMatGen.getFont().deriveFont(jComboBoxMatGen.getFont().getSize()+1f));
+
+        jCheckBoxUTM.setFont(jCheckBoxUTM.getFont().deriveFont(jCheckBoxUTM.getFont().getSize()+1f));
         jCheckBoxUTM.setText("UTM");
         jCheckBoxUTM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1318,21 +1326,29 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getSize()+1f));
         jLabel2.setText("UPC");
 
+        jLabel3.setFont(jLabel3.getFont().deriveFont(jLabel3.getFont().getSize()+1f));
         jLabel3.setText("Categoria");
 
+        jLabel4.setFont(jLabel4.getFont().deriveFont(jLabel4.getFont().getSize()+1f));
         jLabel4.setText("Mat. Genetico");
 
+        jButtonFiltrar.setFont(jButtonFiltrar.getFont().deriveFont(jButtonFiltrar.getFont().getSize()+1f));
         jButtonFiltrar.setText("Filtrar");
+        jButtonFiltrar.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonFiltrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonFiltrarActionPerformed(evt);
             }
         });
 
+        jLabel5.setFont(jLabel5.getFont().deriveFont(jLabel5.getFont().getSize()+1f));
         jLabel5.setText("Filtrar por:");
+        jLabel5.setPreferredSize(new java.awt.Dimension(50, 25));
 
+        jListFiltrar.setFont(jListFiltrar.getFont().deriveFont(jListFiltrar.getFont().getSize()+1f));
         jListFiltrar.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "-", "estado", "bloco", "municipio", "fazenda", "projeto", "upc", "talhao", "area", "m3_ha", "material_genetico", "talhadia", "ano_rotacao", "data_plantio", "data_rotacao_1", "data_rotacao_2", "data_rotacao_3", "idade_hoje", "idade_corte1", "idade_corte2", "idade_corte3", "conducao", "categoria", "situacao", "ima", "mdc_ha", "densidade_madeira", "densidade_carvao", "mad_ton_ha", "carv_ton_ha", "id_operario", "data_estoque", "vol_mad_estimado", "vol_mad_transp", "vol_mad_balanco", "mdc_estimado", "mdc_transp", "mdc_balanco", "mad_ton_estimado", "mad_ton_transp", "mad_ton_balanco", "carv_ton_estimado", "carv_ton_transp", "carv_ton_balanco", "madeira_praca", "madeira_forno", "rend_grav_estimado", "rend_grav_real", "fator_empilalhemto" };
             public int getSize() { return strings.length; }
@@ -1340,24 +1356,28 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jListFiltrar);
 
+        jLabel6.setFont(jLabel6.getFont().deriveFont(jLabel6.getFont().getSize()+1f));
         jLabel6.setText("PROJETOS");
 
+        jLabel7.setFont(jLabel7.getFont().deriveFont(jLabel7.getFont().getSize()+1f));
         jLabel7.setText("FAZENDAS");
 
+        jComboBoxProjeto.setFont(jComboBoxProjeto.getFont().deriveFont(jComboBoxProjeto.getFont().getSize()+1f));
+
+        jComboBoxFazenda.setFont(jComboBoxFazenda.getFont().deriveFont(jComboBoxFazenda.getFont().getSize()+1f));
+
+        jLabel8.setFont(jLabel8.getFont().deriveFont(jLabel8.getFont().getSize()+1f));
         jLabel8.setText("Talhadia");
+
+        jComboBoxTalhadia.setFont(jComboBoxTalhadia.getFont().deriveFont(jComboBoxTalhadia.getFont().getSize()+1f));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(107, 107, 107))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1377,18 +1397,22 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jComboBoxFazenda, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane3))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jComboBoxProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(53, 53, 53)
-                        .addComponent(jComboBoxTalhadia, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(jComboBoxTalhadia, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3))))
+                .addGap(10, 10, 10))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1418,18 +1442,16 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jComboBoxFazenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE))
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(227, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGap(13, 13, 13)))
-                .addComponent(jButtonFiltrar)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                        .addComponent(jScrollPane3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9))))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -1605,6 +1627,50 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
+        jMenu3.setText("Gerenciar");
+
+        jMenuItemUsuarios.setText("Usuarios");
+        jMenuItemUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemUsuariosActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemUsuarios);
+
+        jMenuItemFazendas.setText("Fazendas");
+        jMenuItemFazendas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFazendasActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemFazendas);
+
+        jMenuItemMadeiraPraça.setText("Madeira/Praça");
+        jMenuItemMadeiraPraça.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemMadeiraPraçaActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemMadeiraPraça);
+
+        jMenuItemCarvaoForno.setText("Carvao/Forno");
+        jMenuItemCarvaoForno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCarvaoFornoActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemCarvaoForno);
+
+        jMenuItemEstoque.setText("Estoque");
+        jMenuItemEstoque.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEstoqueActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemEstoque);
+
+        jMenuBar1.add(jMenu3);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1647,10 +1713,6 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
-        VoltarMenu();
-    }//GEN-LAST:event_jButtonVoltarActionPerformed
 
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
         PreencherTabelaFiltrada();        
@@ -1752,6 +1814,56 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jMenuItemCarvaoActionPerformed
 
+    private void jMenuItemEstoqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEstoqueActionPerformed
+        try {
+            new GerenciarEstoquePrincipal().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jMenuItemEstoqueActionPerformed
+
+    private void jMenuItemUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUsuariosActionPerformed
+        try {
+            new GerenciarUsuarios().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jMenuItemUsuariosActionPerformed
+
+    private void jMenuItemFazendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFazendasActionPerformed
+        try {
+            new GerenciarFazenda().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jMenuItemFazendasActionPerformed
+
+    private void jMenuItemMadeiraPraçaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMadeiraPraçaActionPerformed
+        try {
+            new GerenciarMadeiraPraca().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jMenuItemMadeiraPraçaActionPerformed
+
+    private void jMenuItemCarvaoFornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCarvaoFornoActionPerformed
+        try {
+            new GerenciarCarvaoForno().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jMenuItemCarvaoFornoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1794,7 +1906,6 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonFiltrar;
-    private javax.swing.JButton jButtonVoltar;
     private javax.swing.JCheckBox jCheckBoxUTM;
     private javax.swing.JComboBox jComboBoxCategoria;
     private javax.swing.JComboBox jComboBoxFazenda;
@@ -1826,13 +1937,19 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private javax.swing.JList jListFiltrar;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItemCarregarEstoqueExcel;
     private javax.swing.JMenuItem jMenuItemCarregarFazendaExcel;
     private javax.swing.JMenuItem jMenuItemCarvao;
+    private javax.swing.JMenuItem jMenuItemCarvaoForno;
+    private javax.swing.JMenuItem jMenuItemEstoque;
+    private javax.swing.JMenuItem jMenuItemFazendas;
     private javax.swing.JMenuItem jMenuItemGerarPDF;
     private javax.swing.JMenuItem jMenuItemLogout;
     private javax.swing.JMenuItem jMenuItemMadeiraPraca;
+    private javax.swing.JMenuItem jMenuItemMadeiraPraça;
+    private javax.swing.JMenuItem jMenuItemUsuarios;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

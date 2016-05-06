@@ -29,10 +29,9 @@ public class InserirUsuario extends javax.swing.JFrame {
     }
     
     private void _carregarTipo(){
-        jComboBoxTipo.addItem("op_c");
-        jComboBoxTipo.addItem("op_m");
-        jComboBoxTipo.addItem("op_s");  
-        jComboBoxTipo.addItem("op_d");  
+        jComboBoxTipo.addItem("op_smd");
+        jComboBoxTipo.addItem("op_scv"); 
+        jComboBoxTipo.addItem("op_dir");  
         _carregarUPC_Op();
     }
     
@@ -60,14 +59,14 @@ public class InserirUsuario extends javax.swing.JFrame {
 
         InserirUsuarioCtrl inserir = new InserirUsuarioCtrl(usuario);
 
-       try 
+       /*try 
        {
            new GerenciarUsuarios().setVisible(true);
        } catch (SQLException ex) {
            Logger.getLogger(InserirUsuario.class.getName()).log(Level.SEVERE, null, ex);
        }
        this.setVisible(false);
-       dispose();
+       dispose();*/
     }
     
     private void VoltarMenu(){

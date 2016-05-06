@@ -62,13 +62,13 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         //jTextFieldMunicipio.setText(coluna[3]);//municipio  
         //jTextFieldFazenda.setText(coluna[4]);//fazenda  
         //jTextFieldProjeto.setText(coluna[5]);//projeto  
-        jTextFieldUpc.setText(coluna[6]);//upc  
-        jTextFieldTalhao.setText(coluna[7]);//talhao                  
-        jTextFieldArea.setText(coluna[8]);//area         
+        jSpinnerUpc.setValue(Integer.parseInt(coluna[6]));//upc  
+        jSpinnerTalhao.setValue(Integer.parseInt(coluna[7]));//talhao                  
+        jSpinnerArea.setValue(Float.parseFloat(coluna[8]));//area         
         jTextFieldMaterialGenetico.setText(coluna[9]);//material_genetico            
-        jTextFieldM3HA.setText(coluna[10]);//m3_ha             
+        jSpinnerM3HA.setValue(Float.parseFloat(coluna[10]));//m3_ha             
         talhadia = Integer.parseInt(coluna[11]);//talhadia
-        jTextFieldAnoRotacao.setText(coluna[12]);//ano_rotacao
+        jSpinnerAnoRotacao.setValue(Integer.parseInt(coluna[12]));//ano_rotacao
         jTextFieldDataPlantio.setText(coluna[13]);//data_plantio  
         jTextFieldDataRotacao1.setText(coluna[14]);//data_rotacao_1
         jTextFieldDataRotacao2.setText(coluna[15]);//data_rotacao_2
@@ -93,10 +93,10 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         }else{
             jCheckBoxExaurida.setSelected(false);
         }
-        jTextFieldIMA.setText(coluna[24]);//ima          
+        jSpinnerIMA.setValue(Integer.parseInt(coluna[24]));//ima          
         //jTextFieldMDCHA.setText(coluna[25]);//mdc_ha   
-        jTextFieldDensidadeMadeira.setText(coluna[26]);//densidade_madeira     
-        jTextFieldDensidadeCarvao.setText(coluna[27]);//densidade_carvao
+        jSpinnerDensidadeMadeira.setValue(Float.parseFloat(coluna[26]));//densidade_madeira     
+        jSpinnerDensidadeCarvao.setValue(Float.parseFloat(coluna[27]));//densidade_carvao
         /*jTextFieldIdOperario.setText(coluna[28]);//mad_ton_ha   
         /*jTextFieldIdOperario.setText(coluna[29]);//carv_ton_ha   
         /*jTextFieldIdOperario.setText(coluna[30]);//id_operario                  
@@ -115,9 +115,9 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         jTextFieldMadeiraForno.setText(coluna[43]);//carv_ton_balanco                 
         jTextFieldMadeiraForno.setText(coluna[44]);//madeira_praca                 
         jTextFieldMadeiraForno.setText(coluna[45]);//madeira_forno */
-        jTextFieldRendimentoGravimetricoEstimado.setText(coluna[46]);//rend_grav_estimado        
+        jSpinnerRendimentoGravimetricoEstimado.setValue(Float.parseFloat(coluna[46]));//rend_grav_estimado        
         //jTextFieldRendimentoGravimetricoEstimado.setText(coluna[47]);//rend_grav_real 
-        jTextFieldFatorEmpilhamento.setText(coluna[48]);//fator_empilalhemto
+        jSpinnerFatorEmpilhamento.setValue(Float.parseFloat(coluna[48]));//fator_empilalhemto
         //CalcularMadeiraTotal();
     }   
     
@@ -264,109 +264,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
             jLabelSituacao.setText("Situação: "+situacao);
             VolumeMadEstimado();
         }
-    }
-    
-    /**
-     * Calcular Idade
-     * @param data_i 
-     */
-    /*private void CalcularIdade(String data_i, String data_f, String data_plt){
-        DecimalFormat decformat = new DecimalFormat("0.0");
-        SimpleDateFormat dataformat = new SimpleDateFormat("dd/MM/yyyy");
-        Date hoje = new Date(); 
-        
-        java.sql.Date inicio = null;        
-        java.sql.Date fim = null;
-        
-        java.sql.Date inicio_rot = null;
-        java.sql.Date fim_rot = null;
-        
-        try {
-            inicio_rot = new java.sql.Date(dataformat.parse(data_i).getTime());
-            fim_rot = new java.sql.Date(dataformat.parse(data_f).getTime());
-            
-            inicio = new java.sql.Date(dataformat.parse(data_plt).getTime());            
-            fim = new java.sql.Date(dataformat.parse(dataformat.format(hoje)).getTime());
-        } catch (ParseException ex) {
-            Logger.getLogger(AlterarEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        Calendar c1 = Calendar.getInstance();
-        c1.setTime(inicio_rot);
-        int w1 = c1.get(Calendar.DAY_OF_WEEK);
-        c1.add(Calendar.DAY_OF_WEEK, -w1);
-
-        Calendar c2 = Calendar.getInstance();
-        c2.setTime(fim_rot);
-        int w2 = c2.get(Calendar.DAY_OF_WEEK);
-        c2.add(Calendar.DAY_OF_WEEK, -w2);
-        
-        Calendar c3 = Calendar.getInstance();
-        c3.setTime(inicio);
-        int w3 = c3.get(Calendar.DAY_OF_WEEK);
-        c3.add(Calendar.DAY_OF_WEEK, -w3);
-
-        Calendar c4 = Calendar.getInstance();
-        c4.setTime(fim);
-        int w4 = c4.get(Calendar.DAY_OF_WEEK);
-        c4.add(Calendar.DAY_OF_WEEK, -w4);
-
-        float dias1 = (c2.getTimeInMillis()-c1.getTimeInMillis())/(60*60*24*365);
-        float dias2 = (c4.getTimeInMillis()-c3.getTimeInMillis())/(60*60*24*365);
-        idade_hoje = dias2/1000;
-        idade_corte = dias1/1000;
-        jLabelIdadeHoje.setText("Idade Hoje: "+decformat.format(idade_hoje)+" anos.");  
-        jLabelIdadeCorte.setText("Idade Corte 1: "+decformat.format(idade_corte)+" anos. Corte 2: "+idade_corte+" anos. Corte 3: "+idade_corte);  
-        jLabelTalhadia.setText("Talhadia: "+talhadia);
-        if(!jCheckBoxExaurida.isSelected()){
-            DefinirSituacao();
-        }else{
-            situacao = "Exaurida";
-            jLabelSituacao.setText("Situação: "+situacao);
-            VolumeMadEstimado();
-        }
-    }*/
-     
-    /**
-     * Calcular Idade
-     * @param datainicio 
-     */
-    /*private void CalcularIdade(String datainicio){
-        DecimalFormat decformat = new DecimalFormat("0.0");
-        SimpleDateFormat dataformat = new SimpleDateFormat("dd/MM/yyyy");
-        Date hoje = new Date(); 
-        java.sql.Date inicio = null;
-        java.sql.Date fim = null;
-        try {
-            inicio = new java.sql.Date(dataformat.parse(datainicio).getTime());
-            fim = new java.sql.Date(dataformat.parse(dataformat.format(hoje)).getTime());
-        } catch (ParseException ex) {
-            Logger.getLogger(AlterarEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        Calendar c1 = Calendar.getInstance();
-        c1.setTime(inicio);
-        int w1 = c1.get(Calendar.DAY_OF_WEEK);
-        c1.add(Calendar.DAY_OF_WEEK, -w1);
-
-        Calendar c2 = Calendar.getInstance();
-        c2.setTime(fim);
-        int w2 = c2.get(Calendar.DAY_OF_WEEK);
-        c2.add(Calendar.DAY_OF_WEEK, -w2);
-
-        float dias = (c2.getTimeInMillis()-c1.getTimeInMillis())/(60*60*24*365);
-        idade_hoje = dias/1000;
-        jLabelIdadeHoje.setText("Idade hoje: "+decformat.format(idade_hoje)+" anos.");  
-        jLabelIdadeCorte.setText("Idade corte: "+decformat.format(idade_hoje)+" anos.");  
-        jLabelTalhadia.setText("Talhadia: "+talhadia);
-        if(!jCheckBoxExaurida.isSelected()){
-            DefinirSituacao();
-        }else{
-            situacao = "Exaurida";
-            jLabelSituacao.setText("Situação: "+situacao);
-            VolumeMadEstimado();
-        }
-    } */
+    }   
     
     private void DefinirSituacao(){
         if(jComboBoxCategoria.getSelectedIndex()==1){
@@ -376,7 +274,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                 situacao = "Em Pé";
             }
         }else if(jComboBoxCategoria.getSelectedIndex()==2){
-            if(!jTextFieldM3HA.getText().equals("0") && !jTextFieldDataPlantio.getText().equals("00/00/0000")){
+            if(!jSpinnerM3HA.getValue().equals("0") && !jTextFieldDataPlantio.getText().equals("00/00/0000")){
                 situacao = "Inventariado";
             }else if(!jTextFieldDataPlantio.getText().equals("00/00/0000")){
                 situacao = "Não Inventariado";
@@ -393,43 +291,43 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
     }   
     
     private void CalcularMDCHA(){
-        mdc_ha = Float.parseFloat(jTextFieldM3HA.getText()) / Float.parseFloat(jTextFieldRendimentoGravimetricoEstimado.getText());
+        mdc_ha = (float)jSpinnerM3HA.getValue() / (float)jSpinnerRendimentoGravimetricoEstimado.getValue();
         jLabelMDC_HA.setText("MDC/HA: "+mdc_ha);
         VolumeMadEstimado();
     }
     
     private void VolumeMadEstimado(){
-        volume_madeira_estimado = Float.parseFloat(jTextFieldArea.getText())*Float.parseFloat(jTextFieldM3HA.getText());
+        volume_madeira_estimado = (float)jSpinnerArea.getValue()*(float)jSpinnerM3HA.getValue();
         jLabelVolumeEstimado.setText("Volume Madeira Estimado: "+volume_madeira_estimado);
         MetroCarvaoEstimado();
     }
     
     private void MetroCarvaoEstimado(){
-        mdc_estimado = mdc_ha*Float.parseFloat(jTextFieldArea.getText());
+        mdc_estimado = mdc_ha*(float)jSpinnerArea.getValue();
         jLabelMDCEstimado.setText("MDC Estimado: "+mdc_estimado);
         MadeiraToneladaHA();
     }
     
     private void MadeiraToneladaHA(){
-        mad_ton_ha = Float.parseFloat(jTextFieldM3HA.getText())* Float.parseFloat(jTextFieldDensidadeMadeira.getText());
+        mad_ton_ha = (float)jSpinnerM3HA.getValue()* (float)jSpinnerDensidadeMadeira.getValue();
         jLabelMadeiraTonHA.setText("Madeira Tonelada HA: "+mad_ton_ha);
         CarvaoToneladaHA();
     }
     
     private void CarvaoToneladaHA(){
-        carv_ton_ha = Float.parseFloat(jTextFieldM3HA.getText())* Float.parseFloat(jTextFieldDensidadeCarvao.getText());
+        carv_ton_ha = (float)jSpinnerM3HA.getValue()* (float)jSpinnerDensidadeCarvao.getValue();
         jLabelCarvaoTonHA.setText("Carvão Tonelada HA: "+carv_ton_ha);
         MadeiraToneladaestimado();
     }
     
     private void MadeiraToneladaestimado(){
-        mad_ton_estimado = mad_ton_ha * Float.parseFloat(jTextFieldArea.getText());
+        mad_ton_estimado = mad_ton_ha * (float)jSpinnerArea.getValue();
         jLabelMadeiraTonEst.setText("Madeira Tonelada Estimada: "+mad_ton_estimado);
         CarvaoToneladaestimado();
     }
         
     private void CarvaoToneladaestimado(){
-        carv_ton_estimado = carv_ton_ha * Float.parseFloat(jTextFieldArea.getText());
+        carv_ton_estimado = carv_ton_ha * (float)jSpinnerArea.getValue();
         jLabelCarvaoTonEst.setText("Carvão Tonelada Estimada: "+carv_ton_estimado);
         //CalcularRendimentoEstimado();
         
@@ -462,14 +360,14 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
     private void RegistrarEstoque(){
         ControleEstoquePrincipal estoque_principal = new ControleEstoquePrincipal();
         estoque_principal.setId_estoque_p(id);
-        estoque_principal.setUpc(jTextFieldUpc.getText());
-        estoque_principal.setArea(Float.parseFloat(jTextFieldArea.getText()));
-        estoque_principal.setM3_ha(Float.parseFloat(jTextFieldM3HA.getText()));
+        estoque_principal.setUpc((int)jSpinnerUpc.getValue());
+        estoque_principal.setArea((float)jSpinnerArea.getValue());
+        estoque_principal.setM3_ha((float)jSpinnerM3HA.getValue());
         estoque_principal.setMdc_ha(mdc_ha);
         estoque_principal.setMaterial_genetico(jTextFieldMaterialGenetico.getText());
-        estoque_principal.setIma(Float.parseFloat(jTextFieldIMA.getText()));
+        estoque_principal.setIma((int)jSpinnerIMA.getValue());
         estoque_principal.setTalhadia(talhadia);
-        estoque_principal.setAno_rotacao(Integer.parseInt(jTextFieldAnoRotacao.getText()));  
+        estoque_principal.setAno_rotacao((int)jSpinnerAnoRotacao.getValue());  
         estoque_principal.setData_plantio(jTextFieldDataPlantio.getText());
         estoque_principal.setData_rotacao_1(jTextFieldDataRotacao1.getText());
         estoque_principal.setData_rotacao_2(jTextFieldDataRotacao2.getText());
@@ -480,12 +378,12 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         estoque_principal.setIdade_corte3(idade_corte3);
         estoque_principal.setCategoria(jComboBoxCategoria.getSelectedItem().toString());
         estoque_principal.setSituacao(situacao);             
-        estoque_principal.setDensidade_madeira(Float.parseFloat(jTextFieldDensidadeMadeira.getText())); 
-        estoque_principal.setDensidade_carvao(Float.parseFloat(jTextFieldDensidadeCarvao.getText()));
+        estoque_principal.setDensidade_madeira((float)jSpinnerDensidadeMadeira.getValue()); 
+        estoque_principal.setDensidade_carvao((float)jSpinnerDensidadeCarvao.getValue());
         estoque_principal.setMad_ton_ha(mad_ton_ha);
         estoque_principal.setCarv_ton_ha(carv_ton_ha); 
-        estoque_principal.setRend_grav_estimado(Float.parseFloat(jTextFieldRendimentoGravimetricoEstimado.getText()));
-        estoque_principal.setFator_empilalhemto(Float.parseFloat(jTextFieldFatorEmpilhamento.getText()));
+        estoque_principal.setRend_grav_estimado((float)jSpinnerRendimentoGravimetricoEstimado.getValue());
+        estoque_principal.setFator_empilalhemto((float)jSpinnerFatorEmpilhamento.getValue());
         
         estoque_principal.setVol_mad_estimado(volume_madeira_estimado);
         //estoque_principal.setVol_mad_balanco(-volume_madeira_estimado);
@@ -545,24 +443,23 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jPanelSD = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        jTextFieldUpc = new javax.swing.JTextField();
         jComboBoxCategoria = new javax.swing.JComboBox();
         jLabelTalhao = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        jTextFieldTalhao = new javax.swing.JTextField();
-        jTextFieldArea = new javax.swing.JTextField();
-        jTextFieldM3HA = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jTextFieldMaterialGenetico = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
-        jTextFieldFatorEmpilhamento = new javax.swing.JTextField();
-        jTextFieldIMA = new javax.swing.JTextField();
+        jSpinnerUpc = new javax.swing.JSpinner();
+        jSpinnerTalhao = new javax.swing.JSpinner();
+        jSpinnerArea = new javax.swing.JSpinner();
+        jSpinnerM3HA = new javax.swing.JSpinner();
+        jSpinnerIMA = new javax.swing.JSpinner();
+        jSpinnerFatorEmpilhamento = new javax.swing.JSpinner();
+        jTextFieldMaterialGenetico = new javax.swing.JTextField();
         jPanelSE = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jTextFieldAnoRotacao = new javax.swing.JTextField();
         jTextFieldDataPlantio = new javax.swing.JTextField();
         jLabel25 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
@@ -570,13 +467,14 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         jLabel31 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        jTextFieldDensidadeCarvao = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
-        jTextFieldRendimentoGravimetricoEstimado = new javax.swing.JTextField();
-        jTextFieldDensidadeMadeira = new javax.swing.JTextField();
         jTextFieldDataRotacao3 = new javax.swing.JTextField();
         jTextFieldDataRotacao2 = new javax.swing.JTextField();
         jTextFieldDataRotacao1 = new javax.swing.JTextField();
+        jSpinnerDensidadeMadeira = new javax.swing.JSpinner();
+        jSpinnerDensidadeCarvao = new javax.swing.JSpinner();
+        jSpinnerRendimentoGravimetricoEstimado = new javax.swing.JSpinner();
+        jSpinnerAnoRotacao = new javax.swing.JSpinner();
         jPanelI = new javax.swing.JPanel();
         jButtonCargaTalhao = new javax.swing.JButton();
         jLabelMDC_HA = new javax.swing.JLabel();
@@ -671,61 +569,68 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
 
-        jLabel10.setFont(jLabel10.getFont().deriveFont(jLabel10.getFont().getSize()+2f));
+        jLabel10.setFont(jLabel10.getFont().deriveFont(jLabel10.getFont().getSize()+1f));
         jLabel10.setText("Upc");
         jLabel10.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jTextFieldUpc.setFont(jTextFieldUpc.getFont().deriveFont(jTextFieldUpc.getFont().getSize()+2f));
-        jTextFieldUpc.setPreferredSize(new java.awt.Dimension(150, 25));
-
+        jComboBoxCategoria.setFont(jComboBoxCategoria.getFont().deriveFont(jComboBoxCategoria.getFont().getSize()+1f));
         jComboBoxCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-" }));
         jComboBoxCategoria.setPreferredSize(new java.awt.Dimension(150, 25));
 
-        jLabelTalhao.setFont(jLabelTalhao.getFont().deriveFont(jLabelTalhao.getFont().getSize()+2f));
+        jLabelTalhao.setFont(jLabelTalhao.getFont().deriveFont(jLabelTalhao.getFont().getSize()+1f));
         jLabelTalhao.setText("categoria");
         jLabelTalhao.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jLabel18.setFont(jLabel18.getFont().deriveFont(jLabel18.getFont().getSize()+2f));
+        jLabel18.setFont(jLabel18.getFont().deriveFont(jLabel18.getFont().getSize()+1f));
         jLabel18.setText("talhao");
         jLabel18.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jTextFieldTalhao.setFont(jTextFieldTalhao.getFont().deriveFont(jTextFieldTalhao.getFont().getSize()+2f));
-        jTextFieldTalhao.setPreferredSize(new java.awt.Dimension(150, 25));
-
-        jTextFieldArea.setFont(jTextFieldArea.getFont().deriveFont(jTextFieldArea.getFont().getSize()+2f));
-        jTextFieldArea.setPreferredSize(new java.awt.Dimension(150, 25));
-
-        jTextFieldM3HA.setFont(jTextFieldM3HA.getFont().deriveFont(jTextFieldM3HA.getFont().getSize()+2f));
-        jTextFieldM3HA.setPreferredSize(new java.awt.Dimension(150, 25));
-
-        jLabel20.setFont(jLabel20.getFont().deriveFont(jLabel20.getFont().getSize()+2f));
+        jLabel20.setFont(jLabel20.getFont().deriveFont(jLabel20.getFont().getSize()+1f));
         jLabel20.setText("area");
         jLabel20.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jLabel14.setFont(jLabel14.getFont().deriveFont(jLabel14.getFont().getSize()+2f));
+        jLabel14.setFont(jLabel14.getFont().deriveFont(jLabel14.getFont().getSize()+1f));
         jLabel14.setText("M³ por hectare");
         jLabel14.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jTextFieldMaterialGenetico.setFont(jTextFieldMaterialGenetico.getFont().deriveFont(jTextFieldMaterialGenetico.getFont().getSize()+2f));
-        jTextFieldMaterialGenetico.setPreferredSize(new java.awt.Dimension(150, 25));
-
-        jLabel21.setFont(jLabel21.getFont().deriveFont(jLabel21.getFont().getSize()+2f));
+        jLabel21.setFont(jLabel21.getFont().deriveFont(jLabel21.getFont().getSize()+1f));
         jLabel21.setText("material_genetico");
         jLabel21.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jLabel11.setFont(jLabel11.getFont().deriveFont(jLabel11.getFont().getSize()+2f));
+        jLabel11.setFont(jLabel11.getFont().deriveFont(jLabel11.getFont().getSize()+1f));
         jLabel11.setText("ima");
         jLabel11.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jLabel23.setFont(jLabel23.getFont().deriveFont(jLabel23.getFont().getSize()+2f));
+        jLabel23.setFont(jLabel23.getFont().deriveFont(jLabel23.getFont().getSize()+1f));
         jLabel23.setText("fator empilhamento");
         jLabel23.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jTextFieldFatorEmpilhamento.setFont(jTextFieldFatorEmpilhamento.getFont().deriveFont(jTextFieldFatorEmpilhamento.getFont().getSize()+2f));
-        jTextFieldFatorEmpilhamento.setPreferredSize(new java.awt.Dimension(150, 25));
+        jSpinnerUpc.setFont(jSpinnerUpc.getFont().deriveFont(jSpinnerUpc.getFont().getSize()+1f));
+        jSpinnerUpc.setModel(new javax.swing.SpinnerNumberModel());
+        jSpinnerUpc.setPreferredSize(new java.awt.Dimension(150, 25));
 
-        jTextFieldIMA.setFont(jTextFieldIMA.getFont().deriveFont(jTextFieldIMA.getFont().getSize()+2f));
-        jTextFieldIMA.setPreferredSize(new java.awt.Dimension(150, 25));
+        jSpinnerTalhao.setFont(jSpinnerTalhao.getFont().deriveFont(jSpinnerTalhao.getFont().getSize()+1f));
+        jSpinnerTalhao.setModel(new javax.swing.SpinnerNumberModel());
+        jSpinnerTalhao.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jSpinnerArea.setFont(jSpinnerArea.getFont().deriveFont(jSpinnerArea.getFont().getSize()+1f));
+        jSpinnerArea.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
+        jSpinnerArea.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jSpinnerM3HA.setFont(jSpinnerM3HA.getFont().deriveFont(jSpinnerM3HA.getFont().getSize()+1f));
+        jSpinnerM3HA.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
+        jSpinnerM3HA.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jSpinnerIMA.setFont(jSpinnerIMA.getFont().deriveFont(jSpinnerIMA.getFont().getSize()+1f));
+        jSpinnerIMA.setModel(new javax.swing.SpinnerNumberModel());
+        jSpinnerIMA.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jSpinnerFatorEmpilhamento.setFont(jSpinnerFatorEmpilhamento.getFont().deriveFont(jSpinnerFatorEmpilhamento.getFont().getSize()+1f));
+        jSpinnerFatorEmpilhamento.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
+        jSpinnerFatorEmpilhamento.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jTextFieldMaterialGenetico.setFont(jTextFieldMaterialGenetico.getFont().deriveFont(jTextFieldMaterialGenetico.getFont().getSize()+1f));
+        jTextFieldMaterialGenetico.setPreferredSize(new java.awt.Dimension(150, 25));
 
         javax.swing.GroupLayout jPanelSDLayout = new javax.swing.GroupLayout(jPanelSD);
         jPanelSD.setLayout(jPanelSDLayout);
@@ -733,11 +638,11 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
             jPanelSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSDLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(jPanelSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanelSDLayout.createSequentialGroup()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jTextFieldUpc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSpinnerUpc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanelSDLayout.createSequentialGroup()
                         .addComponent(jLabelTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
@@ -745,15 +650,15 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                     .addGroup(jPanelSDLayout.createSequentialGroup()
                         .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jTextFieldTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelSDLayout.createSequentialGroup()
                         .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jTextFieldArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSpinnerArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelSDLayout.createSequentialGroup()
                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jTextFieldM3HA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSpinnerM3HA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelSDLayout.createSequentialGroup()
                         .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
@@ -761,15 +666,13 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                     .addGroup(jPanelSDLayout.createSequentialGroup()
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jTextFieldIMA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSpinnerIMA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelSDLayout.createSequentialGroup()
                         .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jTextFieldFatorEmpilhamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jSpinnerFatorEmpilhamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5))
         );
-
-        jPanelSDLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jComboBoxCategoria, jTextFieldArea, jTextFieldFatorEmpilhamento, jTextFieldIMA, jTextFieldM3HA, jTextFieldMaterialGenetico, jTextFieldTalhao, jTextFieldUpc});
 
         jPanelSDLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel10, jLabel11, jLabel14, jLabel18, jLabel20, jLabel21, jLabel23, jLabelTalhao});
 
@@ -779,7 +682,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldUpc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinnerUpc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -787,15 +690,15 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinnerArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldM3HA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinnerM3HA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -803,73 +706,78 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldIMA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinnerIMA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldFatorEmpilhamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinnerFatorEmpilhamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5))
         );
 
-        jPanelSDLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jComboBoxCategoria, jLabel10, jLabel11, jLabel14, jLabel18, jLabel20, jLabel21, jLabel23, jLabelTalhao, jTextFieldArea, jTextFieldFatorEmpilhamento, jTextFieldIMA, jTextFieldM3HA, jTextFieldMaterialGenetico, jTextFieldTalhao, jTextFieldUpc});
+        jPanelSDLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jComboBoxCategoria, jLabel10, jLabel11, jLabel14, jLabel18, jLabel20, jLabel21, jLabel23, jLabelTalhao});
 
         jComboBoxCategoria.getAccessibleContext().setAccessibleName("");
 
-        jLabel8.setFont(jLabel8.getFont().deriveFont(jLabel8.getFont().getSize()+2f));
+        jLabel8.setFont(jLabel8.getFont().deriveFont(jLabel8.getFont().getSize()+1f));
         jLabel8.setText("Ano_rotacao");
         jLabel8.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jTextFieldAnoRotacao.setFont(jTextFieldAnoRotacao.getFont().deriveFont(jTextFieldAnoRotacao.getFont().getSize()+2f));
-        jTextFieldAnoRotacao.setPreferredSize(new java.awt.Dimension(150, 25));
-
-        jTextFieldDataPlantio.setFont(jTextFieldDataPlantio.getFont().deriveFont(jTextFieldDataPlantio.getFont().getSize()+2f));
+        jTextFieldDataPlantio.setFont(jTextFieldDataPlantio.getFont().deriveFont(jTextFieldDataPlantio.getFont().getSize()+1f));
         jTextFieldDataPlantio.setPreferredSize(new java.awt.Dimension(150, 25));
 
-        jLabel25.setFont(jLabel25.getFont().deriveFont(jLabel25.getFont().getSize()+2f));
+        jLabel25.setFont(jLabel25.getFont().deriveFont(jLabel25.getFont().getSize()+1f));
         jLabel25.setText("data_plantio");
         jLabel25.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jLabel28.setFont(jLabel28.getFont().deriveFont(jLabel28.getFont().getSize()+2f));
+        jLabel28.setFont(jLabel28.getFont().deriveFont(jLabel28.getFont().getSize()+1f));
         jLabel28.setText("data_rotacao_1");
         jLabel28.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jLabel29.setFont(jLabel29.getFont().deriveFont(jLabel29.getFont().getSize()+2f));
+        jLabel29.setFont(jLabel29.getFont().deriveFont(jLabel29.getFont().getSize()+1f));
         jLabel29.setText("data_rotacao_2");
         jLabel29.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jLabel31.setFont(jLabel31.getFont().deriveFont(jLabel31.getFont().getSize()+2f));
+        jLabel31.setFont(jLabel31.getFont().deriveFont(jLabel31.getFont().getSize()+1f));
         jLabel31.setText("data_rotacao_3");
         jLabel31.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jLabel9.setFont(jLabel9.getFont().deriveFont(jLabel9.getFont().getSize()+2f));
+        jLabel9.setFont(jLabel9.getFont().deriveFont(jLabel9.getFont().getSize()+1f));
         jLabel9.setText("densidade_madeira");
         jLabel9.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jLabel22.setFont(jLabel22.getFont().deriveFont(jLabel22.getFont().getSize()+2f));
+        jLabel22.setFont(jLabel22.getFont().deriveFont(jLabel22.getFont().getSize()+1f));
         jLabel22.setText("densidade_carvao");
         jLabel22.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jTextFieldDensidadeCarvao.setFont(jTextFieldDensidadeCarvao.getFont().deriveFont(jTextFieldDensidadeCarvao.getFont().getSize()+2f));
-        jTextFieldDensidadeCarvao.setPreferredSize(new java.awt.Dimension(150, 25));
-
-        jLabel24.setFont(jLabel24.getFont().deriveFont(jLabel24.getFont().getSize()+2f));
+        jLabel24.setFont(jLabel24.getFont().deriveFont(jLabel24.getFont().getSize()+1f));
         jLabel24.setText("rend. grav. est.");
         jLabel24.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jTextFieldRendimentoGravimetricoEstimado.setFont(jTextFieldRendimentoGravimetricoEstimado.getFont().deriveFont(jTextFieldRendimentoGravimetricoEstimado.getFont().getSize()+2f));
-        jTextFieldRendimentoGravimetricoEstimado.setPreferredSize(new java.awt.Dimension(150, 25));
-
-        jTextFieldDensidadeMadeira.setFont(jTextFieldDensidadeMadeira.getFont().deriveFont(jTextFieldDensidadeMadeira.getFont().getSize()+2f));
-        jTextFieldDensidadeMadeira.setPreferredSize(new java.awt.Dimension(150, 25));
-
-        jTextFieldDataRotacao3.setFont(jTextFieldDataRotacao3.getFont().deriveFont(jTextFieldDataRotacao3.getFont().getSize()+2f));
+        jTextFieldDataRotacao3.setFont(jTextFieldDataRotacao3.getFont().deriveFont(jTextFieldDataRotacao3.getFont().getSize()+1f));
         jTextFieldDataRotacao3.setPreferredSize(new java.awt.Dimension(150, 25));
 
-        jTextFieldDataRotacao2.setFont(jTextFieldDataRotacao2.getFont().deriveFont(jTextFieldDataRotacao2.getFont().getSize()+2f));
+        jTextFieldDataRotacao2.setFont(jTextFieldDataRotacao2.getFont().deriveFont(jTextFieldDataRotacao2.getFont().getSize()+1f));
         jTextFieldDataRotacao2.setPreferredSize(new java.awt.Dimension(150, 25));
 
-        jTextFieldDataRotacao1.setFont(jTextFieldDataRotacao1.getFont().deriveFont(jTextFieldDataRotacao1.getFont().getSize()+2f));
+        jTextFieldDataRotacao1.setFont(jTextFieldDataRotacao1.getFont().deriveFont(jTextFieldDataRotacao1.getFont().getSize()+1f));
         jTextFieldDataRotacao1.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jSpinnerDensidadeMadeira.setFont(jSpinnerDensidadeMadeira.getFont().deriveFont(jSpinnerDensidadeMadeira.getFont().getSize()+1f));
+        jSpinnerDensidadeMadeira.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.001f)));
+        jSpinnerDensidadeMadeira.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jSpinnerDensidadeCarvao.setFont(jSpinnerDensidadeCarvao.getFont().deriveFont(jSpinnerDensidadeCarvao.getFont().getSize()+1f));
+        jSpinnerDensidadeCarvao.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.001f)));
+        jSpinnerDensidadeCarvao.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jSpinnerRendimentoGravimetricoEstimado.setFont(jSpinnerRendimentoGravimetricoEstimado.getFont().deriveFont(jSpinnerRendimentoGravimetricoEstimado.getFont().getSize()+1f));
+        jSpinnerRendimentoGravimetricoEstimado.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
+        jSpinnerRendimentoGravimetricoEstimado.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jSpinnerAnoRotacao.setFont(jSpinnerAnoRotacao.getFont().deriveFont(jSpinnerAnoRotacao.getFont().getSize()+1f));
+        jSpinnerAnoRotacao.setModel(new javax.swing.SpinnerNumberModel());
+        jSpinnerAnoRotacao.setMinimumSize(new java.awt.Dimension(200, 25));
+        jSpinnerAnoRotacao.setPreferredSize(new java.awt.Dimension(150, 25));
 
         javax.swing.GroupLayout jPanelSELayout = new javax.swing.GroupLayout(jPanelSE);
         jPanelSE.setLayout(jPanelSELayout);
@@ -881,7 +789,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                     .addGroup(jPanelSELayout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jTextFieldAnoRotacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSpinnerAnoRotacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelSELayout.createSequentialGroup()
                         .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
@@ -889,30 +797,33 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                     .addGroup(jPanelSELayout.createSequentialGroup()
                         .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jTextFieldRendimentoGravimetricoEstimado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSpinnerRendimentoGravimetricoEstimado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelSELayout.createSequentialGroup()
                         .addGroup(jPanelSELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(5, 5, 5)
                         .addGroup(jPanelSELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldDensidadeMadeira, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanelSELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextFieldDataRotacao1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextFieldDataRotacao2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextFieldDataRotacao3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanelSELayout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addGroup(jPanelSELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldDataRotacao1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldDataRotacao2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldDataRotacao3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanelSELayout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(jSpinnerDensidadeMadeira, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanelSELayout.createSequentialGroup()
                         .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jTextFieldDensidadeCarvao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jSpinnerDensidadeCarvao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5))
         );
 
         jPanelSELayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel22, jLabel24, jLabel25, jLabel28, jLabel29, jLabel31, jLabel8, jLabel9});
 
-        jPanelSELayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextFieldAnoRotacao, jTextFieldDataPlantio, jTextFieldDataRotacao1, jTextFieldDataRotacao2, jTextFieldDataRotacao3, jTextFieldDensidadeCarvao, jTextFieldDensidadeMadeira, jTextFieldRendimentoGravimetricoEstimado});
+        jPanelSELayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextFieldDataPlantio, jTextFieldDataRotacao1, jTextFieldDataRotacao2, jTextFieldDataRotacao3});
 
         jPanelSELayout.setVerticalGroup(
             jPanelSELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -920,7 +831,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldAnoRotacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinnerAnoRotacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -939,23 +850,24 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
                     .addComponent(jTextFieldDataRotacao3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldDensidadeMadeira, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerDensidadeMadeira, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldDensidadeCarvao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerDensidadeCarvao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(jPanelSELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldRendimentoGravimetricoEstimado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerRendimentoGravimetricoEstimado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5))
         );
 
         jPanelSELayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel22, jLabel24, jLabel25, jLabel28, jLabel29, jLabel31, jLabel8, jLabel9});
 
-        jPanelSELayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jTextFieldAnoRotacao, jTextFieldDataPlantio, jTextFieldDataRotacao1, jTextFieldDataRotacao2, jTextFieldDataRotacao3, jTextFieldDensidadeCarvao, jTextFieldDensidadeMadeira, jTextFieldRendimentoGravimetricoEstimado});
+        jPanelSELayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jTextFieldDataPlantio, jTextFieldDataRotacao1, jTextFieldDataRotacao2, jTextFieldDataRotacao3});
 
+        jButtonCargaTalhao.setFont(jButtonCargaTalhao.getFont().deriveFont(jButtonCargaTalhao.getFont().getSize()+1f));
         jButtonCargaTalhao.setText("Registrar");
         jButtonCargaTalhao.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonCargaTalhao.addActionListener(new java.awt.event.ActionListener() {
@@ -964,10 +876,11 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
             }
         });
 
-        jLabelMDC_HA.setFont(jLabelMDC_HA.getFont().deriveFont(jLabelMDC_HA.getFont().getSize()+2f));
+        jLabelMDC_HA.setFont(jLabelMDC_HA.getFont().deriveFont(jLabelMDC_HA.getFont().getSize()+1f));
         jLabelMDC_HA.setText("MDC/HA:");
         jLabelMDC_HA.setPreferredSize(new java.awt.Dimension(500, 25));
 
+        jButtonVoltar.setFont(jButtonVoltar.getFont().deriveFont(jButtonVoltar.getFont().getSize()+1f));
         jButtonVoltar.setText("Voltar");
         jButtonVoltar.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -990,6 +903,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         jLabelVolumeEstimado.setText("Volume Madeira Estimado:");
         jLabelVolumeEstimado.setPreferredSize(new java.awt.Dimension(300, 25));
 
+        jCheckBoxExaurida.setFont(jCheckBoxExaurida.getFont().deriveFont(jCheckBoxExaurida.getFont().getSize()+1f));
         jCheckBoxExaurida.setText("Situação Exaurida");
         jCheckBoxExaurida.setPreferredSize(new java.awt.Dimension(500, 25));
 
@@ -1263,20 +1177,20 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelMain;
     private javax.swing.JPanel jPanelSD;
     private javax.swing.JPanel jPanelSE;
-    private javax.swing.JTextField jTextFieldAnoRotacao;
-    private javax.swing.JTextField jTextFieldArea;
+    private javax.swing.JSpinner jSpinnerAnoRotacao;
+    private javax.swing.JSpinner jSpinnerArea;
+    private javax.swing.JSpinner jSpinnerDensidadeCarvao;
+    private javax.swing.JSpinner jSpinnerDensidadeMadeira;
+    private javax.swing.JSpinner jSpinnerFatorEmpilhamento;
+    private javax.swing.JSpinner jSpinnerIMA;
+    private javax.swing.JSpinner jSpinnerM3HA;
+    private javax.swing.JSpinner jSpinnerRendimentoGravimetricoEstimado;
+    private javax.swing.JSpinner jSpinnerTalhao;
+    private javax.swing.JSpinner jSpinnerUpc;
     private javax.swing.JTextField jTextFieldDataPlantio;
     private javax.swing.JTextField jTextFieldDataRotacao1;
     private javax.swing.JTextField jTextFieldDataRotacao2;
     private javax.swing.JTextField jTextFieldDataRotacao3;
-    private javax.swing.JTextField jTextFieldDensidadeCarvao;
-    private javax.swing.JTextField jTextFieldDensidadeMadeira;
-    private javax.swing.JTextField jTextFieldFatorEmpilhamento;
-    private javax.swing.JTextField jTextFieldIMA;
-    private javax.swing.JTextField jTextFieldM3HA;
     private javax.swing.JTextField jTextFieldMaterialGenetico;
-    private javax.swing.JTextField jTextFieldRendimentoGravimetricoEstimado;
-    private javax.swing.JTextField jTextFieldTalhao;
-    private javax.swing.JTextField jTextFieldUpc;
     // End of variables declaration//GEN-END:variables
 }

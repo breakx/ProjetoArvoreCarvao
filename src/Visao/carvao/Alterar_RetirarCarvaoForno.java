@@ -58,7 +58,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         ConexaoBD con = ConexaoBD.getConexao();
         
         ResultSet rs = con.consultaSql(query);
-        JOptionPane.showMessageDialog(null, "CarregarEstoque: "+query);
+        //JOptionPane.showMessageDialog(null, "CarregarEstoque: "+query);
         while(rs.next()){ 
             ControlePrincipal.densidade_carvao = Float.parseFloat(rs.getString("densidade_carvao"));
             ControlePrincipal.mdc_estimado = Float.parseFloat(rs.getString("mdc_estimado"));
@@ -75,7 +75,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
             
             ControlePrincipal.municipio = rs.getString("municipio");
             ControlePrincipal.fazenda = rs.getString("fazenda");
-            ControlePrincipal.talhao = rs.getString("talhao");
+            ControlePrincipal.talhao = Integer.parseInt(rs.getString("talhao"));
             ControlePrincipal.upc = Integer.parseInt(rs.getString("upc"));
         }        
         jLabelMunicipio.setText("Municipio: "+ControlePrincipal.municipio);
@@ -87,7 +87,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
     }   
     
     private void AtualizarDadosCarvao(){                
-        ControlePrincipal.mdc_transp += Float.parseFloat(jTextFieldVolumeCarvao.getText());
+        ControlePrincipal.mdc_transp += (float) jSpinnerVolumeCarvao.getValue();
         ControlePrincipal.mdc_balanco = ControlePrincipal.mdc_transp - ControlePrincipal.mdc_estimado;
         
         ControlePrincipal.carv_ton_transp = ControlePrincipal.mdc_transp * ControlePrincipal.densidade_carvao;
@@ -97,7 +97,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         
         ControlePrincipal.rend_grav_real = ControlePrincipal.carv_ton_transp/ControlePrincipal.mad_ton_transp;
         
-        rend_grav_forno = Float.parseFloat(jTextFieldVolumeCarvao.getText())/madeira;
+        rend_grav_forno = (float) jSpinnerVolumeCarvao.getValue()/madeira;
         jLabelRendimentoForno.setText("Rendimento forno: "+rend_grav_forno);  
         ControlePrincipal.atualizarDados = "carvao";
         RegistrarCarvaoForno();
@@ -111,7 +111,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         carvao.setId_controle_carvao(id);
         carvao.setId_estoque(ControlePrincipal.id_estoque_principal);
         carvao.setId_operario(ControlePrincipal.id_op);
-        carvao.setVolume_carvao(Float.parseFloat(jTextFieldVolumeCarvao.getText()));
+        carvao.setVolume_carvao((float) jSpinnerVolumeCarvao.getValue());
         carvao.setData_saida_carvao(data_forno.format(date));
         carvao.setRend_grav_forno(rend_grav_forno);
         
@@ -119,13 +119,13 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         
         AlterarCarvaoCtrl alterar = new AlterarCarvaoCtrl(carvao);
 
-        try {
+        /*try {
             new GerenciarCarvaoForno().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(Alterar_RetirarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(false);
-        dispose();
+        dispose();*/
     }
     
     private void VoltarMenu(){
@@ -159,7 +159,6 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jButtonLogout = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jTextFieldVolumeCarvao = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButtonRegistrarCarvaoForno = new javax.swing.JButton();
         jButtonVoltar = new javax.swing.JButton();
@@ -169,6 +168,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         jLabelTalhao = new javax.swing.JLabel();
         jLabelUPC = new javax.swing.JLabel();
         jLabelVolumeMadeiraForno = new javax.swing.JLabel();
+        jSpinnerVolumeCarvao = new javax.swing.JSpinner();
         jLabelTitulo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -195,13 +195,14 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelIdTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(jLabelIdTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel2, jLabelIdTipo, jLabelNome});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -209,10 +210,12 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
                 .addComponent(jLabelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(jLabelIdTipo)
                 .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, jLabelIdTipo, jLabelNome});
 
         jPanel2.setBorder(new javax.swing.border.MatteBorder(null));
         jPanel2.setPreferredSize(new java.awt.Dimension(270, 350));
@@ -245,18 +248,11 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
 
-        jTextFieldVolumeCarvao.setText("0");
-        jTextFieldVolumeCarvao.setPreferredSize(new java.awt.Dimension(200, 25));
-        jTextFieldVolumeCarvao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldVolumeCarvaoActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(jLabel1.getFont().deriveFont(jLabel1.getFont().getSize()+1f));
         jLabel1.setText("Volume: ");
         jLabel1.setPreferredSize(new java.awt.Dimension(100, 25));
 
+        jButtonRegistrarCarvaoForno.setFont(jButtonRegistrarCarvaoForno.getFont().deriveFont(jButtonRegistrarCarvaoForno.getFont().getSize()+1f));
         jButtonRegistrarCarvaoForno.setText("Registrar");
         jButtonRegistrarCarvaoForno.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonRegistrarCarvaoForno.addActionListener(new java.awt.event.ActionListener() {
@@ -265,6 +261,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
             }
         });
 
+        jButtonVoltar.setFont(jButtonVoltar.getFont().deriveFont(jButtonVoltar.getFont().getSize()+1f));
         jButtonVoltar.setText("Voltar");
         jButtonVoltar.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -273,6 +270,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
             }
         });
 
+        jLabelRendimentoForno.setFont(jLabelRendimentoForno.getFont().deriveFont(jLabelRendimentoForno.getFont().getSize()+1f));
         jLabelRendimentoForno.setText("Rendimento forno:");
         jLabelRendimentoForno.setPreferredSize(new java.awt.Dimension(200, 25));
 
@@ -296,6 +294,10 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         jLabelVolumeMadeiraForno.setText("Volume de madeira forno: 0.00 m³");
         jLabelVolumeMadeiraForno.setPreferredSize(new java.awt.Dimension(200, 20));
 
+        jSpinnerVolumeCarvao.setFont(jSpinnerVolumeCarvao.getFont().deriveFont(jSpinnerVolumeCarvao.getFont().getSize()+1f));
+        jSpinnerVolumeCarvao.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.100000024f)));
+        jSpinnerVolumeCarvao.setPreferredSize(new java.awt.Dimension(200, 25));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -303,23 +305,21 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabelFazenda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelTalhao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelVolumeMadeiraForno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelUPC, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(jButtonRegistrarCarvaoForno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                    .addComponent(jLabelFazenda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelTalhao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelMunicipio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(10, 10, 10)
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabelRendimentoForno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextFieldVolumeCarvao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addGap(360, 360, 360))
+                                .addComponent(jSpinnerVolumeCarvao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(jLabelUPC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonRegistrarCarvaoForno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelVolumeMadeiraForno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelFazenda, jLabelMunicipio, jLabelTalhao, jLabelUPC});
@@ -339,8 +339,8 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
                 .addComponent(jLabelVolumeMadeiraForno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldVolumeCarvao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerVolumeCarvao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addComponent(jLabelRendimentoForno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
@@ -371,7 +371,7 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)))
                 .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
@@ -391,10 +391,6 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTextFieldVolumeCarvaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldVolumeCarvaoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldVolumeCarvaoActionPerformed
 
     private void jButtonRegistrarCarvaoFornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarCarvaoFornoActionPerformed
         //RegistrarCarvaoForno();
@@ -463,6 +459,6 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextFieldVolumeCarvao;
+    private javax.swing.JSpinner jSpinnerVolumeCarvao;
     // End of variables declaration//GEN-END:variables
 }

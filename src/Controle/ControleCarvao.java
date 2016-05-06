@@ -13,7 +13,8 @@ public class ControleCarvao {
     private String id_controle_carvao;
     private String id_operario;
     private String id_estoque;
-    private String talhao;
+    private int upc_c;
+    private int talhao;
     private String forno;
     private float volume_madeira;
     private String data_entrada_madeira_forno;
@@ -52,14 +53,14 @@ public class ControleCarvao {
     /**
      * @return the talhao
      */
-    public String getTalhao() {
+    public int getTalhao() {
         return talhao;
     }
 
     /**
      * @param talhao the talhao to set
      */
-    public void setTalhao(String talhao) {
+    public void setTalhao(int talhao) {
         this.talhao = talhao;
     }
 
@@ -159,5 +160,19 @@ public class ControleCarvao {
      */
     public void setId_estoque(String id_estoque) {
         this.id_estoque = id_estoque;
+    }
+
+    /**
+     * @return the upc_c
+     */
+    public int getUpc_c() {
+        return upc_c;
+    }
+
+    /**
+     * @param upc_c the upc_c to set
+     */
+    public void setUpc_c(int upc_c) {
+        this.upc_c = upc_c;
     }
 }

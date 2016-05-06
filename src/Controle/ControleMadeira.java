@@ -13,7 +13,8 @@ public class ControleMadeira {
     private String id_controle_madeira;
     private String id_estoque;
     private String id_operario;
-    private String talhao;
+    private int upc_m;
+    private int talhao;
     private String data_entrega;
     private float mad_volume_m_stereo;
     private float mad_volume_m3;
@@ -75,14 +76,14 @@ public class ControleMadeira {
     /**
      * @return the talhao
      */
-    public String getTalhao() {
+    public int getTalhao() {
         return talhao;
     }
 
     /**
      * @param talhao the talhao to set
      */
-    public void setTalhao(String talhao) {
+    public void setTalhao(int talhao) {
         this.talhao = talhao;
     }
 
@@ -294,5 +295,19 @@ public class ControleMadeira {
      */
     public void setPeso_bt(float peso_bt) {
         this.peso_bt = peso_bt;
+    }
+
+    /**
+     * @return the upc_m
+     */
+    public int getUpc_m() {
+        return upc_m;
+    }
+
+    /**
+     * @param upc_m the upc_m to set
+     */
+    public void setUpc_m(int upc_m) {
+        this.upc_m = upc_m;
     }
 }

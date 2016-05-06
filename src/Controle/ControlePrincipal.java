@@ -17,7 +17,7 @@ public class ControlePrincipal {
     public static String data_inicio;
     public static String data_fim;
     public static String forno;
-    public static String talhao;
+    public static int talhao;
     public static String tela_anterior;
     public static String id_estoque_principal;
     

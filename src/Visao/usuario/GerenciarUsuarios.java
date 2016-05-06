@@ -23,6 +23,8 @@ import Visao.fazenda.GerenciarFazenda;
 import Visao.login.Login;
 import Visao.relatorios.GerarRelatorioEstoqueBasico;
 import Visao.relatorios.GerarRelatorioEstoquePrincipal;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.ListSelectionModel;
 
@@ -39,8 +41,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
     public GerenciarUsuarios() throws SQLException {
         initComponents(); 
         this.setExtendedState(MAXIMIZED_BOTH);
-        jButtonExcluir.setVisible(false);       
-        jButtonRelatorio.setVisible(false);
+        jButtonExcluir.setVisible(false);   
         CarregarNome();
         PreencherTabela();
     }
@@ -97,6 +98,16 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         jTableUsuario.getTableHeader().setReorderingAllowed(false);
         jTableUsuario.setAutoResizeMode(jTableUsuario.AUTO_RESIZE_OFF);
         jTableUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        //duplo click
+        jTableUsuario.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                    if(e.getClickCount() == 2){
+                        //System.out.println("duplo-clique detectado");
+                        AlterarInfo();
+                    }
+                }
+            }); 
         con.fecharConexao();
     }
     
@@ -166,8 +177,6 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         jButtonAlterar = new javax.swing.JButton();
         jButtonExcluir = new javax.swing.JButton();
         jButtonLogout = new javax.swing.JButton();
-        jButtonEstoque1 = new javax.swing.JButton();
-        jButtonFazenda = new javax.swing.JButton();
         jButtonRelatorio = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -178,7 +187,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
 
         jLabelTitulo.setFont(new java.awt.Font("Serif", 1, 36)); // NOI18N
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitulo.setText("Menu Supervisor");
+        jLabelTitulo.setText("Gerenciar Usuarios");
         jLabelTitulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabelTitulo.setPreferredSize(new java.awt.Dimension(275, 60));
 
@@ -264,24 +273,6 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
             }
         });
 
-        jButtonEstoque1.setFont(jButtonEstoque1.getFont().deriveFont(jButtonEstoque1.getFont().getSize()+1f));
-        jButtonEstoque1.setText("<html>Buscar <br>Estoque</html>");
-        jButtonEstoque1.setPreferredSize(new java.awt.Dimension(100, 60));
-        jButtonEstoque1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEstoque1ActionPerformed(evt);
-            }
-        });
-
-        jButtonFazenda.setFont(jButtonFazenda.getFont().deriveFont(jButtonFazenda.getFont().getSize()+1f));
-        jButtonFazenda.setText("<html>Gerenciar<br>Fazendas</html>");
-        jButtonFazenda.setPreferredSize(new java.awt.Dimension(100, 60));
-        jButtonFazenda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonFazendaActionPerformed(evt);
-            }
-        });
-
         jButtonRelatorio.setFont(jButtonRelatorio.getFont().deriveFont(jButtonRelatorio.getFont().getSize()+1f));
         jButtonRelatorio.setText("Relatorio");
         jButtonRelatorio.setPreferredSize(new java.awt.Dimension(100, 60));
@@ -307,26 +298,19 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButtonInserir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonFazenda, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonEstoque1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(10, 10, 10))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonAlterar, jButtonEstoque1, jButtonExcluir, jButtonFazenda, jButtonInserir});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonAlterar, jButtonExcluir, jButtonInserir});
 
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonInserir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonEstoque1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jButtonInserir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonFazenda, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jButtonAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -336,7 +320,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                 .addGap(10, 10, 10))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonAlterar, jButtonEstoque1, jButtonExcluir, jButtonFazenda, jButtonInserir});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonAlterar, jButtonExcluir, jButtonInserir});
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
@@ -407,26 +391,14 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButtonLogoutActionPerformed
 
-    private void jButtonEstoque1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEstoque1ActionPerformed
-        BuscarEstoque();
-    }//GEN-LAST:event_jButtonEstoque1ActionPerformed
-
-    private void jButtonFazendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFazendaActionPerformed
-        try {
-            new GerenciarFazenda().setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(GerenciarUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        this.setVisible(false);
-        dispose();
-    }//GEN-LAST:event_jButtonFazendaActionPerformed
-
     private void jButtonRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelatorioActionPerformed
         try {
             new GerarRelatorioEstoqueBasico().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(GerenciarUsuarios.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButtonRelatorioActionPerformed
 
     /**
@@ -446,9 +418,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAlterar;
-    private javax.swing.JButton jButtonEstoque1;
     private javax.swing.JButton jButtonExcluir;
-    private javax.swing.JButton jButtonFazenda;
     private javax.swing.JButton jButtonInserir;
     private javax.swing.JButton jButtonLogout;
     private javax.swing.JButton jButtonRelatorio;

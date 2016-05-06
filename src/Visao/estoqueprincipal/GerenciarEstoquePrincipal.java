@@ -9,8 +9,11 @@ import Controle.ControlePrincipal;
 import Modelo.ConexaoBD;
 import Modelo.GerarTabela;
 import Visao.login.Login;
+import Visao.relatorios.GerarRelatorioEstoqueBasico;
 import Visao.relatorios.GerarRelatorioEstoquePrincipal;
 import Visao.usuario.GerenciarUsuarios;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,8 +37,53 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);    
         jButtonExcluir.setVisible(false);
         CarregarNome();
-        PreencherTabela();
+        _carregarProjetos();
     }   
+    
+    
+    private void _carregarProjetos(){
+        jComboBoxProjeto.addItem("I");
+        jComboBoxProjeto.addItem("II");
+        jComboBoxProjeto.addItem("III");  
+        jComboBoxProjeto.addItem("IV"); 
+        jComboBoxProjeto.addItem("V"); 
+        jComboBoxProjeto.addItem("VI"); 
+        jComboBoxProjeto.addItem("VII"); 
+        jComboBoxProjeto.addItem("VIII"); 
+        jComboBoxProjeto.addItem("IX"); 
+        jComboBoxProjeto.addItem("X");  
+        _carregarFazendas();
+    }
+    
+    private void _carregarFazendas(){ 
+        ConexaoBD con = ConexaoBD.getConexao();
+        String query;
+        ResultSet rs;
+        String whereSql;
+        query = "SELECT fazenda FROM estoque_principal";
+        //JOptionPane.showMessageDialog(null, "Teste!" + query);
+        rs = con.consultaSql(query);
+        jComboBoxFazenda.addItem("-");
+        try {
+            while(rs.next()){
+                int i=0;
+                for (int j=0; j<jComboBoxFazenda.getItemCount(); j++) {
+                    if (jComboBoxFazenda.getItemAt(j).equals(rs.getString("fazenda"))) {
+                        i++; 
+                        //System.out.println("i: "+i);       
+                    }
+                }
+                if(i==0){
+                    //System.out.println("Add: "+i+" f "+rs.getString("fazenda"));
+                    jComboBoxFazenda.addItem(rs.getString("fazenda"));
+                }               
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao gerar lista de fazendas! "+ex);
+        }        
+        PreencherTabela();
+    }
     
     /**
      * 
@@ -93,7 +141,53 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             "RG_Real",
             "Fator_Emp"
         };
-        String query = "Select * from estoque_principal where upc = '"+ControlePrincipal.upc_u+"'";
+        String query;
+        String whereSql;
+        
+        //Controle e definição das variaveis da clausula where like. Filtros
+        String filtro_upc;
+        String filtro_talhao;
+        String filtro_proj;
+        String filtro_faz; 
+        
+        if(jSpinnerUPC.getValue().equals(0)){
+            filtro_upc=""; 
+        }else{
+            filtro_upc=jSpinnerUPC.getValue().toString();
+        }
+        
+        if(jSpinnerTalhao.getValue().equals(0)){
+            filtro_talhao=""; 
+        }else{
+            filtro_talhao=jSpinnerTalhao.getValue().toString();
+        }
+        
+        if(jComboBoxProjeto.getSelectedItem().equals("-")){
+            filtro_proj="";
+        }else{
+            filtro_proj = jComboBoxProjeto.getSelectedItem().toString();
+        }
+        
+        if(jComboBoxFazenda.getSelectedItem().equals("-")){
+            filtro_faz="";
+        }else{
+            filtro_faz=jComboBoxFazenda.getSelectedItem().toString();
+        }
+        
+        //faz busca a partir dos filtros acima
+        if(!filtro_proj.equals("") || !filtro_faz.equals("") || !filtro_talhao.equals("") || !filtro_upc.equals("")){
+            whereSql = "where upc like '%"+filtro_upc+"%' and projeto like '%"+filtro_proj+"%' and fazenda like '%"+filtro_faz+"%' and talhao like '%"+filtro_talhao+"%'";
+        }else{
+            whereSql = "";
+        }
+        
+        /*if(ControlePrincipal.tipo_u.equals("op_dir")){
+            query = "Select * from estoque_principal "+whereSql;
+        }else{
+            query = "Select * from estoque_principal "+whereSql;
+        }*/
+        
+        query = "Select * from estoque_principal "+whereSql;
         int tamanho = 0;       
         ConexaoBD con = ConexaoBD.getConexao();        
         ResultSet rs = con.consultaSql(query);
@@ -171,9 +265,22 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             jTableEstoquePrincipal.getColumnModel().getColumn(i).setResizable(false);
             //System.out.println("Indice: "+i+" - "+ colunas[i].length());
         }
-        jTableEstoquePrincipal.getTableHeader().setReorderingAllowed(false);
+        jTableEstoquePrincipal.getColumnModel().getColumn(0).setMinWidth(0);     
+        jTableEstoquePrincipal.getColumnModel().getColumn(0).setPreferredWidth(0);  
+        jTableEstoquePrincipal.getColumnModel().getColumn(0).setMaxWidth(0);
+        jTableEstoquePrincipal.getColumnModel().getColumn(0).setResizable(false);
         jTableEstoquePrincipal.setAutoResizeMode(jTableEstoquePrincipal.AUTO_RESIZE_OFF);
         jTableEstoquePrincipal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        //duplo click
+        jTableEstoquePrincipal.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                    if(e.getClickCount() == 2){
+                        //System.out.println("duplo-clique detectado");
+                        AlterarInfo();
+                    }
+                }
+            }); 
         con.fecharConexao();
     }
         
@@ -294,7 +401,16 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         jButtonAtualizar = new javax.swing.JButton();
         jButtonExcluir = new javax.swing.JButton();
         jButtonLogout = new javax.swing.JButton();
-        jButtonVoltar2 = new javax.swing.JButton();
+        jButtonRelatorio = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jComboBoxFazenda = new javax.swing.JComboBox();
+        jComboBoxProjeto = new javax.swing.JComboBox();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jSpinnerUPC = new javax.swing.JSpinner();
+        jSpinnerTalhao = new javax.swing.JSpinner();
+        jLabel9 = new javax.swing.JLabel();
+        jButtonFiltrar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableEstoquePrincipal = new javax.swing.JTable();
@@ -328,13 +444,11 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(jLabelIdTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabelIdTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabelNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(10, 10, 10))
         );
         jPanel1Layout.setVerticalGroup(
@@ -378,10 +492,50 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             }
         });
 
-        jButtonVoltar2.setText("Voltar");
-        jButtonVoltar2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRelatorio.setFont(jButtonRelatorio.getFont().deriveFont(jButtonRelatorio.getFont().getSize()+1f));
+        jButtonRelatorio.setText("Relatorio");
+        jButtonRelatorio.setPreferredSize(new java.awt.Dimension(100, 60));
+        jButtonRelatorio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonVoltar2ActionPerformed(evt);
+                jButtonRelatorioActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(jLabel7.getFont().deriveFont(jLabel7.getFont().getSize()+1f));
+        jLabel7.setText("Fazenda");
+        jLabel7.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jComboBoxFazenda.setFont(jComboBoxFazenda.getFont().deriveFont(jComboBoxFazenda.getFont().getSize()+1f));
+
+        jComboBoxProjeto.setFont(jComboBoxProjeto.getFont().deriveFont(jComboBoxProjeto.getFont().getSize()+1f));
+        jComboBoxProjeto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-" }));
+
+        jLabel6.setFont(jLabel6.getFont().deriveFont(jLabel6.getFont().getSize()+1f));
+        jLabel6.setText("Projeto");
+        jLabel6.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getSize()+1f));
+        jLabel2.setText("UPC");
+        jLabel2.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jSpinnerUPC.setFont(jSpinnerUPC.getFont().deriveFont(jSpinnerUPC.getFont().getSize()+1f));
+        jSpinnerUPC.setModel(new javax.swing.SpinnerNumberModel(0, 0, 9, 1));
+        jSpinnerUPC.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jSpinnerTalhao.setFont(jSpinnerTalhao.getFont().deriveFont(jSpinnerTalhao.getFont().getSize()+1f));
+        jSpinnerTalhao.setModel(new javax.swing.SpinnerNumberModel(0, 0, 9, 1));
+        jSpinnerTalhao.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jLabel9.setFont(jLabel9.getFont().deriveFont(jLabel9.getFont().getSize()+1f));
+        jLabel9.setText("Talhao");
+        jLabel9.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jButtonFiltrar.setFont(jButtonFiltrar.getFont().deriveFont(jButtonFiltrar.getFont().getSize()+1f));
+        jButtonFiltrar.setText("Filtrar");
+        jButtonFiltrar.setPreferredSize(new java.awt.Dimension(100, 25));
+        jButtonFiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFiltrarActionPerformed(evt);
             }
         });
 
@@ -390,35 +544,74 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                    .addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButtonExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                            .addComponent(jButtonAtualizar, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                            .addComponent(jButtonVoltar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jButtonAtualizar, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jButtonRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSpinnerUPC, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jComboBoxProjeto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBoxFazenda, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(10, 10, 10))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonAtualizar, jButtonExcluir, jButtonVoltar2});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonAtualizar, jButtonExcluir});
 
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButtonAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(103, 103, 103)
-                .addComponent(jButtonVoltar2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerUPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxFazenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
                 .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+                .addGap(11, 11, 11)
                 .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonAtualizar, jButtonExcluir, jButtonVoltar2});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonAtualizar, jButtonExcluir});
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
@@ -439,7 +632,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -503,13 +696,24 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
     private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
-        new Login().setVisible(true);
+        new Login().setVisible(true);        
+        this.setVisible(false);
         dispose();
     }//GEN-LAST:event_jButtonLogoutActionPerformed
 
-    private void jButtonVoltar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltar2ActionPerformed
-        VoltarMenu();
-    }//GEN-LAST:event_jButtonVoltar2ActionPerformed
+    private void jButtonRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelatorioActionPerformed
+        try {
+            new GerarRelatorioEstoqueBasico().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GerenciarEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jButtonRelatorioActionPerformed
+
+    private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
+        PreencherTabela();
+    }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -556,9 +760,16 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAtualizar;
     private javax.swing.JButton jButtonExcluir;
+    private javax.swing.JButton jButtonFiltrar;
     private javax.swing.JButton jButtonLogout;
-    private javax.swing.JButton jButtonVoltar2;
+    private javax.swing.JButton jButtonRelatorio;
+    private javax.swing.JComboBox jComboBoxFazenda;
+    private javax.swing.JComboBox jComboBoxProjeto;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelIdTipo;
     private javax.swing.JLabel jLabelNome;
     private javax.swing.JLabel jLabelTitulo;
@@ -567,6 +778,8 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelMain;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSpinner jSpinnerTalhao;
+    private javax.swing.JSpinner jSpinnerUPC;
     private javax.swing.JTable jTableEstoquePrincipal;
     // End of variables declaration//GEN-END:variables
 }

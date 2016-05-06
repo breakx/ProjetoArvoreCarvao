@@ -46,23 +46,24 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         ControleCarvao carvao = new ControleCarvao();
         carvao.setId_estoque(ControlePrincipal.id_estoque_principal);
         carvao.setId_operario(ControlePrincipal.id_op);
+        carvao.setUpc_c(ControlePrincipal.upc);
         carvao.setTalhao(ControlePrincipal.talhao);
         carvao.setForno(jTextFieldForno.getText());
-        carvao.setVolume_madeira(Float.parseFloat(jTextFieldVolume_madeira.getText()));
+        carvao.setVolume_madeira((float) jSpinnerVolumeMadeira.getValue());
         carvao.setData_entrada_madeira_forno(data_forno.format(date));
 
-        ControlePrincipal.madeira_forno += Float.parseFloat(jTextFieldVolume_madeira.getText());
-        ControlePrincipal.madeira_praca -= Float.parseFloat(jTextFieldVolume_madeira.getText());
+        ControlePrincipal.madeira_forno += (float) jSpinnerVolumeMadeira.getValue();
+        ControlePrincipal.madeira_praca -= (float) jSpinnerVolumeMadeira.getValue();
         ControlePrincipal.atualizarDados = "carvao";
         InserirCarvaoCtrl inserir = new InserirCarvaoCtrl(carvao);
 
-        try {
+        /*try {
             new GerenciarCarvaoForno().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(InserirMadeiraForno.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(false);
-        dispose();
+        dispose();*/
     }
     
     private void VoltarMenu(){
@@ -98,7 +99,6 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         jButtonLogout = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextFieldVolume_madeira = new javax.swing.JTextField();
         jButtonRegistrarMadeiraForno = new javax.swing.JButton();
         jLabelTalhao = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -108,6 +108,7 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         jLabelVolumeMadeiraPraca = new javax.swing.JLabel();
         jLabelMunicipio = new javax.swing.JLabel();
         jLabelUPC = new javax.swing.JLabel();
+        jSpinnerVolumeMadeira = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -139,22 +140,27 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
-                    .addComponent(jLabelIdTipo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabelNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelIdTipo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel2, jLabelIdTipo, jLabelNome});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jLabelNome, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                .addGap(37, 37, 37)
-                .addComponent(jLabelIdTipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(jLabelIdTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, jLabelIdTipo, jLabelNome});
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jPanel2.setPreferredSize(new java.awt.Dimension(270, 350));
@@ -187,18 +193,11 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel3.setPreferredSize(new java.awt.Dimension(500, 500));
 
-        jLabel1.setFont(jLabel1.getFont().deriveFont(jLabel1.getFont().getSize()+4f));
+        jLabel1.setFont(jLabel1.getFont().deriveFont(jLabel1.getFont().getSize()+1f));
         jLabel1.setText("Volume");
         jLabel1.setPreferredSize(new java.awt.Dimension(100, 25));
 
-        jTextFieldVolume_madeira.setText("0");
-        jTextFieldVolume_madeira.setPreferredSize(new java.awt.Dimension(200, 25));
-        jTextFieldVolume_madeira.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldVolume_madeiraActionPerformed(evt);
-            }
-        });
-
+        jButtonRegistrarMadeiraForno.setFont(jButtonRegistrarMadeiraForno.getFont().deriveFont(jButtonRegistrarMadeiraForno.getFont().getSize()+1f));
         jButtonRegistrarMadeiraForno.setText("Registrar");
         jButtonRegistrarMadeiraForno.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonRegistrarMadeiraForno.addActionListener(new java.awt.event.ActionListener() {
@@ -211,10 +210,11 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         jLabelTalhao.setText("Talhao:");
         jLabelTalhao.setPreferredSize(new java.awt.Dimension(300, 25));
 
-        jLabel4.setFont(jLabel4.getFont().deriveFont(jLabel4.getFont().getSize()+4f));
+        jLabel4.setFont(jLabel4.getFont().deriveFont(jLabel4.getFont().getSize()+1f));
         jLabel4.setText("Forno");
         jLabel4.setPreferredSize(new java.awt.Dimension(100, 25));
 
+        jTextFieldForno.setFont(jTextFieldForno.getFont().deriveFont(jTextFieldForno.getFont().getSize()+1f));
         jTextFieldForno.setText("0");
         jTextFieldForno.setPreferredSize(new java.awt.Dimension(200, 25));
         jTextFieldForno.addActionListener(new java.awt.event.ActionListener() {
@@ -223,6 +223,7 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
             }
         });
 
+        jButtonVoltar.setFont(jButtonVoltar.getFont().deriveFont(jButtonVoltar.getFont().getSize()+1f));
         jButtonVoltar.setText("Voltar");
         jButtonVoltar.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -235,7 +236,7 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         jLabelFazenda.setText("Fazenda: ");
         jLabelFazenda.setPreferredSize(new java.awt.Dimension(300, 25));
 
-        jLabelVolumeMadeiraPraca.setFont(jLabelVolumeMadeiraPraca.getFont().deriveFont(jLabelVolumeMadeiraPraca.getFont().getSize()+4f));
+        jLabelVolumeMadeiraPraca.setFont(jLabelVolumeMadeiraPraca.getFont().deriveFont(jLabelVolumeMadeiraPraca.getFont().getSize()+1f));
         jLabelVolumeMadeiraPraca.setText("Volume atual de madeira: 0.00 m³");
         jLabelVolumeMadeiraPraca.setPreferredSize(new java.awt.Dimension(300, 25));
 
@@ -246,6 +247,10 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         jLabelUPC.setFont(jLabelUPC.getFont().deriveFont(jLabelUPC.getFont().getSize()+4f));
         jLabelUPC.setText("UPC:");
         jLabelUPC.setPreferredSize(new java.awt.Dimension(300, 25));
+
+        jSpinnerVolumeMadeira.setFont(jSpinnerVolumeMadeira.getFont().deriveFont(jSpinnerVolumeMadeira.getFont().getSize()+1f));
+        jSpinnerVolumeMadeira.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerVolumeMadeira.setPreferredSize(new java.awt.Dimension(200, 25));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -260,9 +265,9 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
                                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(10, 10, 10)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextFieldForno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextFieldVolume_madeira, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jTextFieldForno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jSpinnerVolumeMadeira, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addComponent(jButtonRegistrarMadeiraForno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -272,7 +277,7 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
                     .addComponent(jLabelTalhao, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelUPC, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelVolumeMadeiraPraca, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGap(10, 10, 10))
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabelFazenda, jLabelMunicipio, jLabelTalhao, jLabelUPC, jLabelVolumeMadeiraPraca});
@@ -291,13 +296,9 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addComponent(jLabelVolumeMadeiraPraca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jTextFieldVolume_madeira, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerVolumeMadeira, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -345,10 +346,6 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldVolume_madeiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldVolume_madeiraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldVolume_madeiraActionPerformed
-
     private void jButtonRegistrarMadeiraFornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarMadeiraFornoActionPerformed
         RegistrarMadeiraForno();
     }//GEN-LAST:event_jButtonRegistrarMadeiraFornoActionPerformed
@@ -358,13 +355,13 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         //dispose();
     }//GEN-LAST:event_jButtonLogoutActionPerformed
 
-    private void jTextFieldFornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldFornoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldFornoActionPerformed
-
     private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
         VoltarMenu();
     }//GEN-LAST:event_jButtonVoltarActionPerformed
+
+    private void jTextFieldFornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldFornoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldFornoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -419,7 +416,7 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JSpinner jSpinnerVolumeMadeira;
     private javax.swing.JTextField jTextFieldForno;
-    private javax.swing.JTextField jTextFieldVolume_madeira;
     // End of variables declaration//GEN-END:variables
 }

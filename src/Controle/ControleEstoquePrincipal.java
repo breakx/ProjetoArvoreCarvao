@@ -17,7 +17,7 @@ public class ControleEstoquePrincipal {
     private String municipio = null; 
     private String fazenda = null;
     private String projeto = null; 
-    private String upc = null;
+    private int upc = 0;
     private int talhao = 0;
     private float area = 0.0f;
     private String material_genetico = "-";
@@ -148,14 +148,14 @@ public class ControleEstoquePrincipal {
     /**
      * @return the upc
      */
-    public String getUpc() {
+    public int getUpc() {
         return upc;
     }
 
     /**
      * @param upc the upc to set
      */
-    public void setUpc(String upc) {
+    public void setUpc(int upc) {
         this.upc = upc;
     }
 

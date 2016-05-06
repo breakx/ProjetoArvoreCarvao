@@ -34,7 +34,7 @@ public class BuscarRelatorioCarvaoPraca extends javax.swing.JFrame {
         }else if(jTextFieldForno.isEnabled()){// && !jTextField.getText().equals("0") && !jTextFieldTalhaoH3.getText().equals("0") && !jTextFieldTalhaoLargura.getText().equals("0")&& !jTextFieldTalhaoComprimento.getText().equals("0")){
             ControlePrincipal.forno = jTextFieldForno.getText();
         }else if(jTextFieldTalhao.isEnabled()){// && !jTextField.getText().equals("0") && !jTextFieldTalhaoH3.getText().equals("0") && !jTextFieldTalhaoLargura.getText().equals("0")&& !jTextFieldTalhaoComprimento.getText().equals("0")){
-            ControlePrincipal.talhao = jTextFieldTalhao.getText();
+            ControlePrincipal.talhao = Integer.parseInt(jTextFieldTalhao.getText());
         }
         //JOptionPane.showMessageDialog(null, "Teste!" + jTextFieldForno.isEnabled());
         //JOptionPane.showMessageDialog(null, "Teste!" + ControlePrincipal.data_inicio+ControlePrincipal.forno+ControlePrincipal.talhao);

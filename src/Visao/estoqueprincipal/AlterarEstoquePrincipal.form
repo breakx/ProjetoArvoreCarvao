@@ -215,7 +215,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="jPanelSD" min="-2" max="-2" attributes="0"/>
@@ -224,7 +224,7 @@
                           </Group>
                           <Component id="jPanelI" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -251,46 +251,46 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel10" linkSize="12" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldUpc" linkSize="11" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSpinnerUpc" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabelTalhao" linkSize="12" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jComboBoxCategoria" linkSize="11" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jComboBoxCategoria" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel18" linkSize="12" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldTalhao" linkSize="11" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSpinnerTalhao" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel20" linkSize="12" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldArea" linkSize="11" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSpinnerArea" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel14" linkSize="12" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldM3HA" linkSize="11" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSpinnerM3HA" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel21" linkSize="12" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldMaterialGenetico" linkSize="11" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jTextFieldMaterialGenetico" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel11" linkSize="12" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldIMA" linkSize="11" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSpinnerIMA" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel23" linkSize="12" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldFatorEmpilhamento" linkSize="11" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSpinnerFatorEmpilhamento" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -303,7 +303,7 @@
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel10" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextFieldUpc" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jSpinnerUpc" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -313,32 +313,32 @@
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel18" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextFieldTalhao" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jSpinnerTalhao" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel20" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextFieldArea" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jSpinnerArea" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel14" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextFieldM3HA" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jSpinnerM3HA" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel21" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextFieldMaterialGenetico" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTextFieldMaterialGenetico" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel11" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextFieldIMA" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jSpinnerIMA" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel23" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextFieldFatorEmpilhamento" linkSize="10" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jSpinnerFatorEmpilhamento" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       </Group>
@@ -350,7 +350,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel10" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel10" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Upc"/>
@@ -359,20 +359,13 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextFieldUpc">
+                <Component class="javax.swing.JComboBox" name="jComboBoxCategoria">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jTextFieldUpc" property="font" relativeSize="true" size="2"/>
+                        <Font component="jComboBoxCategoria" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[150, 25]"/>
-                    </Property>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JComboBox" name="jComboBoxCategoria">
-                  <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="1">
                         <StringItem index="0" value="-"/>
@@ -390,7 +383,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabelTalhao" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabelTalhao" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="categoria"/>
@@ -403,7 +396,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel18" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel18" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="talhao"/>
@@ -412,47 +405,11 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextFieldTalhao">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-                      <FontInfo relative="true">
-                        <Font component="jTextFieldTalhao" property="font" relativeSize="true" size="2"/>
-                      </FontInfo>
-                    </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[150, 25]"/>
-                    </Property>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="jTextFieldArea">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-                      <FontInfo relative="true">
-                        <Font component="jTextFieldArea" property="font" relativeSize="true" size="2"/>
-                      </FontInfo>
-                    </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[150, 25]"/>
-                    </Property>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="jTextFieldM3HA">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-                      <FontInfo relative="true">
-                        <Font component="jTextFieldM3HA" property="font" relativeSize="true" size="2"/>
-                      </FontInfo>
-                    </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[150, 25]"/>
-                    </Property>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JLabel" name="jLabel20">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel20" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel20" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="area"/>
@@ -465,7 +422,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel14" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel14" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="M&#xb3; por hectare"/>
@@ -474,23 +431,11 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextFieldMaterialGenetico">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-                      <FontInfo relative="true">
-                        <Font component="jTextFieldMaterialGenetico" property="font" relativeSize="true" size="2"/>
-                      </FontInfo>
-                    </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[150, 25]"/>
-                    </Property>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JLabel" name="jLabel21">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel21" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel21" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="material_genetico"/>
@@ -503,7 +448,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel11" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel11" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="ima"/>
@@ -516,7 +461,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel23" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel23" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="fator empilhamento"/>
@@ -525,23 +470,101 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextFieldFatorEmpilhamento">
+                <Component class="javax.swing.JSpinner" name="jSpinnerUpc">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jTextFieldFatorEmpilhamento" property="font" relativeSize="true" size="2"/>
+                        <Font component="jSpinnerUpc" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
+                    </Property>
+                    <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                      <SpinnerModel initial="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[150, 25]"/>
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextFieldIMA">
+                <Component class="javax.swing.JSpinner" name="jSpinnerTalhao">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jTextFieldIMA" property="font" relativeSize="true" size="2"/>
+                        <Font component="jSpinnerTalhao" property="font" relativeSize="true" size="1"/>
+                      </FontInfo>
+                    </Property>
+                    <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                      <SpinnerModel initial="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[150, 25]"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JSpinner" name="jSpinnerArea">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                      <FontInfo relative="true">
+                        <Font component="jSpinnerArea" property="font" relativeSize="true" size="1"/>
+                      </FontInfo>
+                    </Property>
+                    <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                      <SpinnerModel initial="0.0" numberType="java.lang.Float" stepSize="0.01" type="number"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[150, 25]"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JSpinner" name="jSpinnerM3HA">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                      <FontInfo relative="true">
+                        <Font component="jSpinnerM3HA" property="font" relativeSize="true" size="1"/>
+                      </FontInfo>
+                    </Property>
+                    <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                      <SpinnerModel initial="0.0" numberType="java.lang.Float" stepSize="0.01" type="number"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[150, 25]"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JSpinner" name="jSpinnerIMA">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                      <FontInfo relative="true">
+                        <Font component="jSpinnerIMA" property="font" relativeSize="true" size="1"/>
+                      </FontInfo>
+                    </Property>
+                    <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                      <SpinnerModel initial="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[150, 25]"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JSpinner" name="jSpinnerFatorEmpilhamento">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                      <FontInfo relative="true">
+                        <Font component="jSpinnerFatorEmpilhamento" property="font" relativeSize="true" size="1"/>
+                      </FontInfo>
+                    </Property>
+                    <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                      <SpinnerModel initial="0.0" numberType="java.lang.Float" stepSize="0.01" type="number"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[150, 25]"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="jTextFieldMaterialGenetico">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                      <FontInfo relative="true">
+                        <Font component="jTextFieldMaterialGenetico" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -562,7 +585,7 @@
                               <Group type="102" attributes="0">
                                   <Component id="jLabel8" linkSize="13" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldAnoRotacao" linkSize="15" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSpinnerAnoRotacao" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel25" linkSize="13" min="-2" max="-2" attributes="0"/>
@@ -572,7 +595,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel24" linkSize="13" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldRendimentoGravimetricoEstimado" linkSize="15" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSpinnerRendimentoGravimetricoEstimado" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -581,20 +604,25 @@
                                       <Component id="jLabel31" linkSize="13" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel9" linkSize="13" alignment="1" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jTextFieldDensidadeMadeira" linkSize="15" min="-2" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jTextFieldDataRotacao1" linkSize="15" alignment="1" max="-2" attributes="0"/>
-                                          <Component id="jTextFieldDataRotacao2" linkSize="15" alignment="1" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jTextFieldDataRotacao3" linkSize="15" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jTextFieldDataRotacao1" linkSize="15" alignment="1" max="-2" attributes="0"/>
+                                              <Component id="jTextFieldDataRotacao2" linkSize="15" alignment="1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jTextFieldDataRotacao3" linkSize="15" alignment="1" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                          <Component id="jSpinnerDensidadeMadeira" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel22" linkSize="13" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldDensidadeCarvao" linkSize="15" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSpinnerDensidadeCarvao" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -607,7 +635,7 @@
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel8" linkSize="14" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextFieldAnoRotacao" linkSize="16" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jSpinnerAnoRotacao" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -631,18 +659,18 @@
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jTextFieldDensidadeMadeira" linkSize="16" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel9" linkSize="14" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jSpinnerDensidadeMadeira" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jTextFieldDensidadeCarvao" linkSize="16" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel22" linkSize="14" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jSpinnerDensidadeCarvao" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jTextFieldRendimentoGravimetricoEstimado" linkSize="16" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel24" linkSize="14" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jSpinnerRendimentoGravimetricoEstimado" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       </Group>
@@ -654,7 +682,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel8" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel8" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Ano_rotacao"/>
@@ -663,23 +691,11 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextFieldAnoRotacao">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-                      <FontInfo relative="true">
-                        <Font component="jTextFieldAnoRotacao" property="font" relativeSize="true" size="2"/>
-                      </FontInfo>
-                    </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[150, 25]"/>
-                    </Property>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JTextField" name="jTextFieldDataPlantio">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jTextFieldDataPlantio" property="font" relativeSize="true" size="2"/>
+                        <Font component="jTextFieldDataPlantio" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -691,7 +707,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel25" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel25" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="data_plantio"/>
@@ -704,7 +720,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel28" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel28" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="data_rotacao_1"/>
@@ -717,7 +733,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel29" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel29" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="data_rotacao_2"/>
@@ -730,7 +746,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel31" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel31" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="data_rotacao_3"/>
@@ -743,7 +759,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel9" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel9" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="densidade_madeira"/>
@@ -756,7 +772,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel22" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel22" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="densidade_carvao"/>
@@ -765,23 +781,11 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextFieldDensidadeCarvao">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-                      <FontInfo relative="true">
-                        <Font component="jTextFieldDensidadeCarvao" property="font" relativeSize="true" size="2"/>
-                      </FontInfo>
-                    </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[150, 25]"/>
-                    </Property>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JLabel" name="jLabel24">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabel24" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabel24" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="rend. grav. est."/>
@@ -790,35 +794,11 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextFieldRendimentoGravimetricoEstimado">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-                      <FontInfo relative="true">
-                        <Font component="jTextFieldRendimentoGravimetricoEstimado" property="font" relativeSize="true" size="2"/>
-                      </FontInfo>
-                    </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[150, 25]"/>
-                    </Property>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="jTextFieldDensidadeMadeira">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-                      <FontInfo relative="true">
-                        <Font component="jTextFieldDensidadeMadeira" property="font" relativeSize="true" size="2"/>
-                      </FontInfo>
-                    </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[150, 25]"/>
-                    </Property>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JTextField" name="jTextFieldDataRotacao3">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jTextFieldDataRotacao3" property="font" relativeSize="true" size="2"/>
+                        <Font component="jTextFieldDataRotacao3" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -830,7 +810,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jTextFieldDataRotacao2" property="font" relativeSize="true" size="2"/>
+                        <Font component="jTextFieldDataRotacao2" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -842,8 +822,71 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jTextFieldDataRotacao1" property="font" relativeSize="true" size="2"/>
+                        <Font component="jTextFieldDataRotacao1" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[150, 25]"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JSpinner" name="jSpinnerDensidadeMadeira">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                      <FontInfo relative="true">
+                        <Font component="jSpinnerDensidadeMadeira" property="font" relativeSize="true" size="1"/>
+                      </FontInfo>
+                    </Property>
+                    <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                      <SpinnerModel initial="0.0" numberType="java.lang.Float" stepSize="0.001" type="number"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[150, 25]"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JSpinner" name="jSpinnerDensidadeCarvao">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                      <FontInfo relative="true">
+                        <Font component="jSpinnerDensidadeCarvao" property="font" relativeSize="true" size="1"/>
+                      </FontInfo>
+                    </Property>
+                    <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                      <SpinnerModel initial="0.0" numberType="java.lang.Float" stepSize="0.001" type="number"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[150, 25]"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JSpinner" name="jSpinnerRendimentoGravimetricoEstimado">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                      <FontInfo relative="true">
+                        <Font component="jSpinnerRendimentoGravimetricoEstimado" property="font" relativeSize="true" size="1"/>
+                      </FontInfo>
+                    </Property>
+                    <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                      <SpinnerModel initial="0.0" numberType="java.lang.Float" stepSize="0.01" type="number"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[150, 25]"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JSpinner" name="jSpinnerAnoRotacao">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                      <FontInfo relative="true">
+                        <Font component="jSpinnerAnoRotacao" property="font" relativeSize="true" size="1"/>
+                      </FontInfo>
+                    </Property>
+                    <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                      <SpinnerModel initial="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[200, 25]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[150, 25]"/>
@@ -927,6 +970,11 @@
               <SubComponents>
                 <Component class="javax.swing.JButton" name="jButtonCargaTalhao">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                      <FontInfo relative="true">
+                        <Font component="jButtonCargaTalhao" property="font" relativeSize="true" size="1"/>
+                      </FontInfo>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Registrar"/>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[100, 60]"/>
@@ -940,7 +988,7 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
                       <FontInfo relative="true">
-                        <Font component="jLabelMDC_HA" property="font" relativeSize="true" size="2"/>
+                        <Font component="jLabelMDC_HA" property="font" relativeSize="true" size="1"/>
                       </FontInfo>
                     </Property>
                     <Property name="text" type="java.lang.String" value="MDC/HA:"/>
@@ -951,6 +999,11 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="jButtonVoltar">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                      <FontInfo relative="true">
+                        <Font component="jButtonVoltar" property="font" relativeSize="true" size="1"/>
+                      </FontInfo>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Voltar"/>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[100, 60]"/>
@@ -1003,6 +1056,11 @@
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="jCheckBoxExaurida">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                      <FontInfo relative="true">
+                        <Font component="jCheckBoxExaurida" property="font" relativeSize="true" size="1"/>
+                      </FontInfo>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Situa&#xe7;&#xe3;o Exaurida"/>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[500, 25]"/>

@@ -14,6 +14,8 @@ import Visao.login.Login;
 import Visao.madeira.GerenciarMadeiraPraca;
 import Visao.madeira.InserirMadeiraPraca;
 import Visao.usuario.GerenciarUsuarios;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -238,12 +240,12 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
             }else{
                 jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*8);
             }     
-            if(i>9 && ControlePrincipal.tipo_u.equals("op_m")){
+            if(i>9 && ControlePrincipal.tipo_u.equals("op_smd")){
                 jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setMinWidth(0);     
                 jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(0);  
                 jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setMaxWidth(0);
                 jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setResizable(false);
-            }else if(i>10 && ControlePrincipal.tipo_u.equals("op_c")){
+            }else if(i>10 && ControlePrincipal.tipo_u.equals("op_scv")){
                 jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setMinWidth(0);     
                 jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(0);  
                 jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setMaxWidth(0);
@@ -252,7 +254,16 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
             //System.out.println("Indice: "+i+" - "+ colunas[i]);
         }           
         jTableRelatorioEstoquePrincipal.getTableHeader().setReorderingAllowed(false);
-        jTableRelatorioEstoquePrincipal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);        
+        jTableRelatorioEstoquePrincipal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        //duplo click
+        jTableRelatorioEstoquePrincipal.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                    if(e.getClickCount() == 2){
+                        //System.out.println("duplo-clique detectado");
+                        SelecionarTalhao();
+                    }
+                }
+            }); 
     }  
     
     private void SelecionarTalhao(){
@@ -266,9 +277,9 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
             ControlePrincipal.fazenda = jTableRelatorioEstoquePrincipal.getValueAt(linha, 3).toString();
             ControlePrincipal.projeto = jTableRelatorioEstoquePrincipal.getValueAt(linha, 4).toString();
             ControlePrincipal.upc = Integer.parseInt(jTableRelatorioEstoquePrincipal.getValueAt(linha, 5).toString());
-            ControlePrincipal.talhao = jTableRelatorioEstoquePrincipal.getValueAt(linha, 6).toString();  
+            ControlePrincipal.talhao = Integer.parseInt(jTableRelatorioEstoquePrincipal.getValueAt(linha, 6).toString());  
                         
-            if(ControlePrincipal.tipo_u.equals("op_m")){
+            if(ControlePrincipal.tipo_u.equals("op_smd")){
                 ControlePrincipal.densidade_madeira = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 12).toString());
                 ControlePrincipal.vol_mad_estimado = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 14).toString());
                 ControlePrincipal.vol_mad_transp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 15).toString());
@@ -292,7 +303,7 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
                 }else {
                     JOptionPane.showMessageDialog(null, "Talhão não empilhado!");
                 }
-            }else if(ControlePrincipal.tipo_u.equals("op_c")){                
+            }else if(ControlePrincipal.tipo_u.equals("op_scv")){                
                 ControlePrincipal.densidade_carvao = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 13).toString());
                 ControlePrincipal.mdc_estimado = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 17).toString());
                 ControlePrincipal.mdc_transp = Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(linha, 18).toString());
@@ -311,7 +322,7 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
                 }else {
                     JOptionPane.showMessageDialog(null, "Talhão "+ControlePrincipal.talhao+" sem estoque na praça!");
                 }
-            }else if(ControlePrincipal.tipo_u.equals("op_s")){ 
+            }else if(ControlePrincipal.tipo_u.equals("op_scv")){ 
                 /*try {
                     new GerenciarEstoquePrincipal().setVisible(true);
                 } catch (SQLException ex) {
@@ -328,7 +339,7 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
     
     private void VoltarMenu(){        
         switch (ControlePrincipal.tipo_u) {
-            case "op_m":
+            case "op_smd":
                 try {
                     new GerenciarMadeiraPraca().setVisible(true);
                     this.setVisible(false);
@@ -336,7 +347,7 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
                 } catch (SQLException ex) {
                     Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }   break;
-            case "op_c":
+            case "op_scv":
                 try {
                     new GerenciarCarvaoForno().setVisible(true);
                     this.setVisible(false);
@@ -344,7 +355,7 @@ public class GerarRelatorioEstoquePrincipal extends javax.swing.JFrame {
                 } catch (SQLException ex) {
                     Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }   break;
-            case "op_s":
+            case "op_dir":
                 try {
                     new GerenciarUsuarios().setVisible(true);
                     this.setVisible(false);

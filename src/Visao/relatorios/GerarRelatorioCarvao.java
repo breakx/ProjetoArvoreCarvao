@@ -24,7 +24,6 @@ import javax.swing.ListSelectionModel;
  */
 public class GerarRelatorioCarvao extends javax.swing.JFrame {
     
-    private String filtro_op_u;
     /**
      * Creates new form GerarRelatorioCarvao
      * @throws java.sql.SQLException
@@ -64,8 +63,38 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao carregar usuarios! "+ex);
         }             
-        PreencherTabela();
+        _carregarFornos();
     }
+    
+    private void _carregarFornos(){ 
+        jComboBoxForno.removeAllItems();
+        jComboBoxForno.addItem("-");
+        ConexaoBD con = ConexaoBD.getConexao();
+        String query;
+        ResultSet rs;
+        query = "SELECT forno FROM controle_carvao";
+        //JOptionPane.showMessageDialog(null, "Teste!" + query);
+        rs = con.consultaSql(query);
+        try {
+            while(rs.next()){
+                int i=0;
+                for (int j=0; j<jComboBoxForno.getItemCount(); j++) {
+                    if (jComboBoxForno.getItemAt(j).equals(rs.getString("forno"))) {
+                        i++; 
+                        //System.out.println("i: "+i);       
+                    }
+                }
+                if(i==0){
+                    //System.out.println("Add: "+i+" f "+rs.getString("id_operario"));
+                    jComboBoxForno.addItem(rs.getString("forno"));
+                }               
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao carregar fornos! "+ex);
+        }             
+        PreencherTabela();
+    }   
     
     /**
      * 
@@ -76,6 +105,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
             //"id_controle_carvao",
             "id_estoque_p",
             "id_operario",
+            "upc_c",
             "talhao",
             "forno",
             "volume_madeira",
@@ -86,7 +116,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         };
         int tamanho = 0;    
         String query;
-        /*if(ControlePrincipal.tipo_u.equals("op_s")){
+        /*if(ControlePrincipal.tipo_u.equals("op_scv")){
             query = "Select * from controle_carvao";
         }else{
             query = "Select * from controle_carvao where id_operario = '" +ControlePrincipal.id_op+"'";
@@ -95,15 +125,52 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         String whereSql;
         
         //Controle e definição das variaveis da clausula where like. Filtros
+        String filtro_op_u;
+        String filtro_forno;
+        String filtro_upc;
+        String filtro_talhao;
+        String filtro_data_i;
+        String filtro_data_f;
         if(jComboBoxUsuario.getSelectedItem().equals("-")){
-            filtro_op_u="%%";
+            filtro_op_u="";
         }else{
             filtro_op_u=jComboBoxUsuario.getSelectedItem().toString();
         }
         
+        if(jComboBoxForno.getSelectedItem().equals("-")){
+            filtro_forno="";
+        }else{
+            filtro_forno=jComboBoxForno.getSelectedItem().toString();
+        }
+        
+        if(jSpinnerUPC.getValue().equals(0)){
+            filtro_upc=""; 
+        }else{
+            filtro_upc=jSpinnerUPC.getValue().toString();
+        }
+        
+        if(jSpinnerTalhao.getValue().equals(0)){
+            filtro_talhao=""; 
+        }else{
+            filtro_talhao=jSpinnerTalhao.getValue().toString();
+        }
+        
+        if(jTextFieldDataI.getText().equals("")){
+            filtro_data_i=""; 
+        }else{
+            filtro_data_i=jTextFieldDataI.getText();
+        }
+        
+        if(jTextFieldDataF.getText().equals("")){
+            filtro_data_f=""; 
+        }else{
+            filtro_data_f=jTextFieldDataF.getText();
+        }
+        
         //faz busca a partir dos filtros acima
-        if(!filtro_op_u.equals("%%")){
-            whereSql = "where id_operario like '"+filtro_op_u+"'";
+        if(!filtro_op_u.equals("") ||!filtro_forno.equals("") ||!filtro_upc.equals("") ||!filtro_talhao.equals("") ||!filtro_data_i.equals("") ||!filtro_data_f.equals("")){
+            //whereSql = "where id_operario like '%"+filtro_op_u+"%' and forno like '%"+filtro_forno+"%' and upc_c like '%"+filtro_upc+"%' and talhao like '%"+filtro_talhao+"%' and data_entrada_madeira_forno like '%"+filtro_data_i+"%' and data_entrada_madeira_forno like '%"+filtro_data_f+"%'";
+            whereSql = "where id_operario like '%"+filtro_op_u+"%' and forno like '%"+filtro_forno+"%' and upc_c like '%"+filtro_upc+"%' and talhao like '%"+filtro_talhao+"%' and data_entrada_madeira_forno BETWEEN '"+filtro_data_i+"' and '"+filtro_data_f+"'";
         }else{
             whereSql = "";
         }
@@ -111,13 +178,14 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         query = "Select * from controle_carvao "+whereSql;
         ConexaoBD con = ConexaoBD.getConexao();         
         ResultSet rs = con.consultaSql(query);
-        
+        System.out.println("query: "+query);
         try {
             while(rs.next()){
                 dados.add(new Object[]{
                     //rs.getString("id_controle_carvao"),
                     rs.getString("id_estoque_p"),
                     rs.getString("id_operario"),
+                    rs.getString("upc_c"),
                     rs.getString("talhao"),
                     rs.getString("forno"),
                     rs.getString("volume_madeira"),
@@ -156,7 +224,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         if(jTableRelatorioCarvao.getSelectedRow()>=0) {
             int linha = jTableRelatorioCarvao.getSelectedRow();
             String id_madeira = jTableRelatorioCarvao.getValueAt(linha, 0).toString();
-            ControlePrincipal.talhao = jTableRelatorioCarvao.getValueAt(linha, 8).toString();
+            ControlePrincipal.talhao = Integer.parseInt(jTableRelatorioCarvao.getValueAt(linha, 8).toString());
             new InserirMadeiraForno().setVisible(true);
             dispose();
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
@@ -199,6 +267,15 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jComboBoxUsuario = new javax.swing.JComboBox();
         jButtonFiltrar = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jComboBoxForno = new javax.swing.JComboBox();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jSpinnerUPC = new javax.swing.JSpinner();
+        jSpinnerTalhao = new javax.swing.JSpinner();
+        jTextFieldDataI = new javax.swing.JTextField();
+        jTextFieldDataF = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableRelatorioCarvao = new javax.swing.JTable();
@@ -269,6 +346,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
             }
         });
 
+        jButtonVoltar.setFont(jButtonVoltar.getFont().deriveFont(jButtonVoltar.getFont().getSize()+1f));
         jButtonVoltar.setText("Voltar");
         jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -276,11 +354,14 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
             }
         });
 
+        jLabel7.setFont(jLabel7.getFont().deriveFont(jLabel7.getFont().getSize()+1f));
         jLabel7.setText("Usuario");
         jLabel7.setPreferredSize(new java.awt.Dimension(80, 25));
 
+        jComboBoxUsuario.setFont(jComboBoxUsuario.getFont().deriveFont(jComboBoxUsuario.getFont().getSize()+1f));
         jComboBoxUsuario.setPreferredSize(new java.awt.Dimension(150, 25));
 
+        jButtonFiltrar.setFont(jButtonFiltrar.getFont().deriveFont(jButtonFiltrar.getFont().getSize()+1f));
         jButtonFiltrar.setText("Filtrar");
         jButtonFiltrar.setPreferredSize(new java.awt.Dimension(100, 25));
         jButtonFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -289,42 +370,101 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setFont(jLabel8.getFont().deriveFont(jLabel8.getFont().getSize()+1f));
+        jLabel8.setText("Forno");
+        jLabel8.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jComboBoxForno.setFont(jComboBoxForno.getFont().deriveFont(jComboBoxForno.getFont().getSize()+1f));
+        jComboBoxForno.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jLabel9.setFont(jLabel9.getFont().deriveFont(jLabel9.getFont().getSize()+1f));
+        jLabel9.setText("Talhao");
+        jLabel9.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jLabel10.setFont(jLabel10.getFont().deriveFont(jLabel10.getFont().getSize()+1f));
+        jLabel10.setText("Data");
+        jLabel10.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getSize()+1f));
+        jLabel2.setText("UPC");
+        jLabel2.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jSpinnerUPC.setFont(jSpinnerUPC.getFont().deriveFont(jSpinnerUPC.getFont().getSize()+1f));
+        jSpinnerUPC.setModel(new javax.swing.SpinnerNumberModel(0, 0, 9, 1));
+        jSpinnerUPC.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jSpinnerTalhao.setFont(jSpinnerTalhao.getFont().deriveFont(jSpinnerTalhao.getFont().getSize()+1f));
+        jSpinnerTalhao.setModel(new javax.swing.SpinnerNumberModel(0, 0, 9, 1));
+        jSpinnerTalhao.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jTextFieldDataI.setFont(jTextFieldDataI.getFont().deriveFont(jTextFieldDataI.getFont().getSize()+1f));
+        jTextFieldDataI.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jTextFieldDataF.setFont(jTextFieldDataF.getFont().deriveFont(jTextFieldDataF.getFont().getSize()+1f));
+        jTextFieldDataF.setPreferredSize(new java.awt.Dimension(150, 25));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(100, 100, 100)
-                                .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldDataF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldDataI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
-                        .addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(10, 10, 10))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jButtonVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSpinnerUPC, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBoxForno, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxForno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerUPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldDataI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addComponent(jTextFieldDataF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
                 .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -382,7 +522,8 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
-        _carregarUsuarios();
+        //_carregarUsuarios();
+        PreencherTabela();
         //JOptionPane.showMessageDialog(null, jListFiltrar.getSelectedValuesList());
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
@@ -439,9 +580,14 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     private javax.swing.JButton jButtonFiltrar;
     private javax.swing.JButton jButtonLogout;
     private javax.swing.JButton jButtonVoltar;
+    private javax.swing.JComboBox jComboBoxForno;
     private javax.swing.JComboBox jComboBoxUsuario;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelIdTipo;
     private javax.swing.JLabel jLabelNome;
     private javax.swing.JLabel jLabelTitulo;
@@ -449,6 +595,10 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSpinner jSpinnerTalhao;
+    private javax.swing.JSpinner jSpinnerUPC;
     private javax.swing.JTable jTableRelatorioCarvao;
+    private javax.swing.JTextField jTextFieldDataF;
+    private javax.swing.JTextField jTextFieldDataI;
     // End of variables declaration//GEN-END:variables
 }

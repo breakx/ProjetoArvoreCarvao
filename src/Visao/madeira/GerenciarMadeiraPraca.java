@@ -10,6 +10,7 @@ import Controle.ControleUsuario;
 import Modelo.ConexaoBD;
 import Modelo.GerarTabela;
 import Visao.login.Login;
+import Visao.relatorios.GerarRelatorioEstoqueBasico;
 import Visao.relatorios.GerarRelatorioEstoquePrincipal;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -37,6 +38,10 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);    
         jButtonExcluir.setVisible(false);
+        jButtonAlterar.setVisible(false);
+        if(!ControlePrincipal.tipo_u.equals("op_dir")){
+            jButtonRelatorio.setVisible(false);
+        }
         CarregarNome();        
         PreencherTabela();
     }   
@@ -47,6 +52,7 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
     private void PreencherTabela(){
         ArrayList dados = new ArrayList();
         String[] colunas = new String[] { 
+            "upc_m", 
             "talhao", 
             "mad_volume_m_stereo", 
             "mad_volume_m3", 
@@ -69,7 +75,7 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
         };
         int tamanho = 0;    
         String query;
-        if(ControlePrincipal.tipo_u.equals("op_s")){
+        if(ControlePrincipal.tipo_u.equals("op_dir")){
             query = "Select * from controle_madeira";
         }else{
             jButtonAlterar.setVisible(false);
@@ -81,25 +87,26 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
         try {
             while(rs.next()){
                 dados.add(new Object[]{
-                    rs.getString("talhao"),
-                    rs.getString("mad_volume_m_stereo"),
-                    rs.getString("mad_volume_m3"),
-                    rs.getString("altura1_t"),
-                    rs.getString("altura2_t"),
-                    rs.getString("altura3_t"),
-                    rs.getString("comprimento_t"),
-                    rs.getString("largura_t"),
-                    rs.getString("peso_t"),
-                    rs.getString("altura1_bt"),
-                    rs.getString("altura2_bt"),
-                    rs.getString("altura3_bt"),
-                    rs.getString("comprimento_bt"),
-                    rs.getString("largura_bt"),
-                    rs.getString("peso_bt"),
-                    rs.getString("data_entrega"),
-                    rs.getString("id_controle_madeira"),
-                    rs.getString("id_estoque_p"),
-                    rs.getString("id_operario")
+                    rs.getString("upc_m"),//0
+                    rs.getString("talhao"),//1
+                    rs.getString("mad_volume_m_stereo"),//2
+                    rs.getString("mad_volume_m3"),//3
+                    rs.getString("altura1_t"),//4
+                    rs.getString("altura2_t"),//5
+                    rs.getString("altura3_t"),//6
+                    rs.getString("comprimento_t"),//7
+                    rs.getString("largura_t"),//8
+                    rs.getString("peso_t"),//9
+                    rs.getString("altura1_bt"),//10
+                    rs.getString("altura2_bt"),//11
+                    rs.getString("altura3_bt"),//12
+                    rs.getString("comprimento_bt"),//13
+                    rs.getString("largura_bt"),//14
+                    rs.getString("peso_bt"),//15
+                    rs.getString("data_entrega"),//16
+                    rs.getString("id_controle_madeira"),//17
+                    rs.getString("id_estoque_p"),//18
+                    rs.getString("id_operario")//19
                 });
                 tamanho++;
             }
@@ -118,7 +125,7 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
             }else{
                 jTableMadeira.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*8);
             }
-            if(i>14){
+            if(i>15 && !ControlePrincipal.tipo_u.equals("op_dir")){
                 jTableMadeira.getColumnModel().getColumn(i).setMinWidth(0);     
                 jTableMadeira.getColumnModel().getColumn(i).setPreferredWidth(0);  
                 jTableMadeira.getColumnModel().getColumn(i).setMaxWidth(0);
@@ -131,14 +138,16 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
         jTableMadeira.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         //duplo click
-        jTableMadeira.addMouseListener(new MouseAdapter(){
-            public void mouseClicked(MouseEvent e){
-                    if(e.getClickCount() == 2){
-                        //System.out.println("duplo-clique detectado");
-                        AlterarInfo();
+        /*if(!ControlePrincipal.tipo_u.equals("op_dir")){
+            jTableMadeira.addMouseListener(new MouseAdapter(){
+                public void mouseClicked(MouseEvent e){
+                        if(e.getClickCount() == 2){
+                            //System.out.println("duplo-clique detectado");
+                            AlterarInfo();
+                        }
                     }
-                }
-            }); 
+                }); 
+        }*/
         con.fecharConexao();
     }      
     
@@ -146,37 +155,33 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
         if(jTableMadeira.getSelectedRow()>=0)//verifica se a linha a ser alterada esta marcada
         {
             int linha = jTableMadeira.getSelectedRow();            
-            if(jTableMadeira.getValueAt(linha, 12).toString().equals("0")){
-                //JOptionPane.showMessageDialog(null, "Em transporte!"+jTableMadeira.getValueAt(linha, 12).toString());
-                String id_controle_madeira = jTableMadeira.getValueAt(linha, 0).toString();
-                String id_estoque_p = jTableMadeira.getValueAt(linha, 1).toString();
-                //String id_operador = jTableMadeira.getValueAt(linha, 2).toString();
-                //String talhao = jTableMadeira.getValueAt(linha, 3).toString();
-                //String data_entrega = jTableMadeira.getValueAt(linha, 4).toString();
-                String mad_volume_m_stereo = jTableMadeira.getValueAt(linha, 5).toString();
-                String mad_volume_m3 = jTableMadeira.getValueAt(linha, 6).toString();
-                String altura1_t = jTableMadeira.getValueAt(linha, 7).toString();
-                String altura2_t = jTableMadeira.getValueAt(linha, 8).toString();
-                String altura3_t = jTableMadeira.getValueAt(linha, 9).toString();
-                String comprimento_t = jTableMadeira.getValueAt(linha, 10).toString();
-                String largura_t = jTableMadeira.getValueAt(linha, 11).toString();            
-                String peso_t = jTableMadeira.getValueAt(linha, 12).toString();
-                String altura1_bt = jTableMadeira.getValueAt(linha, 13).toString();
-                String altura2_bt = jTableMadeira.getValueAt(linha, 14).toString();
-                String altura3_bt = jTableMadeira.getValueAt(linha, 156).toString();
-                String comprimento_bt = jTableMadeira.getValueAt(linha, 16).toString();
-                String largura_bt = jTableMadeira.getValueAt(linha, 17).toString();            
-                String peso_bt = jTableMadeira.getValueAt(linha, 18).toString();
-                try {
-                    new AlterarMadeiraPraca(id_controle_madeira,id_estoque_p,altura1_t,altura2_t,altura3_t,comprimento_t,largura_t,peso_t,altura1_bt,altura2_bt,altura3_bt,comprimento_bt,largura_bt,peso_bt,mad_volume_m_stereo,mad_volume_m3).setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(GerenciarMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                this.setVisible(false);
-                dispose();
-            }else{
-                JOptionPane.showMessageDialog(null, "Transporte OK!");
+            //JOptionPane.showMessageDialog(null, "Em transporte!"+jTableMadeira.getValueAt(linha, 12).toString());
+            String id_controle_madeira = jTableMadeira.getValueAt(linha, 17).toString();
+            String id_estoque_p = jTableMadeira.getValueAt(linha, 18).toString();
+            //String id_operador = jTableMadeira.getValueAt(linha, 2).toString();
+            //String talhao = jTableMadeira.getValueAt(linha, 3).toString();
+            //String data_entrega = jTableMadeira.getValueAt(linha, 4).toString();
+            String mad_volume_m_stereo = jTableMadeira.getValueAt(linha, 2).toString();
+            String mad_volume_m3 = jTableMadeira.getValueAt(linha, 3).toString();
+            String altura1_t = jTableMadeira.getValueAt(linha, 4).toString();
+            String altura2_t = jTableMadeira.getValueAt(linha, 5).toString();
+            String altura3_t = jTableMadeira.getValueAt(linha, 6).toString();
+            String comprimento_t = jTableMadeira.getValueAt(linha, 7).toString();
+            String largura_t = jTableMadeira.getValueAt(linha, 8).toString();            
+            String peso_t = jTableMadeira.getValueAt(linha, 9).toString();
+            String altura1_bt = jTableMadeira.getValueAt(linha, 10).toString();
+            String altura2_bt = jTableMadeira.getValueAt(linha, 11).toString();
+            String altura3_bt = jTableMadeira.getValueAt(linha, 12).toString();
+            String comprimento_bt = jTableMadeira.getValueAt(linha, 13).toString();
+            String largura_bt = jTableMadeira.getValueAt(linha, 14).toString();            
+            String peso_bt = jTableMadeira.getValueAt(linha, 15).toString();
+            try {
+                new AlterarMadeiraPraca(id_controle_madeira,id_estoque_p,altura1_t,altura2_t,altura3_t,comprimento_t,largura_t,peso_t,altura1_bt,altura2_bt,altura3_bt,comprimento_bt,largura_bt,peso_bt,mad_volume_m_stereo,mad_volume_m3).setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(GerenciarMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
             }
+            this.setVisible(false);
+            dispose();
             
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
     }
@@ -192,7 +197,7 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
     }
     
     private void InserirInfo(){
-        if(ControlePrincipal.talhao != null)//verifica se a linha a ser alterada esta marcada
+        if(ControlePrincipal.talhao != 0)//verifica se a linha a ser alterada esta marcada
         {
             new InserirMadeiraPraca().setVisible(true);
             this.setVisible(false);
@@ -233,6 +238,7 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
         jButtonExcluir = new javax.swing.JButton();
         jButtonLogout = new javax.swing.JButton();
         jButtonBuscarEstoque = new javax.swing.JButton();
+        jButtonRelatorio = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableMadeira = new javax.swing.JTable();
@@ -327,6 +333,15 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
             }
         });
 
+        jButtonRelatorio.setFont(jButtonRelatorio.getFont().deriveFont(jButtonRelatorio.getFont().getSize()+1f));
+        jButtonRelatorio.setText("Relatorio");
+        jButtonRelatorio.setPreferredSize(new java.awt.Dimension(100, 60));
+        jButtonRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRelatorioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -340,14 +355,17 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
                             .addComponent(jButtonBuscarEstoque, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                             .addComponent(jButtonAlterar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(148, 148, 148)))
+                        .addGap(48, 48, 48)
+                        .addComponent(jButtonRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(10, 10, 10))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(jButtonBuscarEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonBuscarEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addComponent(jButtonAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
@@ -438,6 +456,16 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
     private void jButtonAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlterarActionPerformed
         AlterarInfo();
     }//GEN-LAST:event_jButtonAlterarActionPerformed
+
+    private void jButtonRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelatorioActionPerformed
+        try {
+            new GerarRelatorioEstoqueBasico().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GerenciarMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jButtonRelatorioActionPerformed
     
     /**
      * @param args the command line arguments
@@ -490,6 +518,7 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
     private javax.swing.JButton jButtonBuscarEstoque;
     private javax.swing.JButton jButtonExcluir;
     private javax.swing.JButton jButtonLogout;
+    private javax.swing.JButton jButtonRelatorio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelIdTipo;
     private javax.swing.JLabel jLabelNome;

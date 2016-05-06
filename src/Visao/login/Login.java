@@ -13,7 +13,6 @@ package Visao.login;
 import Controle.ControlePrincipal;
 import Controle.ControleUsuario;
 import Modelo.ConexaoBD;
-import Visao.usuario.GerenciarUsuarios;
 import Visao.carvao.GerenciarCarvaoForno;
 import Visao.madeira.GerenciarMadeiraPraca;
 import Visao.relatorios.GerarRelatorioEstoqueBasico;
@@ -67,35 +66,26 @@ public class Login extends javax.swing.JFrame {
     }
     
     public void CarregaTela(String tipo){
-        if(tipo.equals("op_c")){
+        if(tipo.equals("op_scv")){
             try
             {
                 new GerenciarCarvaoForno().setVisible(true);
-                //gcf.ChangeName(nome, id_op);
             } catch (SQLException ex) {
                 Logger.getLogger(GerenciarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else if(tipo.equals("op_m")){
+        }else if(tipo.equals("op_smd")){
             try
             {
                 new GerenciarMadeiraPraca().setVisible(true);
-                //gmtp.ChangeName(nome, id_op);
             } catch (SQLException ex) {
                 Logger.getLogger(GerenciarMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else if(tipo.equals("op_s")){
+        }else if(tipo.equals("op_dir")){
             try
             {
-                new GerenciarUsuarios().setVisible(true);
-                //gu.ChangeName(nome, id_op);
-            } catch (SQLException ex) {
-                Logger.getLogger(GerenciarUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }else if(tipo.equals("op_d")){
-            try {
                 new GerarRelatorioEstoqueBasico().setVisible(true);
             } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         this.setVisible(false);
