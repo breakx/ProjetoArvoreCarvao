@@ -14,51 +14,86 @@ import javax.swing.JOptionPane;
 public class ConexaoBD {
     private static ConexaoBD instancia;
     public static Connection con = null;    
+    
+    private String host = "";
+    private String database = "";
+    private String url = "";
+    private String usuario_bd = "";
+    private String senha_bd = "";
 
-    private ConexaoBD()
+    private ConexaoBD(int index)
     {
-        /*String database = "appmadeira";
-        String url = "jdbc:mysql://localhost/"+database;
-        String usuario_bd = "root";
-        String senha_bd = "";*/
-        
-        String database = "appmadeiracarvao";
-        String url = "jdbc:mysql://db4free.net:3306/"+database;
-        String usuario_bd = "crgddev";
-        String senha_bd = "duarte1207";
+        //System.err.println("ConexaoBD: "+ index);
+        switch(index){
+            case 0:
+                BDPrincipal();
+                //BDLocal();
+                break;
+            case 1:                
+                BDSecundario();
+                //BDLocal();
+                break;
+            case 2:
+                BDLocal();
+                break;
+        }
         try
         {
             //Class.forName("org.gjt.mm.mysql.Driver").newInstance();
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con = DriverManager.getConnection(url,usuario_bd,senha_bd);
-        }catch( Exception ex )
+        }catch( ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex )
         {
             System.err.printf("\nExceção: %s\n", ex);
             JOptionPane.showMessageDialog(null, "Erro ao conectar: "+ex);
+            //System.exit(0);
             throw new java.lang.RuntimeException("Erro ao conectar 2");
         }
     }
+    
+    private void BDPrincipal(){
+        host ="db4free.net:3306/";
+        database = "appmadeiracarvao";
+        url = "jdbc:mysql://"+host+database;
+        usuario_bd = "crgddev";
+        senha_bd = "duarte1207";
+    }
+    
+    private void BDLocal(){
+        host ="localhost/";
+        database = "appmadeira";
+        url = "jdbc:mysql://"+host+database;
+        usuario_bd = "root";
+        senha_bd = "";
+    }
+    
+    private void BDSecundario(){
+        host ="mysql873.umbler.com:41890/";
+        database = "crserver";
+        url = "jdbc:mysql://"+host+database;
+        usuario_bd = "crgd";
+        senha_bd = "crgd1234";
+    }
 
-    public static ConexaoBD getConexao()
+    public static ConexaoBD getConexao(int index)
     {
         try
         {
             if(con == null){
-               instancia = new ConexaoBD();
+               instancia = new ConexaoBD(index);
             }
             return instancia;
         }catch( Exception ex ){
             System.err.printf("\nExceção: %s\n", ex);
             JOptionPane.showMessageDialog(null, "Erro ao conectar: "+ex);
+            //System.exit(0);
             throw new java.lang.RuntimeException("Erro ao conectar 1");
         }
     }
 
-
     public void fecharConexao()
     {
         try{
-
             if(con != null){
                 con.close();
                 con = null;
@@ -69,7 +104,6 @@ public class ConexaoBD {
             JOptionPane.showMessageDialog(null, "Conexão fechada! "+ex);
             throw new java.lang.RuntimeException("Erro ao conectar 3");
         }
-
     }
 
     public ResultSet consultaSql(String comando)

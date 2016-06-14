@@ -46,7 +46,7 @@ public class GerenciarFazenda extends javax.swing.JFrame {
     }   
     
     private void _carregarFazendas(){ 
-        ConexaoBD con = ConexaoBD.getConexao();
+        ConexaoBD con = ConexaoBD.getConexao(0);
         String query;
         ResultSet rs;
         String whereSql;
@@ -105,7 +105,7 @@ public class GerenciarFazenda extends javax.swing.JFrame {
             whereSql = "";
         }
         String query = "Select * from fazenda"+whereSql;
-        ConexaoBD con = ConexaoBD.getConexao();         
+        ConexaoBD con = ConexaoBD.getConexao(0);         
         ResultSet rs = con.consultaSql(query);
         
         try {
@@ -178,7 +178,7 @@ public class GerenciarFazenda extends javax.swing.JFrame {
             //projeto = ValidarProjeto(jTableFazenda.getValueAt(linha, 4).toString());
             String id_fazenda = jTableFazenda.getValueAt(linha, 5).toString();
             String query = "Select projeto from fazenda where municipio = '"+municipio+"' and fazenda = '"+fazenda+"'";
-            ConexaoBD con = ConexaoBD.getConexao();
+            ConexaoBD con = ConexaoBD.getConexao(0);
             ResultSet rs = con.consultaSql(query);
             try {
                 while(rs.next()){
@@ -690,6 +690,8 @@ public class GerenciarFazenda extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(GerenciarFazenda.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButtonRelatorioActionPerformed
 
     /**

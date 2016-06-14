@@ -10,52 +10,56 @@ package Controle;
  * @author Cristiano GD
  */
 public class ControlePrincipal {
+    //Dados de usuario
     public static String nome;
     public static String tipo_u;
     public static String id_op;
     public static int upc_u;
-    public static String data_inicio;
-    public static String data_fim;
-    public static String forno;
-    public static int talhao;
-    public static String tela_anterior;
-    public static String id_estoque_principal;
-    
-    public static String atualizarDados;
-    
-    public static String estado;
-    public static String municipio;
-    public static String fazenda;
-    public static String projeto;
-    public static String bloco;  
-    public static String situacao;  
-    
-    public static float fator_emp;    
+    //public static String tela_anterior;
+         
+    //Dados do estoque
     public static float densidade_madeira;
-    public static float densidade_carvao;
-    
+    public static float densidade_carvao;    
     public static float vol_mad_estimado;
     public static float vol_mad_transp;
     public static float vol_mad_balanco;
     public static float mdc_estimado;
-    public static float mdc_transp;
+    public static float mdc_prod;
     public static float mdc_balanco;
     public static float mad_ton_estimado;
     public static float mad_ton_transp;
     public static float mad_ton_balanco;
     public static float carv_ton_estimado;
-    public static float carv_ton_transp;
+    public static float carv_ton_prod;
     public static float carv_ton_balanco;
     public static float madeira_praca;
     public static float madeira_forno;
-    public static float mad_ton_tot;
-    public static float carv_ton_tot;    
+    public static float carvao_praca;
+    public static float mdc_transp;
+    public static float carv_ton_transp;   
     public static float rend_grav_real;
+    public static float fator_empilalhemto; 
+    public static float mad_ton_tot;
+    public static float carv_ton_tot;  
     
-    //Dados atuais
-    public static int upc;
+    //Dados atuais  
+    public static String id_estoque_principal;    
+    public static String estado;
+    public static String municipio;
+    public static String fazenda;
+    public static String projeto;
+    public static String bloco;  
+    public static String situacao; 
     public static String material_genetico;
+    public static String data_inicio;
+    public static String data_fim;
+    public static int talhao;
+    public static int upc;
     
-    //
+    //Dados de controle
     public static boolean excel_cmd;
+    public static String atualizarDados;
+    public static String validade;    
+    public static String condicao_carvao;
+    //public static String forno;
 }

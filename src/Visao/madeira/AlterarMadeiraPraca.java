@@ -29,7 +29,12 @@ public class AlterarMadeiraPraca extends javax.swing.JFrame {
     private float volumeMadeiraM3_ant;
     private float volumeMadeiraMStereo = 0;
     private float volumeMadeiraM3 = 0;
-    private float fator_emp = 1.4f;
+    //private float fator_empilalhemto = 1.4f;
+    private float vol_mad_transp_bd = 0; 
+    private float vol_mad_balanco_bd = 0; 
+    private float mad_ton_transp_bd = 0; 
+    private float mad_ton_balanco_bd = 0; 
+    private float madeira_praca_bd = 0; 
     AlterarMadeiraPraca() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -38,23 +43,23 @@ public class AlterarMadeiraPraca extends javax.swing.JFrame {
      * Creates new form AlterarMadeiraEntradaPraca
      * 
      */
-    public  AlterarMadeiraPraca(String id_controle_madeira, String id_estoque, String altura1_t, String altura2_t, String altura3_t, String comprimento_t, String largura_t, String peso_t, String altura1_bt, String altura2_bt, String altura3_bt, String comprimento_bt, String largura_bt, String peso_bt, String vol_mst, String vol_m3) throws SQLException {
-        super("Alterar Madeira");
+    //public  AlterarMadeiraPraca(String id_controle_madeira, String id_estoque, String altura1_t, String altura2_t, String altura3_t, String comprimento_t, String largura_t, String peso_t, String altura1_bt, String altura2_bt, String altura3_bt, String comprimento_bt, String largura_bt, String peso_bt, String vol_mst, String vol_m3) throws SQLException {
+    public  AlterarMadeiraPraca(String[] dados) throws SQLException {    super("Alterar Madeira");
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);    
-        CarregarEstoque(id_estoque);
+        CarregarEstoque(dados[18]);//id_estoque
         CarregarNome();
-        this.id = id_controle_madeira;
-        volumeMadeiraMStereo_ant = Float.parseFloat(vol_mst);
-        volumeMadeiraM3_ant = Float.parseFloat(vol_m3);
-        jSpinnerTranporteT_H1.setValue(Float.parseFloat(altura1_t));
-        jSpinnerTranporteT_H2.setValue(Float.parseFloat(altura2_t));
-        jSpinnerTranporteT_H3.setValue(Float.parseFloat(altura2_t));
-        jSpinnerTranporteT_Comprimento.setValue(Float.parseFloat(comprimento_t));
-        jSpinnerTranporteT_Largura.setValue(Float.parseFloat(largura_t));
-        jSpinnerTranporteT_Peso.setValue(Float.parseFloat(peso_t));
+        this.id = dados[17];//id_controle_madeira
+        volumeMadeiraMStereo_ant = Float.parseFloat(dados[2]);//mad_volume_m_stereo
+        volumeMadeiraM3_ant = Float.parseFloat(dados[3]);//mad_volume_m3
+        jSpinnerTranporteT_H1.setValue(Float.parseFloat(dados[4]));//altura1_t
+        jSpinnerTranporteT_H2.setValue(Float.parseFloat(dados[5]));//altura2_t
+        jSpinnerTranporteT_H3.setValue(Float.parseFloat(dados[6]));//altura3_t
+        jSpinnerTranporteT_Comprimento.setValue(Float.parseFloat(dados[7]));//comprimento_t
+        jSpinnerTranporteT_Largura.setValue(Float.parseFloat(dados[8]));//largura_t
+        jSpinnerTranporteT_Peso.setValue(Float.parseFloat(dados[9]));//peso_t
         
-        if(!altura1_bt.equals("0")){
+        if(!dados[10].equals("0")){//altura1_bt
             jCheckBoxBT.setSelected(true);
             jSpinnerTranporteBT_H1.setEnabled(true);
             jSpinnerTranporteBT_H2.setEnabled(true);
@@ -62,13 +67,13 @@ public class AlterarMadeiraPraca extends javax.swing.JFrame {
             jSpinnerTranporteBT_Comprimento.setEnabled(true);
             jSpinnerTranporteBT_Largura.setEnabled(true);
             jSpinnerTranporteBT_Peso.setEnabled(true);
-            jSpinnerTranporteBT_H1.setValue(Float.parseFloat(altura1_bt));
-            jSpinnerTranporteBT_H2.setValue(Float.parseFloat(altura2_bt));
-            jSpinnerTranporteBT_H3.setValue(Float.parseFloat(altura2_bt));
-            jSpinnerTranporteBT_Comprimento.setValue(Float.parseFloat(comprimento_bt));
-            jSpinnerTranporteBT_Largura.setValue(Float.parseFloat(largura_bt));
-            jSpinnerTranporteBT_Peso.setValue(Float.parseFloat(peso_bt));
-        }else{
+            jSpinnerTranporteBT_H1.setValue(Float.parseFloat(dados[10]));//altura1_bt
+            jSpinnerTranporteBT_H2.setValue(Float.parseFloat(dados[11]));//altura2_bt
+            jSpinnerTranporteBT_H3.setValue(Float.parseFloat(dados[12]));//altura3_bt
+            jSpinnerTranporteBT_Comprimento.setValue(Float.parseFloat(dados[13]));//comprimento_bt
+            jSpinnerTranporteBT_Largura.setValue(Float.parseFloat(dados[14]));//largura_bt
+            jSpinnerTranporteBT_Peso.setValue(Float.parseFloat(dados[15]));//peso_bt
+        }/*else{
             jCheckBoxBT.setSelected(false);
             jSpinnerTranporteBT_H1.setValue(null);
             jSpinnerTranporteBT_H2.setValue(null);
@@ -76,23 +81,34 @@ public class AlterarMadeiraPraca extends javax.swing.JFrame {
             jSpinnerTranporteBT_Comprimento.setValue(null);
             jSpinnerTranporteBT_Largura.setValue(null);
             jSpinnerTranporteBT_Peso.setValue(null);
-        }
+        }*/
+        
+        jLabelVolumeMadeiraMSt.setText("Volume madeira: "+volumeMadeiraMStereo_ant+" mst");
+        jLabelVolumeMadeiraM3.setText("Volume madeira: "+volumeMadeiraM3_ant+" m³");  
+        id = dados[17];//id_controle_madeira
+        ControlePrincipal.id_estoque_principal = dados[18];//id_estoque_p
     }     
     
     private void CarregarEstoque(String id_estq) throws SQLException{
         
-        String query = "Select vol_mad_transp, mad_ton_transp, madeira_praca from estoque_principal where id_estoque_p = "+id_estq;
-        ConexaoBD con = ConexaoBD.getConexao();
+        //String query = "Select vol_mad_transp, vol_mad_balanco, mad_ton_transp, mad_ton_balanco, madeira_praca, fator_empilalhemto from estoque_principal where id_estoque_p = "+id_estq;
+        String query = "Select * from estoque_principal where id_estoque_p = "+id_estq;
+        ConexaoBD con = ConexaoBD.getConexao(0);
         
         ResultSet rs = con.consultaSql(query);
         //JOptionPane.showMessageDialog(null, "Carregando Estoque: "+query);
-        while(rs.next()){
-            /*ControlePrincipal.volume_madeira_talhao = Float.parseFloat(rs.getString("madeira_talhao")); 
-            ControlePrincipal.volume_madeira_praca = Float.parseFloat(rs.getString("madeira_praca")); 
-            ControlePrincipal.volume_madeira_forno = Float.parseFloat(rs.getString("madeira_forno")); 
-            ControlePrincipal.volume_madeira_transpl = Float.parseFloat(rs.getString("mad_ton_tot")); 
-            ControlePrincipal.volume_carvao_transp = Float.parseFloat(rs.getString("carv_ton_tot"));   */  
+        while(rs.next()){ 
+            vol_mad_transp_bd = Float.parseFloat(rs.getString("vol_mad_transp")); 
+            vol_mad_balanco_bd = Float.parseFloat(rs.getString("vol_mad_balanco")); 
+            mad_ton_transp_bd = Float.parseFloat(rs.getString("mad_ton_transp")); 
+            mad_ton_balanco_bd = Float.parseFloat(rs.getString("mad_ton_balanco")); 
+            madeira_praca_bd = Float.parseFloat(rs.getString("madeira_praca")); 
+            
+            ControlePrincipal.vol_mad_estimado = Float.parseFloat(rs.getString("vol_mad_estimado")); 
+            ControlePrincipal.mad_ton_estimado = Float.parseFloat(rs.getString("mad_ton_estimado")); 
+            ControlePrincipal.fator_empilalhemto = Float.parseFloat(rs.getString("fator_empilalhemto")); 
         }
+        //System.out.println("Estoque_id: " +id_estq+", "+ vol_mad_transp_bd+", "+ vol_mad_balanco_bd+", "+ mad_ton_transp_bd+", "+ mad_ton_balanco_bd+", "+ madeira_praca_bd+", "+ControlePrincipal.fator_empilalhemto);
         con.fecharConexao();
     } 
         
@@ -116,27 +132,26 @@ public class AlterarMadeiraPraca extends javax.swing.JFrame {
             }
         }
         jLabelVolumeMadeiraMSt.setText("Volume madeira: "+volumeMadeiraMStereo+" mst"); 
-        if(ControlePrincipal.fator_emp > 0){
-            volumeMadeiraM3 = volumeMadeiraMStereo / ControlePrincipal.fator_emp;
+        if(ControlePrincipal.fator_empilalhemto > 0){
+            volumeMadeiraM3 = volumeMadeiraMStereo / ControlePrincipal.fator_empilalhemto;
         }else{
-            JOptionPane.showMessageDialog(null, "Fator = 0, volume incorreto! " + ControlePrincipal.fator_emp);
+            JOptionPane.showMessageDialog(null, "Fator = 0, volume incorreto! " + ControlePrincipal.fator_empilalhemto);
         }        
         jLabelVolumeMadeiraM3.setText("Volume madeira: "+volumeMadeiraM3+" m³");   
         AtualizarDadosMadeira();
     }    
     
     private void AtualizarDadosMadeira(){                
-        ControlePrincipal.vol_mad_transp += volumeMadeiraM3;
+        ControlePrincipal.vol_mad_transp = vol_mad_transp_bd-(volumeMadeiraM3_ant-volumeMadeiraM3);
         ControlePrincipal.vol_mad_balanco = ControlePrincipal.vol_mad_transp - ControlePrincipal.vol_mad_estimado;
         
-        ControlePrincipal.mad_ton_transp = ControlePrincipal.vol_mad_transp * ControlePrincipal.densidade_madeira;
+        ControlePrincipal.mad_ton_transp = mad_ton_transp_bd-(ControlePrincipal.vol_mad_transp * ControlePrincipal.densidade_madeira);
         ControlePrincipal.mad_ton_balanco = ControlePrincipal.mad_ton_transp - ControlePrincipal.mad_ton_estimado;
         
-        ControlePrincipal.madeira_praca += volumeMadeiraM3;
-        
-        ControlePrincipal.mad_ton_tot += ControlePrincipal.mad_ton_transp;
+        ControlePrincipal.madeira_praca = madeira_praca_bd-(volumeMadeiraM3_ant-volumeMadeiraM3);
         ControlePrincipal.atualizarDados = "madeira";
         RegistarCargaPraca();
+        //System.out.println("Verficar: " + ControlePrincipal.vol_mad_transp+", "+ ControlePrincipal.vol_mad_balanco+", "+ ControlePrincipal.mad_ton_transp+", "+ ControlePrincipal.mad_ton_balanco+", "+ ControlePrincipal.madeira_praca);
     }
     
     private void RegistarCargaPraca(){
@@ -144,9 +159,6 @@ public class AlterarMadeiraPraca extends javax.swing.JFrame {
         Date date = new Date();
         
         ControleMadeira madeira = new ControleMadeira();
-        madeira.setId_operario(ControlePrincipal.id_op);
-        madeira.setTalhao(ControlePrincipal.talhao);//selecionar talhao
-        madeira.setData_entrega(data_entrega.format(date));
         madeira.setMad_volume_m_stereo(volumeMadeiraMStereo);
         madeira.setMad_volume_m3(volumeMadeiraM3);
         madeira.setAltura1_t((float)jSpinnerTranporteT_H1.getValue());
@@ -165,7 +177,8 @@ public class AlterarMadeiraPraca extends javax.swing.JFrame {
             madeira.setPeso_bt((float)jSpinnerTranporteBT_Peso.getValue());
         }
         
-        madeira.setId_estoque(ControlePrincipal.id_estoque_principal);
+        //madeira.setId_estoque(ControlePrincipal.id_estoque_principal);
+        madeira.setId_controle_madeira(id);
         
         //JOptionPane.showMessageDialog(null, "Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_transp+" carv: "+ControlePrincipal.volume_carvao_transp);
         
@@ -578,7 +591,7 @@ public class AlterarMadeiraPraca extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonLogoutActionPerformed
 
     private void jButtonCargaTalhaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargaTalhaoActionPerformed
-        //CalcularVolumeTalhao();
+        CalcularVolumeTalhao();
         //RegistrarCargaTalhao();
     }//GEN-LAST:event_jButtonCargaTalhaoActionPerformed
 

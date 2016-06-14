@@ -40,7 +40,7 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
     private void BuscarTalhao(){
     //
         String query = "SELECT `talhao` FROM `estoque_principal` WHERE `fazenda` = '"+ControlePrincipal.fazenda+"' and `projeto` = '"+ControlePrincipal.projeto+"'";
-        ConexaoBD con = ConexaoBD.getConexao(); 
+        ConexaoBD con = ConexaoBD.getConexao(0); 
         //System.out.println("importando "+query);  
         ResultSet rs = con.consultaSql(query);
 

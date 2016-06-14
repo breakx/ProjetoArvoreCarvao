@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 /**
@@ -38,8 +39,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         jButtonExcluir.setVisible(false);
         CarregarNome();
         _carregarProjetos();
-    }   
-    
+    }    
     
     private void _carregarProjetos(){
         jComboBoxProjeto.addItem("I");
@@ -56,7 +56,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
     }
     
     private void _carregarFazendas(){ 
-        ConexaoBD con = ConexaoBD.getConexao();
+        ConexaoBD con = ConexaoBD.getConexao(0);
         String query;
         ResultSet rs;
         String whereSql;
@@ -127,16 +127,19 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             "Vol_Md_Transp",
             "Vol_Md_Bal",
             "MdC_Est",
-            "MdC_Transp",
+            "MdC_Prod",
             "MdC_Bal",
             "Md_Tn_Est",
             "Md_Tn_Transp",
             "Md_Tn_Bal",
             "Cv_Tn_Est",
-            "Cv_Tn_Transp",
+            "Cv_Tn_Prod",
             "Cv_Tn_Bal",
             "Md_Praca",
+            "Cv_Praca",
             "Md_Forno",
+            "MdC_Transp",
+            "Cv_Tn_Transp",
             "RG_Est",
             "RG_Real",
             "Fator_Emp"
@@ -173,23 +176,47 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         }else{
             filtro_faz=jComboBoxFazenda.getSelectedItem().toString();
         }
+                 
+        whereSql = "where ";
+        //faz busca a partir dos filtros acima               
+        if(!filtro_upc.equals("")){
+            whereSql += "upc = '"+filtro_upc+"'";
+        }
+        //System.out.println("whereSql: " + whereSql.length());
         
-        //faz busca a partir dos filtros acima
-        if(!filtro_proj.equals("") || !filtro_faz.equals("") || !filtro_talhao.equals("") || !filtro_upc.equals("")){
-            whereSql = "where upc like '%"+filtro_upc+"%' and projeto like '%"+filtro_proj+"%' and fazenda like '%"+filtro_faz+"%' and talhao like '%"+filtro_talhao+"%'";
-        }else{
-            whereSql = "";
+        if(!filtro_proj.equals("")){
+            if(whereSql.length()>=15){
+                whereSql += " and projeto = '"+filtro_proj+"'";
+            }else{
+                whereSql += "projeto = '"+filtro_proj+"'";
+            }
         }
         
-        /*if(ControlePrincipal.tipo_u.equals("op_dir")){
-            query = "Select * from estoque_principal "+whereSql;
-        }else{
-            query = "Select * from estoque_principal "+whereSql;
-        }*/
+        if(!filtro_faz.equals("")){
+            if(whereSql.length()>=15){
+                whereSql += " and fazenda = '"+filtro_faz+"'";
+            }else{
+                whereSql += "fazenda = '"+filtro_faz+"'";
+            }
+        }
+        
+        if(!filtro_talhao.equals("")){
+            if(whereSql.length()>=15){
+                whereSql += " and talhao = '"+filtro_talhao+"'";
+            }else{
+                whereSql += "talhao = '"+filtro_talhao+"'";
+            }
+        }
+        
+        if(whereSql.length()<7){
+            whereSql = "";
+        }
+        //System.out.println("whereSql: " + whereSql.length());
         
         query = "Select * from estoque_principal "+whereSql;
+        //System.out.printf("query: "+ query);
         int tamanho = 0;       
-        ConexaoBD con = ConexaoBD.getConexao();        
+        ConexaoBD con = ConexaoBD.getConexao(0);        
         ResultSet rs = con.consultaSql(query);
         
         try {
@@ -230,17 +257,20 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                     rs.getString("vol_mad_estimado"),
                     rs.getString("vol_mad_transp"),
                     rs.getString("vol_mad_balanco"),
-                    rs.getString("mdc_estimado"),
-                    rs.getString("mdc_transp"),
+                    rs.getString("mdc_estimado"),                    
+                    rs.getString("mdc_prod"),
                     rs.getString("mdc_balanco"),
                     rs.getString("mad_ton_estimado"),
                     rs.getString("mad_ton_transp"),
                     rs.getString("mad_ton_balanco"),
                     rs.getString("carv_ton_estimado"),
-                    rs.getString("carv_ton_transp"),
+                    rs.getString("carv_ton_prod"),
                     rs.getString("carv_ton_balanco"),
                     rs.getString("madeira_praca"),
+                    rs.getString("carvao_praca"),
                     rs.getString("madeira_forno"),
+                    rs.getString("mdc_transp"),
+                    rs.getString("carv_ton_transp"),
                     rs.getString("rend_grav_estimado"),
                     rs.getString("rend_grav_real"),
                     rs.getString("fator_empilalhemto")
@@ -263,17 +293,18 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                 jTableEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*8);
             }
             jTableEstoquePrincipal.getColumnModel().getColumn(i).setResizable(false);
-            //System.out.println("Indice: "+i+" - "+ colunas[i].length());
+            //System.out.println("Indice: "+i+" - "+ colunas[i]);
         }
         jTableEstoquePrincipal.getColumnModel().getColumn(0).setMinWidth(0);     
         jTableEstoquePrincipal.getColumnModel().getColumn(0).setPreferredWidth(0);  
         jTableEstoquePrincipal.getColumnModel().getColumn(0).setMaxWidth(0);
         jTableEstoquePrincipal.getColumnModel().getColumn(0).setResizable(false);
-        jTableEstoquePrincipal.setAutoResizeMode(jTableEstoquePrincipal.AUTO_RESIZE_OFF);
+        jTableEstoquePrincipal.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTableEstoquePrincipal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         //duplo click
         jTableEstoquePrincipal.addMouseListener(new MouseAdapter(){
+            @Override
             public void mouseClicked(MouseEvent e){
                     if(e.getClickCount() == 2){
                         //System.out.println("duplo-clique detectado");
@@ -329,7 +360,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             String vol_mad_transp = jTableEstoquePrincipal.getValueAt(linha, 33).toString();
             String vol_mad_balanco = jTableEstoquePrincipal.getValueAt(linha, 34).toString();
             String mdc_estimado = jTableEstoquePrincipal.getValueAt(linha, 35).toString();
-            String mdc_transp = jTableEstoquePrincipal.getValueAt(linha, 36).toString();
+            String mdc_prod = jTableEstoquePrincipal.getValueAt(linha, 36).toString();
             String mdc_balanco = jTableEstoquePrincipal.getValueAt(linha, 37).toString();
             String mad_ton_estimado = jTableEstoquePrincipal.getValueAt(linha, 38).toString();
             String mad_ton_transp = jTableEstoquePrincipal.getValueAt(linha, 39).toString();
@@ -523,7 +554,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         jSpinnerUPC.setPreferredSize(new java.awt.Dimension(150, 25));
 
         jSpinnerTalhao.setFont(jSpinnerTalhao.getFont().deriveFont(jSpinnerTalhao.getFont().getSize()+1f));
-        jSpinnerTalhao.setModel(new javax.swing.SpinnerNumberModel(0, 0, 9, 1));
+        jSpinnerTalhao.setModel(new javax.swing.SpinnerNumberModel(0, 0, 999, 1));
         jSpinnerTalhao.setPreferredSize(new java.awt.Dimension(150, 25));
 
         jLabel9.setFont(jLabel9.getFont().deriveFont(jLabel9.getFont().getSize()+1f));
@@ -746,13 +777,11 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new GerenciarEstoquePrincipal().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(GerenciarEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new GerenciarEstoquePrincipal().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(GerenciarEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }

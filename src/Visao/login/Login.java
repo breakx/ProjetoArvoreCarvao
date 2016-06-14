@@ -18,6 +18,10 @@ import Visao.madeira.GerenciarMadeiraPraca;
 import Visao.relatorios.GerarRelatorioEstoqueBasico;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -30,10 +34,43 @@ public class Login extends javax.swing.JFrame {
 
     //variables
     ControleUsuario usuario = new ControleUsuario();
+    String nome_empresa = "Empresa Madeira Carvão SA";
     
     /** Creates new form Login */
     public Login() {
-        initComponents();          
+        initComponents();
+        ValidadeLogin();
+    }
+    
+    private void ValidadeLogin(){
+        try
+        {
+            //DefaultTableModel dtm = (DefaultTableModel) jTableUsuario.getModel();
+            String query = "Select validade from empresas where nome_empresa = '"+nome_empresa+"'";
+            ConexaoBD con = ConexaoBD.getConexao(1);
+
+            ResultSet rs = con.consultaSql(query);
+            rs.first();
+
+            //data hoje
+            Timestamp data_hj = new Timestamp(System.currentTimeMillis());
+            //System.out.println("Data hj: "+data_hj+" validade: "+rs.getTimestamp("validade")+" : "+rs.getTimestamp("validade").after(data_hj));
+            DateFormat data_format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss"); 
+            if(rs.getTimestamp("validade").after(data_hj)){
+                ControlePrincipal.validade = data_format.format(rs.getTimestamp("validade"));
+                //SystemIn();
+            }else{
+                JOptionPane.showMessageDialog(null, "Erro, prazo de validade do sistema vencido, contate os administradores!"
+                        + "\n"
+                        + "\n Cristiano G. Duarte, Fone(wtz): +55 32 98435-6738, Email: cristiano_crgd@yahoo.com.br"
+                        + "\n ou"
+                        + "\n Guilherme L. Santos, Fone(wtz): +55 38 99923-3428, Email: santosladeira@hotmail.com");
+                System.exit(0);
+            }
+            con.fecharConexao();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Usuario Invalido! "+ex);                    
+        }
     }
     
     public void SystemIn(){
@@ -41,7 +78,7 @@ public class Login extends javax.swing.JFrame {
         {
             //DefaultTableModel dtm = (DefaultTableModel) jTableUsuario.getModel();
             String query = "Select * from usuario where login_usuario = '"+jTextFieldUsuario.getText()+"'";
-            ConexaoBD con = ConexaoBD.getConexao();
+            ConexaoBD con = ConexaoBD.getConexao(0);
 
             ResultSet rs = con.consultaSql(query);
             rs.first();
@@ -66,27 +103,42 @@ public class Login extends javax.swing.JFrame {
     }
     
     public void CarregaTela(String tipo){
-        if(tipo.equals("op_scv")){
-            try
-            {
-                new GerenciarCarvaoForno().setVisible(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(GerenciarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }else if(tipo.equals("op_smd")){
-            try
-            {
-                new GerenciarMadeiraPraca().setVisible(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(GerenciarMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }else if(tipo.equals("op_dir")){
-            try
-            {
-                new GerarRelatorioEstoqueBasico().setVisible(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        switch (tipo) {
+            case "op_scv":
+                try
+                {
+                    new GerenciarCarvaoForno().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GerenciarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
+                }   break;
+            case "op_bal":
+                try
+                {
+                    new GerenciarMadeiraPraca().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GerenciarMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
+            }   break;
+            case "op_ger":
+                try
+                {
+                    new GerarRelatorioEstoqueBasico().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+                }   break;
+            case "op_adm":
+                try
+                {
+                    new GerarRelatorioEstoqueBasico().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+                }   break;
+            case "op_dir":
+                try
+                {
+                    new GerarRelatorioEstoqueBasico().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            }   break;
         }
         this.setVisible(false);
         dispose();
@@ -197,6 +249,7 @@ public class Login extends javax.swing.JFrame {
     private void jButtonLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogarActionPerformed
         // TODO add your handling code here:        
         SystemIn();
+        //ValidadeLogin();
     }//GEN-LAST:event_jButtonLogarActionPerformed
 
     /**

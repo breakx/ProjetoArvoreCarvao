@@ -31,7 +31,8 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
      */
     public InserirMadeiraPraca() {
         initComponents();
-        this.setExtendedState(MAXIMIZED_BOTH);    
+        this.setExtendedState(MAXIMIZED_BOTH);  
+        //jSpinnerTranporteT_H1.isFocusable();
         CarregarNome();
     }
     
@@ -55,12 +56,12 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
             }
         }
         jLabelVolumeMadeiraMSt.setText("Volume madeira: "+volumeMadeiraMStereo+" mst"); 
-        /*if(ControlePrincipal.fator_emp > 0){
-            volumeMadeiraM3 = volumeMadeiraMStereo / ControlePrincipal.fator_emp;
+        /*if(ControlePrincipal.fator_empilalhemto > 0){
+            volumeMadeiraM3 = volumeMadeiraMStereo / ControlePrincipal.fator_empilalhemto;
         }else{
-            JOptionPane.showMessageDialog(null, "Fator = 0, volume incorreto! " + ControlePrincipal.fator_emp);
+            JOptionPane.showMessageDialog(null, "Fator = 0, volume incorreto! " + ControlePrincipal.fator_empilalhemto);
         }*/    
-        volumeMadeiraM3 = volumeMadeiraMStereo / ControlePrincipal.fator_emp;
+        volumeMadeiraM3 = volumeMadeiraMStereo / ControlePrincipal.fator_empilalhemto;
         jLabelVolumeMadeiraM3.setText("Volume madeira: "+volumeMadeiraM3+" m³");   
         AtualizarDadosMadeira();
     }   
@@ -96,6 +97,7 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
         madeira.setComprimento_t((float)jSpinnerTranporteT_Comprimento.getValue());
         madeira.setLargura_t((float)jSpinnerTranporteT_Largura.getValue());
         madeira.setPeso_t((float)jSpinnerTranporteT_Peso.getValue());
+        madeira.setUpc_m(ControlePrincipal.upc_u);
         
         if(jCheckBoxBT.isSelected()){
             madeira.setAltura1_bt((float)jSpinnerTranporteBT_H1.getValue());
@@ -111,17 +113,15 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
         //JOptionPane.showMessageDialog(null, "Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_transp+" carv: "+ControlePrincipal.volume_carvao_transp);
                         
         InserirMadeiraCtrl inserir = new InserirMadeiraCtrl(madeira);
-        this.setVisible(false);
-        dispose();
         
-        /*try {
+        try {
             new GerenciarMadeiraPraca().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(InserirMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
         }         
         this.setVisible(false);
         dispose();
-        */       
+               
     }   
     
     private void CarregarNome(){
@@ -293,7 +293,7 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
         jLabelVolumeMadeiraMSt.setPreferredSize(new java.awt.Dimension(100, 25));
 
         jLabel7.setFont(jLabel7.getFont().deriveFont(jLabel7.getFont().getSize()+1f));
-        jLabel7.setText("Peso");
+        jLabel7.setText("Peso(t)");
         jLabel7.setPreferredSize(new java.awt.Dimension(100, 25));
 
         jCheckBoxBT.setFont(jCheckBoxBT.getFont().deriveFont(jCheckBoxBT.getFont().getSize()+1f));
@@ -329,56 +329,56 @@ public class InserirMadeiraPraca extends javax.swing.JFrame {
         });
 
         jSpinnerTranporteT_H1.setFont(jSpinnerTranporteT_H1.getFont().deriveFont(jSpinnerTranporteT_H1.getFont().getSize()+1f));
-        jSpinnerTranporteT_H1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_H1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
         jSpinnerTranporteT_H1.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteT_H2.setFont(jSpinnerTranporteT_H2.getFont().deriveFont(jSpinnerTranporteT_H2.getFont().getSize()+1f));
-        jSpinnerTranporteT_H2.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_H2.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
         jSpinnerTranporteT_H2.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteT_H3.setFont(jSpinnerTranporteT_H3.getFont().deriveFont(jSpinnerTranporteT_H3.getFont().getSize()+1f));
-        jSpinnerTranporteT_H3.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_H3.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
         jSpinnerTranporteT_H3.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteT_Comprimento.setFont(jSpinnerTranporteT_Comprimento.getFont().deriveFont(jSpinnerTranporteT_Comprimento.getFont().getSize()+1f));
-        jSpinnerTranporteT_Comprimento.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_Comprimento.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
         jSpinnerTranporteT_Comprimento.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteT_Largura.setFont(jSpinnerTranporteT_Largura.getFont().deriveFont(jSpinnerTranporteT_Largura.getFont().getSize()+1f));
-        jSpinnerTranporteT_Largura.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_Largura.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
         jSpinnerTranporteT_Largura.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteT_Peso.setFont(jSpinnerTranporteT_Peso.getFont().deriveFont(jSpinnerTranporteT_Peso.getFont().getSize()+1f));
-        jSpinnerTranporteT_Peso.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_Peso.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
         jSpinnerTranporteT_Peso.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteBT_Peso.setFont(jSpinnerTranporteBT_Peso.getFont().deriveFont(jSpinnerTranporteBT_Peso.getFont().getSize()+1f));
-        jSpinnerTranporteBT_Peso.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_Peso.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
         jSpinnerTranporteBT_Peso.setEnabled(false);
         jSpinnerTranporteBT_Peso.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteBT_Largura.setFont(jSpinnerTranporteBT_Largura.getFont().deriveFont(jSpinnerTranporteBT_Largura.getFont().getSize()+1f));
-        jSpinnerTranporteBT_Largura.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_Largura.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
         jSpinnerTranporteBT_Largura.setEnabled(false);
         jSpinnerTranporteBT_Largura.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteBT_Comprimento.setFont(jSpinnerTranporteBT_Comprimento.getFont().deriveFont(jSpinnerTranporteBT_Comprimento.getFont().getSize()+1f));
-        jSpinnerTranporteBT_Comprimento.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_Comprimento.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
         jSpinnerTranporteBT_Comprimento.setEnabled(false);
         jSpinnerTranporteBT_Comprimento.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteBT_H3.setFont(jSpinnerTranporteBT_H3.getFont().deriveFont(jSpinnerTranporteBT_H3.getFont().getSize()+1f));
-        jSpinnerTranporteBT_H3.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_H3.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
         jSpinnerTranporteBT_H3.setEnabled(false);
         jSpinnerTranporteBT_H3.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteBT_H2.setFont(jSpinnerTranporteBT_H2.getFont().deriveFont(jSpinnerTranporteBT_H2.getFont().getSize()+1f));
-        jSpinnerTranporteBT_H2.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_H2.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
         jSpinnerTranporteBT_H2.setEnabled(false);
         jSpinnerTranporteBT_H2.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteBT_H1.setFont(jSpinnerTranporteBT_H1.getFont().deriveFont(jSpinnerTranporteBT_H1.getFont().getSize()+1f));
-        jSpinnerTranporteBT_H1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_H1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.01f)));
         jSpinnerTranporteBT_H1.setEnabled(false);
         jSpinnerTranporteBT_H1.setPreferredSize(new java.awt.Dimension(200, 25));
 

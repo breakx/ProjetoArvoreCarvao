@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,9 +33,8 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         jLabelMunicipio.setText("Municipio: "+ControlePrincipal.municipio);
         jLabelFazenda.setText("Fazenda: "+ControlePrincipal.fazenda);        
         jLabelTalhao.setText("Talhao: "+ControlePrincipal.talhao);        
-        jLabelUPC.setText("UPC: "+ControlePrincipal.upc);
-        
-        jLabelVolumeMadeiraPraca.setText("Volume atual de madeira: "+ControlePrincipal.madeira_praca+" m³");
+        jLabelUPC.setText("UPC: "+ControlePrincipal.upc);        
+        jLabelVolumeMadeiraPraca.setText("Volume atual de madeira na praça: "+ControlePrincipal.madeira_praca+" m³");
         CarregarNome();
         //RegistrarMadeiraForno();
     }   
@@ -51,19 +51,23 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         carvao.setForno(jTextFieldForno.getText());
         carvao.setVolume_madeira((float) jSpinnerVolumeMadeira.getValue());
         carvao.setData_entrada_madeira_forno(data_forno.format(date));
+        
+        if((float) jSpinnerVolumeMadeira.getValue() < ControlePrincipal.madeira_praca){
+            ControlePrincipal.madeira_forno += (float) jSpinnerVolumeMadeira.getValue();
+            ControlePrincipal.madeira_praca -= (float) jSpinnerVolumeMadeira.getValue();
+            ControlePrincipal.atualizarDados = "carvao";
+            InserirCarvaoCtrl inserir = new InserirCarvaoCtrl(carvao);
+        }else{
+            JOptionPane.showMessageDialog(null, "Erro, volume de madeira insuficiente na praça!");
+        }
 
-        ControlePrincipal.madeira_forno += (float) jSpinnerVolumeMadeira.getValue();
-        ControlePrincipal.madeira_praca -= (float) jSpinnerVolumeMadeira.getValue();
-        ControlePrincipal.atualizarDados = "carvao";
-        InserirCarvaoCtrl inserir = new InserirCarvaoCtrl(carvao);
-
-        /*try {
+        try {
             new GerenciarCarvaoForno().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(InserirMadeiraForno.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(false);
-        dispose();*/
+        dispose();
     }
     
     private void VoltarMenu(){

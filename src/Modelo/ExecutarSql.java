@@ -28,7 +28,7 @@ public class ExecutarSql {
             {
                 //JOptionPane.showMessageDialog(null, "SQL= "+comando);
                 //System.out.println("SQL= "+comando);
-                ConexaoBD conexao = ConexaoBD.getConexao();
+                ConexaoBD conexao = ConexaoBD.getConexao(0);
                 Statement stmt = ConexaoBD.con.createStatement();
                 stmt.executeUpdate(comando);
                 stmt.close();
@@ -53,7 +53,7 @@ public class ExecutarSql {
     public void executar2(String comando){
         try
         {
-            ConexaoBD conexao = ConexaoBD.getConexao();
+            ConexaoBD conexao = ConexaoBD.getConexao(0);
             Statement stmt = ConexaoBD.con.createStatement();
             stmt.executeUpdate(comando);
             stmt.close();
@@ -68,7 +68,8 @@ public class ExecutarSql {
     
     private void UpdateEstoque(){
         String query = "";
-        if(ControlePrincipal.tipo_u.equals("op_smd")){
+        //if(ControlePrincipal.tipo_u.equals("op_bal")){
+        if(ControlePrincipal.atualizarDados.equals("madeira")){
             query = "UPDATE estoque_principal SET "
                 + "`vol_mad_transp` = '"+ControlePrincipal.vol_mad_transp
                 + "', `vol_mad_balanco` = '"+ControlePrincipal.vol_mad_balanco
@@ -76,13 +77,17 @@ public class ExecutarSql {
                 + "', `mad_ton_balanco` = '"+ControlePrincipal.mad_ton_balanco
                 + "', `madeira_praca` = '"+ControlePrincipal.madeira_praca 
                 + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
-        }else if(ControlePrincipal.tipo_u.equals("op_scv")){
+        //}else if(ControlePrincipal.tipo_u.equals("op_scv")){
+        }else if(ControlePrincipal.atualizarDados.equals("carvao")){
             query = "UPDATE estoque_principal SET "
-                + "`mdc_transp` = '"+ControlePrincipal.mdc_transp
+                + "`mdc_prod` = '"+ControlePrincipal.mdc_prod
                 + "', `mdc_balanco` = '"+ControlePrincipal.mdc_balanco
-                + "', `carv_ton_transp` = '"+ControlePrincipal.carv_ton_transp
+                + "', `carv_ton_prod` = '"+ControlePrincipal.carv_ton_prod
                 + "', `carv_ton_balanco` = '"+ControlePrincipal.carv_ton_balanco
                 + "', `madeira_praca` = '"+ControlePrincipal.madeira_praca
+                + "', `carvao_praca` = '"+ControlePrincipal.carvao_praca
+                + "', `mdc_transp` = '"+ControlePrincipal.mdc_transp
+                + "', `carv_ton_transp` = '"+ControlePrincipal.carv_ton_transp
                 + "', `madeira_forno` = '"+ControlePrincipal.madeira_forno   
                 + "', `rend_grav_real` = '"+ControlePrincipal.rend_grav_real
                 + "' WHERE id_estoque_p = "+ControlePrincipal.id_estoque_principal;
@@ -91,7 +96,7 @@ public class ExecutarSql {
         //JOptionPane.showMessageDialog(null, "Executar Talhao: "+query);
         
         try {
-            ConexaoBD conexao = ConexaoBD.getConexao();
+            ConexaoBD conexao = ConexaoBD.getConexao(0);
             Statement stmt = ConexaoBD.con.createStatement();
             stmt.executeUpdate(query);
             stmt.close();
@@ -111,7 +116,7 @@ public class ExecutarSql {
         ControlePrincipal.vol_mad_transp = 0;
         ControlePrincipal.vol_mad_balanco = 0;
         ControlePrincipal.mdc_estimado = 0;
-        ControlePrincipal.mdc_transp = 0;
+        ControlePrincipal.mdc_prod = 0;
         ControlePrincipal.mdc_balanco = 0;
         ControlePrincipal.mad_ton_estimado = 0;
         ControlePrincipal.mad_ton_transp = 0;
@@ -124,6 +129,6 @@ public class ExecutarSql {
         ControlePrincipal.mad_ton_tot = 0;
         ControlePrincipal.carv_ton_tot = 0;
         ControlePrincipal.rend_grav_real = 0;
-        ControlePrincipal.atualizarDados = null;
+        ControlePrincipal.atualizarDados = null;        
     }
 }

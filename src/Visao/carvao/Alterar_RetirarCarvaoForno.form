@@ -201,24 +201,31 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabelFazenda" linkSize="1" alignment="0" max="32767" attributes="0"/>
                       <Component id="jLabelTalhao" linkSize="1" alignment="0" max="32767" attributes="0"/>
                       <Component id="jLabelMunicipio" linkSize="1" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jLabelUPC" linkSize="1" alignment="0" max="32767" attributes="0"/>
                       <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                          <Component id="jButtonVoltar" min="-2" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="110" max="-2" attributes="0"/>
+                              <Component id="jLabelRendimentoForno" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jLabelVolumeMadeiraForno" alignment="0" min="-2" pref="400" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jButtonRegistrarCarvaoForno" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jButtonVoltar" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel1" min="-2" pref="196" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jLabelRendimentoForno" max="32767" attributes="0"/>
-                                  <Component id="jSpinnerVolumeCarvao" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="jSpinnerVolumeCarvao" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="jLabelUPC" linkSize="1" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jButtonRegistrarCarvaoForno" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelVolumeMadeiraForno" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               </Group>
@@ -262,9 +269,9 @@
                 <Font component="jLabel1" property="font" relativeSize="true" size="1"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Volume: "/>
+            <Property name="text" type="java.lang.String" value="Volume de carv&#xe3;o forno: "/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 25]"/>
+              <Dimension value="[200, 25]"/>
             </Property>
           </Properties>
         </Component>
@@ -322,7 +329,7 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Municipio: "/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[350, 25]"/>
+              <Dimension value="[400, 25]"/>
             </Property>
           </Properties>
         </Component>
@@ -374,7 +381,7 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Volume de madeira forno: 0.00 m&#xb3;"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[200, 20]"/>
+              <Dimension value="[400, 20]"/>
             </Property>
           </Properties>
         </Component>

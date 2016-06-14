@@ -60,7 +60,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         };
         String query = "Select * from usuario";
         int tamanho = 0;       
-        ConexaoBD con = ConexaoBD.getConexao();        
+        ConexaoBD con = ConexaoBD.getConexao(0);        
         ResultSet rs = con.consultaSql(query);
         
         try {
@@ -89,10 +89,10 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
             }else{
                 jTableUsuario.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*15);
             }
-            jTableUsuario.getColumnModel().getColumn(0).setMinWidth(0);     
+            /*jTableUsuario.getColumnModel().getColumn(0).setMinWidth(0);     
             jTableUsuario.getColumnModel().getColumn(0).setPreferredWidth(0);  
             jTableUsuario.getColumnModel().getColumn(0).setMaxWidth(0);
-            jTableUsuario.getColumnModel().getColumn(0).setResizable(false);
+            jTableUsuario.getColumnModel().getColumn(0).setResizable(false);*/
             //System.out.println("Indice: "+i+" - "+ colunas[i].length());
         }
         jTableUsuario.getTableHeader().setReorderingAllowed(false);

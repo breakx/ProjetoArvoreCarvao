@@ -308,7 +308,7 @@
             <Component class="javax.swing.JList" name="jListFiltrar">
               <Properties>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="30">
+                  <StringArray count="32">
                     <StringItem index="0" value="-"/>
                     <StringItem index="1" value="estado"/>
                     <StringItem index="2" value="bloco"/>
@@ -320,25 +320,27 @@
                     <StringItem index="8" value="situacao"/>
                     <StringItem index="9" value="fator_empilalhemto"/>
                     <StringItem index="10" value="madeira_praca"/>
-                    <StringItem index="11" value="madeira_forno"/>
-                    <StringItem index="12" value="material_genetico"/>
-                    <StringItem index="13" value="densidade_madeira"/>
-                    <StringItem index="14" value="densidade_carvao"/>
-                    <StringItem index="15" value="vol_mad_estimado"/>
-                    <StringItem index="16" value="vol_mad_transp"/>
-                    <StringItem index="17" value="vol_mad_balanco"/>
-                    <StringItem index="18" value="mdc_estimado"/>
-                    <StringItem index="19" value="mdc_transp"/>
-                    <StringItem index="20" value="mdc_balanco"/>
-                    <StringItem index="21" value="mad_ton_estimado"/>
-                    <StringItem index="22" value="mad_ton_transp"/>
-                    <StringItem index="23" value="mad_ton_balanco"/>
-                    <StringItem index="24" value="carv_ton_estimado"/>
-                    <StringItem index="25" value="carv_ton_transp"/>
-                    <StringItem index="26" value="carv_ton_balanco"/>
-                    <StringItem index="27" value="rend_grav_estimado"/>
-                    <StringItem index="28" value="rend_grav_real"/>
-                    <StringItem index="29" value="id_estoque_p"/>
+                    <StringItem index="11" value="carvao_praca"/>
+                    <StringItem index="12" value="madeira_forno"/>
+                    <StringItem index="13" value="mdc_transp"/>
+                    <StringItem index="14" value="densidade_madeira"/>
+                    <StringItem index="15" value="densidade_carvao"/>
+                    <StringItem index="16" value="vol_mad_estimado"/>
+                    <StringItem index="17" value="vol_mad_transp"/>
+                    <StringItem index="18" value="vol_mad_balanco"/>
+                    <StringItem index="19" value="mdc_estimado"/>
+                    <StringItem index="20" value="mdc_prod"/>
+                    <StringItem index="21" value="mdc_balanco"/>
+                    <StringItem index="22" value="mad_ton_estimado"/>
+                    <StringItem index="23" value="mad_ton_transp"/>
+                    <StringItem index="24" value="mad_ton_balanco"/>
+                    <StringItem index="25" value="carv_ton_estimado"/>
+                    <StringItem index="26" value="carv_ton_prod"/>
+                    <StringItem index="27" value="carv_ton_balanco"/>
+                    <StringItem index="28" value="rend_grav_estimado"/>
+                    <StringItem index="29" value="rend_grav_real"/>
+                    <StringItem index="30" value="carv_ton_transp"/>
+                    <StringItem index="31" value="id_estoque_p"/>
                   </StringArray>
                 </Property>
               </Properties>

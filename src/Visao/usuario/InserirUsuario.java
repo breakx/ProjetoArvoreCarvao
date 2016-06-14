@@ -29,9 +29,13 @@ public class InserirUsuario extends javax.swing.JFrame {
     }
     
     private void _carregarTipo(){
-        jComboBoxTipo.addItem("op_smd");
+        /*jComboBoxTipo.addItem("op_smd");
         jComboBoxTipo.addItem("op_scv"); 
-        jComboBoxTipo.addItem("op_dir");  
+        jComboBoxTipo.addItem("op_ger");*/  
+        jComboBoxTipo.addItem("Balanceiro");
+        jComboBoxTipo.addItem("Supervisor Carvao"); 
+        jComboBoxTipo.addItem("Gerente");
+        jComboBoxTipo.addItem("Diretor");
         _carregarUPC_Op();
     }
     
@@ -53,20 +57,40 @@ public class InserirUsuario extends javax.swing.JFrame {
         usuario.setLogin_usuario(jTextFieldLogin.getText());
         usuario.setSenha_usuario(jTextFieldSenha.getText());
         //usuario.setTipo_usuario(jTextFieldTipo.getText());        
-        usuario.setTipo_usuario(jComboBoxTipo.getSelectedItem().toString()); 
+        //usuario.setTipo_usuario(jComboBoxTipo.getSelectedItem().toString()); 
+        usuario.setTipo_usuario(CodigoTipoUsuario(jComboBoxTipo.getSelectedItem().toString())); 
         usuario.setUpc_usuario(String.valueOf(jComboBoxUpcOp.getSelectedIndex()));
         usuario.setNome_usuario(jTextFieldNome.getText());
 
         InserirUsuarioCtrl inserir = new InserirUsuarioCtrl(usuario);
 
-       /*try 
+       try 
        {
            new GerenciarUsuarios().setVisible(true);
        } catch (SQLException ex) {
            Logger.getLogger(InserirUsuario.class.getName()).log(Level.SEVERE, null, ex);
        }
        this.setVisible(false);
-       dispose();*/
+       dispose();
+    }
+    
+    private String CodigoTipoUsuario(String nome_tipo){
+        String tipo="-";
+        switch(nome_tipo){
+            case "Balanceiro":
+                tipo="op_bal";
+                break;
+            case "Supervisor Carvao":
+                tipo="op_scv";
+                break;                
+            case "Gerente":
+                tipo="op_ger";
+                break;
+            case "Diretor":
+                tipo="op_dir";
+                break;
+        }
+        return tipo;
     }
     
     private void VoltarMenu(){

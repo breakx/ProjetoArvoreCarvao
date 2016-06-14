@@ -4,9 +4,9 @@
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="jMenuPrincipal">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Arquivo"/>
+            <Property name="text" type="java.lang.String" value="Menu"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGerarPDF">
@@ -33,6 +33,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCarregarFazendaExcelActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemValidade">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Validade"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemValidadeActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemLogout">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Logout"/>
@@ -43,72 +51,96 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu2">
+        <Menu class="javax.swing.JMenu" name="jMenuRelatorio">
           <Properties>
             <Property name="text" type="java.lang.String" value="Relatorios"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemMadeiraPraca">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Madeira/Pra&#xe7;a"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemMadeiraPracaActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCarvao">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Carv&#xe3;o"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCarvaoActionPerformed"/>
-              </Events>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu3">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Gerenciar"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemUsuarios">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Usuarios"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemUsuariosActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFazendas">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Fazendas"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFazendasActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemMadeiraPra&#xe7;a">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Madeira/Pra&#xe7;a"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemMadeiraPra&#xe7;aActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCarvaoForno">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Carvao/Forno"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCarvaoFornoActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemEstoque">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemRelatorioEstoque">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Estoque"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemEstoqueActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemRelatorioEstoqueActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemRelatorioMadeiraPraca">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Madeira/Pra&#xe7;a"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemRelatorioMadeiraPracaActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemRelatorioCarvao">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Carv&#xe3;o"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemRelatorioCarvaoActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemRelatorioCarvaoExpedido">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Carv&#xe3;o Expedido"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemRelatorioCarvaoExpedidoActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenuGerenciar">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Gerenciar"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGerenciarUsuarios">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Usuarios"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGerenciarUsuariosActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGerenciarFazendas">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Fazendas"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGerenciarFazendasActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGerenciarMadeiraPra&#xe7;a">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Madeira/Pra&#xe7;a"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGerenciarMadeiraPra&#xe7;aActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGerenciarCarvaoForno">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Carvao/Forno"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGerenciarCarvaoFornoActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGerenciarExpedirCarvao">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="ExpedirCarv&#xe3;o"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGerenciarExpedirCarvaoActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGerenciarEstoque">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Estoque"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGerenciarEstoqueActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -153,7 +185,7 @@
                       </Group>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jPanel3" pref="670" max="32767" attributes="0"/>
+                          <Component id="jPanel3" pref="760" max="32767" attributes="0"/>
                           <Component id="jPanel4" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -172,10 +204,10 @@
                   <Group type="102" attributes="0">
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="jPanel2" pref="513" max="32767" attributes="0"/>
+                      <Component id="jPanel2" pref="550" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="jPanel3" pref="548" max="32767" attributes="0"/>
+                      <Component id="jPanel3" pref="550" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -293,7 +325,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel4" min="-2" pref="97" max="-2" attributes="0"/>
@@ -302,14 +334,14 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel3" max="32767" attributes="0"/>
-                          <EmptySpace min="53" pref="53" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="jComboBoxCategoria" min="-2" pref="78" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jLabel2" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace pref="40" max="32767" attributes="0"/>
+                          <EmptySpace pref="36" max="32767" attributes="0"/>
                           <Component id="jCheckBoxUTM" min="-2" pref="78" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="jSpinnerUPC" min="-2" pref="78" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
@@ -324,7 +356,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel8" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="jComboBoxTalhadia" min="-2" pref="78" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -333,63 +365,71 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jButtonFiltrar" min="-2" pref="97" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
                               </Group>
                               <Component id="jScrollPane3" max="32767" attributes="0"/>
                           </Group>
                       </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jLabel9" min="-2" pref="97" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="jComboBoxAnoRotacao" min="-2" pref="78" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jSpinnerUPC" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jCheckBoxUTM" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jComboBoxCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jComboBoxTalhadia" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jComboBoxMatGen" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jComboBoxProjeto" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jComboBoxFazenda" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jComboBoxAnoRotacao" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="227" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="jScrollPane3" max="32767" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jButtonFiltrar" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jScrollPane3" pref="239" max="32767" attributes="0"/>
                   </Group>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <Component id="jButtonFiltrar" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -518,7 +558,7 @@
                   </FontInfo>
                 </Property>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="49">
+                  <StringArray count="52">
                     <StringItem index="0" value="-"/>
                     <StringItem index="1" value="estado"/>
                     <StringItem index="2" value="bloco"/>
@@ -528,18 +568,18 @@
                     <StringItem index="6" value="upc"/>
                     <StringItem index="7" value="talhao"/>
                     <StringItem index="8" value="area"/>
-                    <StringItem index="9" value="m3_ha"/>
-                    <StringItem index="10" value="material_genetico"/>
+                    <StringItem index="9" value="material_genetico"/>
+                    <StringItem index="10" value="m3_ha"/>
                     <StringItem index="11" value="talhadia"/>
                     <StringItem index="12" value="ano_rotacao"/>
                     <StringItem index="13" value="data_plantio"/>
                     <StringItem index="14" value="data_rotacao_1"/>
                     <StringItem index="15" value="data_rotacao_2"/>
                     <StringItem index="16" value="data_rotacao_3"/>
-                    <StringItem index="17" value="idade_hoje"/>
-                    <StringItem index="18" value="idade_corte1"/>
-                    <StringItem index="19" value="idade_corte2"/>
-                    <StringItem index="20" value="idade_corte3"/>
+                    <StringItem index="17" value="idade_corte1"/>
+                    <StringItem index="18" value="idade_corte2"/>
+                    <StringItem index="19" value="idade_corte3"/>
+                    <StringItem index="20" value="idade_hoje"/>
                     <StringItem index="21" value="conducao"/>
                     <StringItem index="22" value="categoria"/>
                     <StringItem index="23" value="situacao"/>
@@ -555,19 +595,22 @@
                     <StringItem index="33" value="vol_mad_transp"/>
                     <StringItem index="34" value="vol_mad_balanco"/>
                     <StringItem index="35" value="mdc_estimado"/>
-                    <StringItem index="36" value="mdc_transp"/>
+                    <StringItem index="36" value="mdc_prod"/>
                     <StringItem index="37" value="mdc_balanco"/>
                     <StringItem index="38" value="mad_ton_estimado"/>
                     <StringItem index="39" value="mad_ton_transp"/>
                     <StringItem index="40" value="mad_ton_balanco"/>
                     <StringItem index="41" value="carv_ton_estimado"/>
-                    <StringItem index="42" value="carv_ton_transp"/>
+                    <StringItem index="42" value="carv_ton_prod"/>
                     <StringItem index="43" value="carv_ton_balanco"/>
                     <StringItem index="44" value="madeira_praca"/>
-                    <StringItem index="45" value="madeira_forno"/>
-                    <StringItem index="46" value="rend_grav_estimado"/>
-                    <StringItem index="47" value="rend_grav_real"/>
-                    <StringItem index="48" value="fator_empilalhemto"/>
+                    <StringItem index="45" value="carvao_praca"/>
+                    <StringItem index="46" value="madeira_forno"/>
+                    <StringItem index="47" value="mdc_transp"/>
+                    <StringItem index="48" value="carv_ton_transp"/>
+                    <StringItem index="49" value="rend_grav_estimado"/>
+                    <StringItem index="50" value="rend_grav_real"/>
+                    <StringItem index="51" value="fator_empilalhemto"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -581,7 +624,7 @@
                 <Font component="jLabel6" property="font" relativeSize="true" size="1"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="PROJETOS"/>
+            <Property name="text" type="java.lang.String" value="Projeto"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
@@ -591,7 +634,7 @@
                 <Font component="jLabel7" property="font" relativeSize="true" size="1"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="FAZENDAS"/>
+            <Property name="text" type="java.lang.String" value="Fazenda"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="jComboBoxProjeto">
@@ -640,6 +683,28 @@
             </Property>
           </Properties>
         </Component>
+        <Component class="javax.swing.JLabel" name="jLabel9">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jLabel9" property="font" relativeSize="true" size="1"/>
+              </FontInfo>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Ano Rota&#xe7;&#xe3;o"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jComboBoxAnoRotacao">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jComboBoxAnoRotacao" property="font" relativeSize="true" size="1"/>
+              </FontInfo>
+            </Property>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel3">
@@ -657,12 +722,12 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jScrollPane1" alignment="0" pref="666" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -694,61 +759,91 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabelM3_ha" max="32767" attributes="0"/>
-                      <Component id="jLabelAreaTotal" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jLabelMDC_ha" alignment="0" max="32767" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabelVolumeMadeiraEstTotal" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabelVolumeMadeiraTranspTotal" max="32767" attributes="0"/>
-                          <EmptySpace min="14" pref="14" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabelAreaTotal" max="32767" attributes="0"/>
+                              <Component id="jLabelM3_ha" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jLabelVolumeCarvaoEstTotal" max="32767" attributes="0"/>
-                      <Component id="jLabelVolumeCarvaoTranspTotal" alignment="0" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="jLabelInfo1" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="jLabelTotalCarvaoPraca" alignment="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jLabelTotalMadeiraPraca" pref="0" max="32767" attributes="0"/>
+                              <Component id="jLabelMDC_ha" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabelToneladaCarvaoEstTotal" max="32767" attributes="0"/>
+                      <Component id="jLabelToneladaMadeiraTranspTotal" max="32767" attributes="0"/>
+                      <Component id="jLabelVolumeMadeiraEstTotal" max="32767" attributes="0"/>
+                      <Component id="jLabelVolumeMadeiraTranspTotal" max="32767" attributes="0"/>
                       <Component id="jLabelToneladaMadeiraEstTotal" max="32767" attributes="0"/>
-                      <Component id="jLabelToneladaMadeiraTranspTotal" alignment="1" max="32767" attributes="0"/>
-                      <Component id="jLabelToneladaCarvaoTranspTotal" max="32767" attributes="0"/>
+                      <Component id="jLabelInfo2" alignment="0" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jLabelToneladaCarvaoProdTotal" pref="249" max="32767" attributes="0"/>
+                      <Component id="jLabelVolumeCarvaoTranspTotal" alignment="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="jLabelVolumeCarvaoProdTotal" alignment="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="jLabelVolumeCarvaoEstTotal" alignment="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="jLabelToneladaCarvaoEstTotal" alignment="1" pref="0" max="32767" attributes="0"/>
+                      <Component id="jLabelToneladaCarvaoTranspTotal" alignment="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="jLabelInfo3" alignment="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabelVolumeMadeiraTranspTotal" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelToneladaMadeiraTranspTotal" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelInfo1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelInfo2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelInfo3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabelAreaTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelVolumeMadeiraEstTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelVolumeCarvaoEstTotal" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabelVolumeMadeiraEstTotal" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelToneladaMadeiraEstTotal" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelMDC_ha" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabelToneladaCarvaoTranspTotal" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelVolumeCarvaoTranspTotal" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabelM3_ha" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelVolumeMadeiraTranspTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelVolumeCarvaoProdTotal" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabelVolumeCarvaoEstTotal" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelToneladaCarvaoEstTotal" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelMDC_ha" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelToneladaMadeiraEstTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelVolumeCarvaoTranspTotal" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabelTotalMadeiraPraca" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelToneladaMadeiraTranspTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelToneladaCarvaoEstTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabelTotalCarvaoPraca" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabelToneladaCarvaoProdTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                  <Component id="jLabelToneladaCarvaoTranspTotal" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -761,9 +856,22 @@
                 <Font component="jLabelAreaTotal" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Area Total: 0 m&#xb3;"/>
+            <Property name="text" type="java.lang.String" value="Area Total: 0 ha"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 15]"/>
+              <Dimension value="[200, 15]"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabelVolumeCarvaoProdTotal">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jLabelVolumeCarvaoProdTotal" property="font" relativeSize="true" size="0"/>
+              </FontInfo>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Volume carv&#xe3;o produzido total: 0 m&#xb3;"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[250, 15]"/>
             </Property>
           </Properties>
         </Component>
@@ -774,22 +882,9 @@
                 <Font component="jLabelM3_ha" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Media Geral m&#xb3;/ha: 0 m&#xb3;"/>
+            <Property name="text" type="java.lang.String" value="Media Geral m&#xb3;/ha: 0"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 15]"/>
-            </Property>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabelVolumeCarvaoTranspTotal">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-              <FontInfo relative="true">
-                <Font component="jLabelVolumeCarvaoTranspTotal" property="font" relativeSize="true" size="0"/>
-              </FontInfo>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Volume carv&#xe3;o transportado total: 0 m&#xb3;"/>
-            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 15]"/>
+              <Dimension value="[200, 15]"/>
             </Property>
           </Properties>
         </Component>
@@ -805,7 +900,7 @@
               <Dimension value="[100, 15]"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 15]"/>
+              <Dimension value="[250, 15]"/>
             </Property>
           </Properties>
         </Component>
@@ -816,22 +911,22 @@
                 <Font component="jLabelToneladaMadeiraTranspTotal" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Toneladas de madeira transportada totais: 0 m&#xb3;"/>
+            <Property name="text" type="java.lang.String" value="Toneladas de madeira transportada total: 0"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 15]"/>
+              <Dimension value="[250, 15]"/>
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabelToneladaCarvaoTranspTotal">
+        <Component class="javax.swing.JLabel" name="jLabelToneladaCarvaoProdTotal">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
               <FontInfo relative="true">
-                <Font component="jLabelToneladaCarvaoTranspTotal" property="font" relativeSize="true" size="0"/>
+                <Font component="jLabelToneladaCarvaoProdTotal" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Toneladas de carv&#xe3;o transportado totais: 0 m&#xb3;"/>
+            <Property name="text" type="java.lang.String" value="Toneladas de carv&#xe3;o  produzido total: 0"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 15]"/>
+              <Dimension value="[250, 15]"/>
             </Property>
           </Properties>
         </Component>
@@ -842,12 +937,12 @@
                 <Font component="jLabelMDC_ha" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Media geral mdc/ha: 0 m&#xb3;"/>
+            <Property name="text" type="java.lang.String" value="Media ponderada mdc/ha: 0 "/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[100, 15]"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 15]"/>
+              <Dimension value="[200, 15]"/>
             </Property>
           </Properties>
         </Component>
@@ -863,7 +958,7 @@
               <Dimension value="[100, 15]"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 15]"/>
+              <Dimension value="[250, 15]"/>
             </Property>
           </Properties>
         </Component>
@@ -876,7 +971,7 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Volume carv&#xe3;o estimado total: 0 m&#xb3;"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 15]"/>
+              <Dimension value="[250, 15]"/>
             </Property>
           </Properties>
         </Component>
@@ -887,9 +982,9 @@
                 <Font component="jLabelToneladaMadeiraEstTotal" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Toneladas de madeira estimada totais: 0 m&#xb3;"/>
+            <Property name="text" type="java.lang.String" value="Toneladas de madeira estimada total: 0"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 15]"/>
+              <Dimension value="[250, 15]"/>
             </Property>
           </Properties>
         </Component>
@@ -900,9 +995,100 @@
                 <Font component="jLabelToneladaCarvaoEstTotal" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Toneladas de carv&#xe3;o estimado totais: 0 m&#xb3;"/>
+            <Property name="text" type="java.lang.String" value="Toneladas de carv&#xe3;o estimado total: 0"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[100, 15]"/>
+              <Dimension value="[250, 15]"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabelTotalCarvaoPraca">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jLabelTotalCarvaoPraca" property="font" relativeSize="true" size="0"/>
+              </FontInfo>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Volume carvao pra&#xe7;a total: 0 m&#xb3;"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[200, 15]"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabelTotalMadeiraPraca">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jLabelTotalMadeiraPraca" property="font" relativeSize="true" size="0"/>
+              </FontInfo>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Total madeira pra&#xe7;a: 0 m&#xb3;"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[200, 15]"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabelInfo1">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font bold="true" component="jLabelInfo1" property="font" relativeSize="false" size="12"/>
+              </FontInfo>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Informa&#xe7;&#xf5;es Gerais"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[200, 15]"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabelInfo2">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font bold="true" component="jLabelInfo2" property="font" relativeSize="false" size="12"/>
+              </FontInfo>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Informa&#xe7;&#xf5;es Madeira"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[250, 15]"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabelInfo3">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font bold="true" component="jLabelInfo3" property="font" relativeSize="false" size="12"/>
+              </FontInfo>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Informa&#xe7;&#xf5;es Carv&#xe3;o"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[250, 15]"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabelVolumeCarvaoTranspTotal">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jLabelVolumeCarvaoTranspTotal" property="font" relativeSize="true" size="0"/>
+              </FontInfo>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Volume carv&#xe3;o transportado total: 0 m&#xb3;"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[250, 15]"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabelToneladaCarvaoTranspTotal">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jLabelToneladaCarvaoTranspTotal" property="font" relativeSize="true" size="0"/>
+              </FontInfo>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Toneladas de carv&#xe3;o transportado total: 0"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[250, 15]"/>
             </Property>
           </Properties>
         </Component>

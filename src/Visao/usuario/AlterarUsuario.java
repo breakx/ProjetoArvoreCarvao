@@ -42,14 +42,18 @@ public class AlterarUsuario extends javax.swing.JFrame {
         this.id = id;
         jTextFieldLogin.setText(login);
         jTextFieldNome.setText(nome);
-        jComboBoxTipo.setSelectedItem(tipo);
+        jComboBoxTipo.setSelectedItem(ConverterCodigoTipoUsuario(tipo));
         jComboBoxUpcOp.setSelectedIndex(Integer.valueOf(upc_u)); 
     }
     
     private void _carregarTipo(){
-        jComboBoxTipo.addItem("op_smd");
+        /*jComboBoxTipo.addItem("op_bal");
         jComboBoxTipo.addItem("op_scv"); 
-        jComboBoxTipo.addItem("op_dir"); 
+        jComboBoxTipo.addItem("op_dir");*/  
+        jComboBoxTipo.addItem("Balanceiro");
+        jComboBoxTipo.addItem("Supervisor Carvao"); 
+        jComboBoxTipo.addItem("Gerente");
+        jComboBoxTipo.addItem("Diretor");
         _carregarUPC_Op();
     }
     
@@ -75,19 +79,58 @@ public class AlterarUsuario extends javax.swing.JFrame {
         usuario.setLogin_usuario(jTextFieldLogin.getText());      
         //usuario.setTipo_usuario(jTextFieldTipo.getText());
         usuario.setSenha_usuario(jTextFieldSenha.getText());          
-        usuario.setTipo_usuario(jComboBoxTipo.getSelectedItem().toString()); 
+        //usuario.setTipo_usuario(jComboBoxTipo.getSelectedItem().toString()); 
+        usuario.setTipo_usuario(CodigoTipoUsuario(jComboBoxTipo.getSelectedItem().toString())); 
         usuario.setUpc_usuario(String.valueOf(jComboBoxUpcOp.getSelectedIndex()));
         usuario.setNome_usuario(jTextFieldNome.getText());
 
         AlterarUsuarioCtrl alterar = new AlterarUsuarioCtrl(usuario);
 
-        /*try {
+        try {
             new GerenciarUsuarios().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(AlterarUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(false);
-        dispose();*/
+        dispose();
+    }
+    
+    private String CodigoTipoUsuario(String nome_tipo){
+        String tipo="-";
+        switch(nome_tipo){
+            case "Balanceiro":
+                tipo="op_bal";
+                break;
+            case "Supervisor Carvao":
+                tipo="op_scv";
+                break;                
+            case "Gerente":
+                tipo="op_ger";
+                break;
+            case "Diretor":
+                tipo="op_dir";
+                break;
+        }
+        return tipo;
+    }
+    
+    private String ConverterCodigoTipoUsuario(String tipo_nome){
+        String nome="-";
+        switch(tipo_nome){
+            case "op_bal":
+                nome="Balanceiro";
+                break;
+            case "op_scv":
+                nome="Supervisor Carvao";
+                break;                
+            case "op_ger":
+                nome="Gerente";
+                break;
+            case "op_dir":
+                nome="Diretor";
+                break;
+        }
+        return nome;
     }
     
     private void VoltarMenu(){
