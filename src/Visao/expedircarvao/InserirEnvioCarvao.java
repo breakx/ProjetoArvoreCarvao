@@ -34,6 +34,7 @@ public class InserirEnvioCarvao extends javax.swing.JFrame {
         jLabelTalhao.setText("Talhao: "+ControlePrincipal.talhao);        
         jLabelUPC.setText("UPC: "+ControlePrincipal.upc);        
         jLabelVolumeCarvaoPraca.setText("Volume atual de carvão na praça: "+ControlePrincipal.carvao_praca+" m³");
+        jLabelMaterialGenetico.setText("Material Genético: "+ControlePrincipal.material_genetico);
         CarregarNome();
     }
     
@@ -42,6 +43,7 @@ public class InserirEnvioCarvao extends javax.swing.JFrame {
         Date date = new Date();
 
         volume_transportado = (float) jSpinnerPesoTransportado.getValue()/ControlePrincipal.densidade_carvao;
+        //System.out.println("Densidade: "+ControlePrincipal.densidade_carvao);
         jLabelVolumeCarvaoEnviado.setText("Volume de carvão enviado: "+volume_transportado+" m³.");
         ControleExpedirCarvao expedir_carvao = new ControleExpedirCarvao();
         expedir_carvao.setId_estoque_p(ControlePrincipal.id_estoque_principal);
@@ -51,7 +53,9 @@ public class InserirEnvioCarvao extends javax.swing.JFrame {
         expedir_carvao.setPeso_transportado((float) jSpinnerPesoTransportado.getValue());
         expedir_carvao.setVolume_transportado(volume_transportado);
         expedir_carvao.setDestino_carvao(jTextFieldDestinoCarvao.getText());
+        expedir_carvao.setPlaca_veiculo(jTextFieldPlacaVeiculo.getText());
         expedir_carvao.setData_envio(data_envio.format(date));
+        expedir_carvao.setMaterial_gen(ControlePrincipal.material_genetico);
         
         if(volume_transportado < ControlePrincipal.carvao_praca){
             ControlePrincipal.carvao_praca -= volume_transportado;
@@ -116,6 +120,9 @@ public class InserirEnvioCarvao extends javax.swing.JFrame {
         jLabelUPC = new javax.swing.JLabel();
         jSpinnerPesoTransportado = new javax.swing.JSpinner();
         jLabelVolumeCarvaoEnviado = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jTextFieldPlacaVeiculo = new javax.swing.JTextField();
+        jLabelMaterialGenetico = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -257,32 +264,58 @@ public class InserirEnvioCarvao extends javax.swing.JFrame {
         jLabelVolumeCarvaoEnviado.setText("Volume de carvão enviado: 0.00 m³");
         jLabelVolumeCarvaoEnviado.setPreferredSize(new java.awt.Dimension(300, 25));
 
+        jLabel5.setFont(jLabel5.getFont().deriveFont(jLabel5.getFont().getSize()+1f));
+        jLabel5.setText("Placa Veículo");
+        jLabel5.setPreferredSize(new java.awt.Dimension(100, 25));
+
+        jTextFieldPlacaVeiculo.setFont(jTextFieldPlacaVeiculo.getFont().deriveFont(jTextFieldPlacaVeiculo.getFont().getSize()+1f));
+        jTextFieldPlacaVeiculo.setPreferredSize(new java.awt.Dimension(200, 25));
+        jTextFieldPlacaVeiculo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldPlacaVeiculoActionPerformed(evt);
+            }
+        });
+
+        jLabelMaterialGenetico.setFont(jLabelMaterialGenetico.getFont().deriveFont(jLabelMaterialGenetico.getFont().getSize()+4f));
+        jLabelMaterialGenetico.setText("Material Genético:");
+        jLabelMaterialGenetico.setPreferredSize(new java.awt.Dimension(300, 25));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldDestinoCarvao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSpinnerPesoTransportado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelFazenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelUPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButtonRegistrarExpedicaoCarvao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(101, 101, 101)
-                        .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabelMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelFazenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelUPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelVolumeCarvaoPraca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelVolumeCarvaoEnviado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                        .addContainerGap()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelVolumeCarvaoPraca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jTextFieldPlacaVeiculo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldDestinoCarvao, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jSpinnerPesoTransportado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jButtonRegistrarExpedicaoCarvao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(101, 101, 101)
+                                .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabelVolumeCarvaoEnviado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabelMaterialGenetico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(360, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -296,6 +329,8 @@ public class InserirEnvioCarvao extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addComponent(jLabelUPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
+                .addComponent(jLabelMaterialGenetico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
                 .addComponent(jLabelVolumeCarvaoPraca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -305,6 +340,10 @@ public class InserirEnvioCarvao extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldDestinoCarvao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldPlacaVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addComponent(jLabelVolumeCarvaoEnviado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
@@ -365,6 +404,10 @@ public class InserirEnvioCarvao extends javax.swing.JFrame {
         VoltarMenu();
     }//GEN-LAST:event_jButtonVoltarActionPerformed
 
+    private void jTextFieldPlacaVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldPlacaVeiculoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldPlacaVeiculoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -407,8 +450,10 @@ public class InserirEnvioCarvao extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelFazenda;
     private javax.swing.JLabel jLabelIdTipo;
+    private javax.swing.JLabel jLabelMaterialGenetico;
     private javax.swing.JLabel jLabelMunicipio;
     private javax.swing.JLabel jLabelNome;
     private javax.swing.JLabel jLabelTalhao;
@@ -421,5 +466,6 @@ public class InserirEnvioCarvao extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JSpinner jSpinnerPesoTransportado;
     private javax.swing.JTextField jTextFieldDestinoCarvao;
+    private javax.swing.JTextField jTextFieldPlacaVeiculo;
     // End of variables declaration//GEN-END:variables
 }

@@ -9,6 +9,7 @@ import Controle.ControleCarvao;
 import Controle.ControlePrincipal;
 import Controle.ControleUsuario;
 import Controle.carvao.InserirCarvaoCtrl;
+import Visao.relatorios.GerarRelatorioEstoquePrincipal;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -35,12 +36,13 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         jLabelTalhao.setText("Talhao: "+ControlePrincipal.talhao);        
         jLabelUPC.setText("UPC: "+ControlePrincipal.upc);        
         jLabelVolumeMadeiraPraca.setText("Volume atual de madeira na praça: "+ControlePrincipal.madeira_praca+" m³");
+        jLabelMaterialGenetico.setText("Material Genético: "+ControlePrincipal.material_genetico);
         CarregarNome();
         //RegistrarMadeiraForno();
     }   
     
     private void RegistrarMadeiraForno(){
-        DateFormat data_forno = new SimpleDateFormat("dd/MM/yyyy"); 
+        DateFormat data_forno = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
         Date date = new Date();
 
         ControleCarvao carvao = new ControleCarvao();
@@ -51,23 +53,24 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         carvao.setForno(jTextFieldForno.getText());
         carvao.setVolume_madeira((float) jSpinnerVolumeMadeira.getValue());
         carvao.setData_entrada_madeira_forno(data_forno.format(date));
+        carvao.setMaterial_gen(ControlePrincipal.material_genetico);
         
         if((float) jSpinnerVolumeMadeira.getValue() < ControlePrincipal.madeira_praca){
             ControlePrincipal.madeira_forno += (float) jSpinnerVolumeMadeira.getValue();
             ControlePrincipal.madeira_praca -= (float) jSpinnerVolumeMadeira.getValue();
             ControlePrincipal.atualizarDados = "carvao";
             InserirCarvaoCtrl inserir = new InserirCarvaoCtrl(carvao);
+            
+            try {
+                new GerenciarCarvaoForno().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(InserirMadeiraForno.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.setVisible(false);
+            dispose();
         }else{
             JOptionPane.showMessageDialog(null, "Erro, volume de madeira insuficiente na praça!");
-        }
-
-        try {
-            new GerenciarCarvaoForno().setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(InserirMadeiraForno.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        this.setVisible(false);
-        dispose();
+        }       
     }
     
     private void VoltarMenu(){
@@ -113,6 +116,7 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         jLabelMunicipio = new javax.swing.JLabel();
         jLabelUPC = new javax.swing.JLabel();
         jSpinnerVolumeMadeira = new javax.swing.JSpinner();
+        jLabelMaterialGenetico = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -256,31 +260,40 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
         jSpinnerVolumeMadeira.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
         jSpinnerVolumeMadeira.setPreferredSize(new java.awt.Dimension(200, 25));
 
+        jLabelMaterialGenetico.setFont(jLabelMaterialGenetico.getFont().deriveFont(jLabelMaterialGenetico.getFont().getSize()+4f));
+        jLabelMaterialGenetico.setText("Material Genético:");
+        jLabelMaterialGenetico.setPreferredSize(new java.awt.Dimension(300, 25));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(10, 10, 10)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jTextFieldForno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jSpinnerVolumeMadeira, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(jButtonRegistrarMadeiraForno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabelMunicipio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelFazenda, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelTalhao, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelUPC, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelVolumeMadeiraPraca, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(10, 10, 10)
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jTextFieldForno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jSpinnerVolumeMadeira, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jButtonRegistrarMadeiraForno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabelMunicipio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelFazenda, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelTalhao, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelUPC, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelVolumeMadeiraPraca, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabelMaterialGenetico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(10, 10, 10))
         );
 
@@ -298,6 +311,8 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addComponent(jLabelUPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
+                .addComponent(jLabelMaterialGenetico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
                 .addComponent(jLabelVolumeMadeiraPraca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -311,7 +326,7 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonRegistrarMadeiraForno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(203, 203, 203))
+                .addContainerGap())
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabelFazenda, jLabelMunicipio, jLabelTalhao, jLabelUPC, jLabelVolumeMadeiraPraca});
@@ -411,6 +426,7 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelFazenda;
     private javax.swing.JLabel jLabelIdTipo;
+    private javax.swing.JLabel jLabelMaterialGenetico;
     private javax.swing.JLabel jLabelMunicipio;
     private javax.swing.JLabel jLabelNome;
     private javax.swing.JLabel jLabelTalhao;

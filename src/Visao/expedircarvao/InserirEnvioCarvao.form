@@ -213,32 +213,47 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel1" alignment="0" max="-2" attributes="0"/>
-                              <Component id="jLabel4" alignment="0" max="-2" attributes="0"/>
-                          </Group>
+                      <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jTextFieldDestinoCarvao" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jSpinnerPesoTransportado" alignment="0" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabelMunicipio" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelFazenda" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelTalhao" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelUPC" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jButtonRegistrarExpedicaoCarvao" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="101" max="-2" attributes="0"/>
-                          <Component id="jButtonVoltar" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabelVolumeCarvaoPraca" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel1" alignment="0" max="-2" attributes="0"/>
+                                      <Component id="jLabel4" alignment="0" max="-2" attributes="0"/>
+                                      <Component id="jLabel5" alignment="0" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                      <Component id="jTextFieldPlacaVeiculo" max="32767" attributes="0"/>
+                                      <Component id="jTextFieldDestinoCarvao" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="jSpinnerPesoTransportado" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jButtonRegistrarExpedicaoCarvao" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="101" max="-2" attributes="0"/>
+                                  <Component id="jButtonVoltar" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="jLabelVolumeCarvaoEnviado" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <Component id="jLabelMunicipio" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelFazenda" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelTalhao" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelUPC" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelVolumeCarvaoPraca" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelVolumeCarvaoEnviado" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                          <Component id="jLabelMaterialGenetico" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace pref="360" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -254,6 +269,8 @@
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Component id="jLabelUPC" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <Component id="jLabelMaterialGenetico" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Component id="jLabelVolumeCarvaoPraca" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -264,6 +281,11 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel4" alignment="3" max="-2" attributes="0"/>
                       <Component id="jTextFieldDestinoCarvao" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabel5" alignment="3" max="-2" attributes="0"/>
+                      <Component id="jTextFieldPlacaVeiculo" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Component id="jLabelVolumeCarvaoEnviado" min="-2" max="-2" attributes="0"/>
@@ -439,6 +461,47 @@
               </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" value="Volume de carv&#xe3;o enviado: 0.00 m&#xb3;"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[300, 25]"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel5">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jLabel5" property="font" relativeSize="true" size="1"/>
+              </FontInfo>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Placa Ve&#xed;culo"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[100, 25]"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jTextFieldPlacaVeiculo">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jTextFieldPlacaVeiculo" property="font" relativeSize="true" size="1"/>
+              </FontInfo>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[200, 25]"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldPlacaVeiculoActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabelMaterialGenetico">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+              <FontInfo relative="true">
+                <Font component="jLabelMaterialGenetico" property="font" relativeSize="true" size="4"/>
+              </FontInfo>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Material Gen&#xe9;tico:"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[300, 25]"/>
             </Property>

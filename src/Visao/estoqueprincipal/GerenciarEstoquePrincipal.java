@@ -524,7 +524,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         });
 
         jButtonRelatorio.setFont(jButtonRelatorio.getFont().deriveFont(jButtonRelatorio.getFont().getSize()+1f));
-        jButtonRelatorio.setText("Relatorio");
+        jButtonRelatorio.setText("<html>Voltar<br>Relatorio</html>");
         jButtonRelatorio.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonRelatorio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

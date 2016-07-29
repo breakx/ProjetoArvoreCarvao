@@ -43,6 +43,7 @@ public class Login extends javax.swing.JFrame {
     }
     
     private void ValidadeLogin(){
+        String options[] = {"sim","não","talvez"};
         try
         {
             //DefaultTableModel dtm = (DefaultTableModel) jTableUsuario.getModel();
@@ -58,7 +59,7 @@ public class Login extends javax.swing.JFrame {
             DateFormat data_format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss"); 
             if(rs.getTimestamp("validade").after(data_hj)){
                 ControlePrincipal.validade = data_format.format(rs.getTimestamp("validade"));
-                //SystemIn();
+                //JOptionPane.showMessageDialog(null, "Verificando validade!"+ControlePrincipal.validade);
             }else{
                 JOptionPane.showMessageDialog(null, "Erro, prazo de validade do sistema vencido, contate os administradores!"
                         + "\n"
@@ -76,13 +77,12 @@ public class Login extends javax.swing.JFrame {
     public void SystemIn(){
         try
         {
-            //DefaultTableModel dtm = (DefaultTableModel) jTableUsuario.getModel();
             String query = "Select * from usuario where login_usuario = '"+jTextFieldUsuario.getText()+"'";
             ConexaoBD con = ConexaoBD.getConexao(0);
 
             ResultSet rs = con.consultaSql(query);
             rs.first();
-
+            JOptionPane.showMessageDialog(null, "Conectando "+ConexaoBD.hostname);
             if(jTextFieldUsuario.getText().equals(rs.getString("login_usuario")) && jTextFieldSenha.getText().equals(rs.getString("senha_usuario"))){ 
                     String id_u = rs.getString("id_usuario");
                     String login = rs.getString("login_usuario");
@@ -98,7 +98,7 @@ public class Login extends javax.swing.JFrame {
                 }
             con.fecharConexao();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Usuario Invalido! "+ex);                    
+            JOptionPane.showMessageDialog(null, "Usuario Invalido!");                    
         }
     }
     
@@ -249,7 +249,6 @@ public class Login extends javax.swing.JFrame {
     private void jButtonLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogarActionPerformed
         // TODO add your handling code here:        
         SystemIn();
-        //ValidadeLogin();
     }//GEN-LAST:event_jButtonLogarActionPerformed
 
     /**

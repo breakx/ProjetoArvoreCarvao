@@ -31,8 +31,10 @@ import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -129,7 +131,67 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao carregar fornos! "+ex);
+            JOptionPane.showMessageDialog(null, "Erro ao carregar destinos! "+ex);
+        }             
+        _carregarPlacas();
+    }   
+    
+    private void _carregarPlacas(){ 
+        jComboBoxPlacaVeiculo.removeAllItems();
+        jComboBoxPlacaVeiculo.addItem("-");
+        ConexaoBD con = ConexaoBD.getConexao(0);
+        String query;
+        ResultSet rs;
+        query = "SELECT placa_veiculo FROM expedir_carvao";
+        //JOptionPane.showMessageDialog(null, "Teste!" + query);
+        rs = con.consultaSql(query);
+        try {
+            while(rs.next()){
+                int i=0;
+                for (int j=0; j<jComboBoxPlacaVeiculo.getItemCount(); j++) {
+                    if (jComboBoxPlacaVeiculo.getItemAt(j).equals(rs.getString("placa_veiculo"))) {
+                        i++; 
+                        //System.out.println("i: "+i);       
+                    }
+                }
+                if(i==0){
+                    //System.out.println("Add: "+i+" f "+rs.getString("id_operario"));
+                    jComboBoxPlacaVeiculo.addItem(rs.getString("placa_veiculo"));
+                }               
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao carregar placas! "+ex);
+        }             
+        _carregarMateriaisGeneticos();
+    }   
+    
+    private void _carregarMateriaisGeneticos(){ 
+        jComboBoxMaterialGenetico.removeAllItems();
+        jComboBoxMaterialGenetico.addItem("-");
+        ConexaoBD con = ConexaoBD.getConexao(0);
+        String query;
+        ResultSet rs;
+        query = "SELECT material_gen FROM expedir_carvao";
+        //JOptionPane.showMessageDialog(null, "Teste!" + query);
+        rs = con.consultaSql(query);
+        try {
+            while(rs.next()){
+                int i=0;
+                for (int j=0; j<jComboBoxMaterialGenetico.getItemCount(); j++) {
+                    if (jComboBoxMaterialGenetico.getItemAt(j).equals(rs.getString("material_gen"))) {
+                        i++; 
+                        //System.out.println("i: "+i);       
+                    }
+                }
+                if(i==0){
+                    //System.out.println("Add: "+i+" f "+rs.getString("material_gen"));
+                    jComboBoxMaterialGenetico.addItem(rs.getString("material_gen"));
+                }               
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao carregar materiais genéticos! "+ex);
         }             
         PreencherTabela();
     }   
@@ -145,12 +207,15 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
             "peso_transportado", 
             "volume_transportado", 
             "destino_carvao", 
+            "placa_veiculo", 
             "id_estoque_p",  
             "id_operario", 
             "data_envio", 
+            "material_gen"
             //"id_expedir_carvao"
         };
-        DecimalFormat decformat = new DecimalFormat("0.00");
+        Locale brasil = new Locale ("pt", "BR");
+        DecimalFormat decformat = new DecimalFormat ("#,##0.00", new DecimalFormatSymbols (brasil));
         String query;
         int tamanho = 0;
         
@@ -158,7 +223,9 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
         
         //Controle e definição das variaveis da clausula where like. Filtros
         String filtro_op_u;
-        String filtro_forno;
+        String filtro_destino;
+        String filtro_placa;
+        String filtro_mat_gen;
         String filtro_upc;
         String filtro_talhao;
         String filtro_data_i;
@@ -170,9 +237,21 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
         }
         
         if(jComboBoxDestino.getSelectedItem().equals("-")){
-            filtro_forno="";
+            filtro_destino="";
         }else{
-            filtro_forno=jComboBoxDestino.getSelectedItem().toString();
+            filtro_destino=jComboBoxDestino.getSelectedItem().toString();
+        }
+        
+        if(jComboBoxPlacaVeiculo.getSelectedItem().equals("-")){
+            filtro_placa="";
+        }else{
+            filtro_placa=jComboBoxPlacaVeiculo.getSelectedItem().toString();
+        }
+        
+        if(jComboBoxMaterialGenetico.getSelectedItem().equals("-")){
+            filtro_mat_gen="";
+        }else{
+            filtro_mat_gen=jComboBoxMaterialGenetico.getSelectedItem().toString();
         }
         
         if(jSpinnerUPC.getValue().equals(0)){
@@ -206,11 +285,27 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
         }
         
         //System.out.println("whereSql: " + whereSql.length());
-        if(!filtro_forno.equals("")){
+        if(!filtro_destino.equals("")){
             if(whereSql.length()>=17){
-                whereSql += " and forno = '"+filtro_forno+"'";
+                whereSql += " and destino_carvao = '"+filtro_destino+"'";
             }else{            
-                whereSql += "forno = '"+filtro_forno+"'";
+                whereSql += "destino_carvao = '"+filtro_destino+"'";
+            }        
+        }
+        
+        if(!filtro_placa.equals("")){
+            if(whereSql.length()>=17){
+                whereSql += " and placa_veiculo = '"+filtro_placa+"'";
+            }else{            
+                whereSql += "placa_veiculo = '"+filtro_placa+"'";
+            }        
+        }
+        
+        if(!filtro_mat_gen.equals("")){
+            if(whereSql.length()>=17){
+                whereSql += " and material_gen = '"+filtro_mat_gen+"'";
+            }else{            
+                whereSql += "material_gen = '"+filtro_mat_gen+"'";
             }        
         }
         
@@ -255,7 +350,7 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
         ResultSet rs = con.consultaSql(query);
         pesoTotal=0;
         volumeTotal=0;
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
             while(rs.next()){
                 linhas.add(new Object[]{
@@ -263,11 +358,13 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
                     rs.getString("talhao"),//1
                     rs.getString("peso_transportado"),//2
                     rs.getString("volume_transportado"),//3              
-                    rs.getString("destino_carvao"),//4
-                    rs.getString("id_estoque_p"),//5
-                    rs.getString("id_operario"),//6
-                    newDateFormat.format(rs.getDate("data_envio")),//7
-                    rs.getString("id_expedir_carvao"),//8
+                    rs.getString("destino_carvao"),//4          
+                    rs.getString("placa_veiculo"),//5
+                    rs.getString("id_estoque_p"),//6
+                    rs.getString("id_operario"),//7
+                    newDateFormat.format(rs.getTimestamp("data_envio")),//8
+                    rs.getString("material_gen"),//9
+                    rs.getString("id_expedir_carvao"),//10
                 });
                                 
                 //peso transportado total
@@ -298,12 +395,7 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
             }else{
                 jTableExpedirCarvao.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*8);
             }
-            if(i>3 && !ControlePrincipal.tipo_u.equals("op_ger")){
-                jTableExpedirCarvao.getColumnModel().getColumn(i).setMinWidth(0);     
-                jTableExpedirCarvao.getColumnModel().getColumn(i).setPreferredWidth(0);  
-                jTableExpedirCarvao.getColumnModel().getColumn(i).setMaxWidth(0);
-                jTableExpedirCarvao.getColumnModel().getColumn(i).setResizable(false);
-            }
+            jTableExpedirCarvao.getColumnModel().getColumn(i).setResizable(false);
             //System.out.println("Indice: "+i+" - "+ colunas[i].length()*200);
         }
         jTableExpedirCarvao.getTableHeader().setReorderingAllowed(false);
@@ -412,6 +504,10 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
         jTextFieldDataI = new javax.swing.JTextField();
         jTextFieldDataF = new javax.swing.JTextField();
         jLabelData1 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jComboBoxPlacaVeiculo = new javax.swing.JComboBox();
+        jLabel11 = new javax.swing.JLabel();
+        jComboBoxMaterialGenetico = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableExpedirCarvao = new javax.swing.JTable();
@@ -548,35 +644,61 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
         jLabelData1.setText("Data fim");
         jLabelData1.setPreferredSize(new java.awt.Dimension(80, 25));
 
+        jLabel10.setFont(jLabel10.getFont().deriveFont(jLabel10.getFont().getSize()+1f));
+        jLabel10.setText("Placa");
+        jLabel10.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jComboBoxPlacaVeiculo.setFont(jComboBoxPlacaVeiculo.getFont().deriveFont(jComboBoxPlacaVeiculo.getFont().getSize()+1f));
+        jComboBoxPlacaVeiculo.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        jLabel11.setFont(jLabel11.getFont().deriveFont(jLabel11.getFont().getSize()+1f));
+        jLabel11.setText("Mat. Gen.");
+        jLabel11.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jComboBoxMaterialGenetico.setFont(jComboBoxMaterialGenetico.getFont().deriveFont(jComboBoxMaterialGenetico.getFont().getSize()+1f));
+        jComboBoxMaterialGenetico.setPreferredSize(new java.awt.Dimension(150, 25));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelData1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextFieldDataF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextFieldDataI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabelData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabelData1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(10, 10, 10)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jTextFieldDataF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jTextFieldDataI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(10, 10, 10)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jSpinnerUPC, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jComboBoxDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(jComboBoxPlacaVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerUPC, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBoxDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jComboBoxMaterialGenetico, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(10, 10, 10))
         );
         jPanel2Layout.setVerticalGroup(
@@ -590,6 +712,14 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxPlacaVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxMaterialGenetico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -608,7 +738,7 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
                     .addComponent(jLabelData1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(255, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -632,7 +762,7 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
         );
 
         jLabelPesoTotal.setFont(jLabelPesoTotal.getFont());
@@ -1005,8 +1135,12 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonFiltrar;
     private javax.swing.JComboBox jComboBoxDestino;
+    private javax.swing.JComboBox jComboBoxMaterialGenetico;
+    private javax.swing.JComboBox jComboBoxPlacaVeiculo;
     private javax.swing.JComboBox jComboBoxUsuario;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

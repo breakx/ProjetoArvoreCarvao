@@ -15,6 +15,7 @@ public class ConexaoBD {
     private static ConexaoBD instancia;
     public static Connection con = null;    
     
+    public static String hostname = "";
     private String host = "";
     private String database = "";
     private String url = "";
@@ -26,7 +27,8 @@ public class ConexaoBD {
         //System.err.println("ConexaoBD: "+ index);
         switch(index){
             case 0:
-                BDPrincipal();
+                BDSecundario();
+                //BDPrincipal();
                 //BDLocal();
                 break;
             case 1:                
@@ -52,27 +54,33 @@ public class ConexaoBD {
     }
     
     private void BDPrincipal(){
+        hostname ="BDPrincipal";
         host ="db4free.net:3306/";
         database = "appmadeiracarvao";
         url = "jdbc:mysql://"+host+database;
         usuario_bd = "crgddev";
         senha_bd = "duarte1207";
+        //JOptionPane.showMessageDialog(null, "Conectando ao bd db4free!");
     }
     
     private void BDLocal(){
+        hostname ="localhost";
         host ="localhost/";
         database = "appmadeira";
         url = "jdbc:mysql://"+host+database;
         usuario_bd = "root";
         senha_bd = "";
+        //JOptionPane.showMessageDialog(null, "Conectando ao bd localhost!");
     }
     
     private void BDSecundario(){
+        hostname ="BDSecundario";
         host ="mysql873.umbler.com:41890/";
         database = "crserver";
         url = "jdbc:mysql://"+host+database;
         usuario_bd = "crgd";
         senha_bd = "crgd1234";
+        //JOptionPane.showMessageDialog(null, "Conectando ao bd umber!");
     }
 
     public static ConexaoBD getConexao(int index)

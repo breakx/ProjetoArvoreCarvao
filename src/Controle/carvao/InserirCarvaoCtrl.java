@@ -25,7 +25,8 @@ public class InserirCarvaoCtrl {
                 + "`data_entrada_madeira_forno`, "
                 + "`volume_carvao`, "
                 + "`data_saida_carvao_forno`, "                
-                + "`rend_grav_forno`"
+                + "`rend_grav_forno`, "
+                + "`material_gen`"
                 + ")"
               + "VALUES (" + null
               + ", '" + carvao.getId_estoque()
@@ -38,7 +39,9 @@ public class InserirCarvaoCtrl {
               +"', '0.0"
               +"', '00/00/0000 00:00:00"
               +"', '0.0"
+              + "', '" + carvao.getMaterial_gen()
               +"')";
+        //System.out.println("query: "+query);
         ExecutarSql execut = new ExecutarSql();
         execut.executar(query);
     }

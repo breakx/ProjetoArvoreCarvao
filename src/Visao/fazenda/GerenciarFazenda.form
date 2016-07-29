@@ -381,7 +381,7 @@
                 <Font component="jButtonRelatorio" property="font" relativeSize="true" size="1"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Relatorio"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Voltar&lt;br&gt;Relatorio&lt;/html&gt;"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[100, 60]"/>
             </Property>

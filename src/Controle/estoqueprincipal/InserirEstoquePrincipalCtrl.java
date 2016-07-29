@@ -66,6 +66,7 @@ public class InserirEstoquePrincipalCtrl {
         + "`carv_ton_balanco`, "
                 
         + "`madeira_praca`, "
+        + "`carvao_praca`, "
         + "`madeira_forno`, "
         + "`rend_grav_estimado`, "
         + "`rend_grav_real`, "
@@ -125,6 +126,7 @@ public class InserirEstoquePrincipalCtrl {
             + "', '" + estoque.getCarv_ton_balanco()
                 
             + "', '" + estoque.getMadeira_praca()
+            + "', '" + estoque.getCarvao_praca()
             + "', '" + estoque.getMadeira_forno()
             + "', '" + estoque.getRend_grav_estimado()
             + "', '" + estoque.getRend_grav_real()

@@ -224,7 +224,7 @@
           <Font name="Serif" size="36" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="Relatorio Estoque Principal Basico"/>
+        <Property name="text" type="java.lang.String" value="Relatorio Estoque"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[275, 70]"/>

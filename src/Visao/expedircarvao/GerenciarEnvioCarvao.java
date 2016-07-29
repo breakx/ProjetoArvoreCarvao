@@ -53,9 +53,11 @@ public class GerenciarEnvioCarvao extends javax.swing.JFrame {
             "peso_transportado", 
             "volume_transportado", 
             "destino_carvao", 
+            "placa_veiculo", 
             "id_estoque_p",  
             "id_operario", 
             "data_envio", 
+            "material_gen", 
             "id_expedir_carvao"
         };
         String query;
@@ -76,11 +78,13 @@ public class GerenciarEnvioCarvao extends javax.swing.JFrame {
                     rs.getString("talhao"),//1
                     rs.getString("peso_transportado"),//2
                     rs.getString("volume_transportado"),//3              
-                    rs.getString("destino_carvao"),//4
-                    rs.getString("id_estoque_p"),//5
-                    rs.getString("id_operario"),//6
-                    rs.getString("data_envio"),//7
-                    rs.getString("id_expedir_carvao"),//8
+                    rs.getString("destino_carvao"),//4          
+                    rs.getString("placa_veiculo"),//5
+                    rs.getString("id_estoque_p"),//6
+                    rs.getString("id_operario"),//7
+                    rs.getTimestamp("data_envio"),//8
+                    rs.getString("material_gen"),//9
+                    rs.getString("id_expedir_carvao"),//10
                 });
                 tamanho++;
             }
@@ -99,7 +103,7 @@ public class GerenciarEnvioCarvao extends javax.swing.JFrame {
             }else{
                 jTableExpedirCarvao.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*8);
             }
-            if(i>3 && !ControlePrincipal.tipo_u.equals("op_ger")){
+            if(i>3 && (!ControlePrincipal.tipo_u.equals("op_ger"))){
                 jTableExpedirCarvao.getColumnModel().getColumn(i).setMinWidth(0);     
                 jTableExpedirCarvao.getColumnModel().getColumn(i).setPreferredWidth(0);  
                 jTableExpedirCarvao.getColumnModel().getColumn(i).setMaxWidth(0);
@@ -267,7 +271,7 @@ public class GerenciarEnvioCarvao extends javax.swing.JFrame {
         });
 
         jButtonRelatorio.setFont(jButtonRelatorio.getFont().deriveFont(jButtonRelatorio.getFont().getSize()+1f));
-        jButtonRelatorio.setText("Relatorio");
+        jButtonRelatorio.setText("<html>Voltar<br>Relatorio</html>");
         jButtonRelatorio.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonRelatorio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

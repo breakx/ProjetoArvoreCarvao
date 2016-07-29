@@ -32,10 +32,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -133,6 +135,36 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao carregar fornos! "+ex);
         }             
+        _carregarMateriaisGeneticos();
+    }   
+    
+    private void _carregarMateriaisGeneticos(){ 
+        jComboBoxMaterialGenetico.removeAllItems();
+        jComboBoxMaterialGenetico.addItem("-");
+        ConexaoBD con = ConexaoBD.getConexao(0);
+        String query;
+        ResultSet rs;
+        query = "SELECT material_gen FROM controle_carvao";
+        //JOptionPane.showMessageDialog(null, "Teste!" + query);
+        rs = con.consultaSql(query);
+        try {
+            while(rs.next()){
+                int i=0;
+                for (int j=0; j<jComboBoxMaterialGenetico.getItemCount(); j++) {
+                    if (jComboBoxMaterialGenetico.getItemAt(j).equals(rs.getString("material_gen"))) {
+                        i++; 
+                        //System.out.println("i: "+i);       
+                    }
+                }
+                if(i==0){
+                    //System.out.println("Add: "+i+" f "+rs.getString("material_gen"));
+                    jComboBoxMaterialGenetico.addItem(rs.getString("material_gen"));
+                }               
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao carregar materiais genéticos! "+ex);
+        }             
         PreencherTabela();
     }   
     
@@ -152,7 +184,8 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
             "data_entrada_madeira_forno",
             "volume_carvao",
             "data_saida_carvao_forno",
-            "rend_grav_forno"
+            "rend_grav_forno",
+            "material_gen"
         };
         int tamanho = 0;    
         String query;        
@@ -161,6 +194,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         //Controle e definição das variaveis da clausula where like. Filtros
         String filtro_op_u;
         String filtro_forno;
+        String filtro_mat_gen;
         String filtro_upc;
         String filtro_talhao;
         String filtro_data_i = null;
@@ -175,6 +209,12 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
             filtro_forno="";
         }else{
             filtro_forno=jComboBoxForno.getSelectedItem().toString();
+        }
+        
+        if(jComboBoxMaterialGenetico.getSelectedItem().equals("-")){
+            filtro_mat_gen="";
+        }else{
+            filtro_mat_gen=jComboBoxMaterialGenetico.getSelectedItem().toString();
         }
         
         if(jSpinnerUPC.getValue().equals(0)){
@@ -213,6 +253,14 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
                 whereSql += " and forno = '"+filtro_forno+"'";
             }else{            
                 whereSql += "forno = '"+filtro_forno+"'";
+            }        
+        }
+        
+        if(!filtro_mat_gen.equals("")){
+            if(whereSql.length()>=17){
+                whereSql += " and material_gen = '"+filtro_mat_gen+"'";
+            }else{            
+                whereSql += "material_gen = '"+filtro_mat_gen+"'";
             }        
         }
         
@@ -258,8 +306,9 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         ResultSet rs = con.consultaSql(query);
         vol_mad_Total=0;
         vol_carv_Total=0;
-        DecimalFormat decformat = new DecimalFormat("0.00");
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Locale brasil = new Locale ("pt", "BR");
+        DecimalFormat decformat = new DecimalFormat ("#,##0.00", new DecimalFormatSymbols (brasil));
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
             while(rs.next()){
                 linhas.add(new Object[]{
@@ -270,10 +319,11 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
                     rs.getString("talhao"),
                     rs.getString("forno"),
                     rs.getString("volume_madeira"),
-                    newDateFormat.format(rs.getDate("data_entrada_madeira_forno")),
+                    newDateFormat.format(rs.getTimestamp("data_entrada_madeira_forno")),
                     rs.getString("volume_carvao"),
                     rs.getString("data_saida_carvao_forno"),
-                    rs.getString("rend_grav_forno")
+                    rs.getString("rend_grav_forno"),
+                    rs.getString("material_gen")
                 });
                 
                 //volume madeira total
@@ -403,6 +453,8 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         jTextFieldDataI = new javax.swing.JTextField();
         jTextFieldDataF = new javax.swing.JTextField();
         jLabelData1 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jComboBoxMaterialGenetico = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableRelatorioCarvao = new javax.swing.JTable();
@@ -544,35 +596,49 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         jLabelData1.setText("Data fim");
         jLabelData1.setPreferredSize(new java.awt.Dimension(80, 25));
 
+        jLabel11.setFont(jLabel11.getFont().deriveFont(jLabel11.getFont().getSize()+1f));
+        jLabel11.setText("Mat. Gen.");
+        jLabel11.setPreferredSize(new java.awt.Dimension(80, 25));
+
+        jComboBoxMaterialGenetico.setFont(jComboBoxMaterialGenetico.getFont().deriveFont(jComboBoxMaterialGenetico.getFont().getSize()+1f));
+        jComboBoxMaterialGenetico.setPreferredSize(new java.awt.Dimension(150, 25));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelData1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextFieldDataF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextFieldDataI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelData1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jTextFieldDataF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jTextFieldDataI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jSpinnerUPC, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBoxForno, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinnerUPC, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBoxForno, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jComboBoxMaterialGenetico, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(10, 10, 10))
         );
         jPanel2Layout.setVerticalGroup(
@@ -586,6 +652,10 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxForno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxMaterialGenetico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -604,7 +674,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
                     .addComponent(jLabelData1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(255, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -620,7 +690,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
         );
 
         jLabelVolumeMadeiraTotal.setFont(jLabelVolumeMadeiraTotal.getFont());
@@ -992,8 +1062,10 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonFiltrar;
     private javax.swing.JComboBox jComboBoxForno;
+    private javax.swing.JComboBox jComboBoxMaterialGenetico;
     private javax.swing.JComboBox jComboBoxUsuario;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

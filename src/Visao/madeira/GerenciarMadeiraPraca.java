@@ -16,6 +16,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,7 +85,7 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
         }
         ConexaoBD con = ConexaoBD.getConexao(0);         
         ResultSet rs = con.consultaSql(query);
-        
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
             while(rs.next()){
                 dados.add(new Object[]{
@@ -104,7 +105,7 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
                     rs.getString("comprimento_bt"),//13
                     rs.getString("largura_bt"),//14
                     rs.getString("peso_bt"),//15
-                    rs.getString("data_entrega"),//16
+                    newDateFormat.format(rs.getTimestamp("data_entrega")),//16
                     rs.getString("id_controle_madeira"),//17
                     rs.getString("id_estoque_p"),//18
                     rs.getString("id_operario")//19
@@ -343,7 +344,7 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
         });
 
         jButtonRelatorio.setFont(jButtonRelatorio.getFont().deriveFont(jButtonRelatorio.getFont().getSize()+1f));
-        jButtonRelatorio.setText("Relatorio");
+        jButtonRelatorio.setText("<html>Voltar<br>Relatorio</html>");
         jButtonRelatorio.setPreferredSize(new java.awt.Dimension(100, 60));
         jButtonRelatorio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

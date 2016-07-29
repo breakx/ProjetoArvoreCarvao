@@ -19,6 +19,8 @@ public class ControleExpedirCarvao {
     private float peso_transportado;
     private float volume_transportado;
     private String destino_carvao;
+    private String placa_veiculo;
+    private String material_gen;
 
     /**
      * @return the id_expedir_carvao
@@ -144,6 +146,34 @@ public class ControleExpedirCarvao {
      */
     public void setDestino_carvao(String destino_carvao) {
         this.destino_carvao = destino_carvao;
+    }
+
+    /**
+     * @return the placa_veiculo
+     */
+    public String getPlaca_veiculo() {
+        return placa_veiculo;
+    }
+
+    /**
+     * @param placa_veiculo the placa_veiculo to set
+     */
+    public void setPlaca_veiculo(String placa_veiculo) {
+        this.placa_veiculo = placa_veiculo;
+    }
+
+    /**
+     * @return the material_gen
+     */
+    public String getMaterial_gen() {
+        return material_gen;
+    }
+
+    /**
+     * @param material_gen the material_gen to set
+     */
+    public void setMaterial_gen(String material_gen) {
+        this.material_gen = material_gen;
     }
     
 }

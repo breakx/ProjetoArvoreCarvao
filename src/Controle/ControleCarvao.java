@@ -21,6 +21,7 @@ public class ControleCarvao {
     private float volume_carvao;
     private String data_saida_carvao;
     private float rend_grav_forno;
+    private String material_gen;
 
     /**
      * @return the id_controle_carvao
@@ -174,5 +175,19 @@ public class ControleCarvao {
      */
     public void setUpc_c(int upc_c) {
         this.upc_c = upc_c;
+    }
+
+    /**
+     * @return the material_gen
+     */
+    public String getMaterial_gen() {
+        return material_gen;
+    }
+
+    /**
+     * @param material_gen the material_gen to set
+     */
+    public void setMaterial_gen(String material_gen) {
+        this.material_gen = material_gen;
     }
 }

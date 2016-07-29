@@ -31,7 +31,10 @@ import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -214,7 +217,9 @@ public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
         mStereoTotal=0;
         m3Total=0;
         pesoTotal=0;
-        DecimalFormat decformat = new DecimalFormat("0.00");
+        Locale brasil = new Locale ("pt", "BR");
+        DecimalFormat decformat = new DecimalFormat ("#,##0.00", new DecimalFormatSymbols (brasil));
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
             while(rs.next()){
                 linhas.add(new Object[]{
@@ -223,7 +228,7 @@ public class GerarRelatorioMadeiraPraca extends javax.swing.JFrame {
                     rs.getString("id_operario"),
                     rs.getString("upc_m"),
                     rs.getString("talhao"),
-                    rs.getString("data_entrega"),
+                    newDateFormat.format(rs.getTimestamp("data_entrega")),
                     rs.getString("mad_volume_m_stereo"),
                     rs.getString("mad_volume_m3"),
                     rs.getString("altura1_t"),

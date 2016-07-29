@@ -56,6 +56,7 @@ public class ControleEstoquePrincipal {
     private float carv_ton_transp = 0.0f; 
     private float carv_ton_balanco = 0.0f; 
     private float madeira_praca = 0.0f; 
+    private float carvao_praca = 0.0f; 
     private float madeira_forno = 0.0f; 
     private float rend_grav_estimado = 0.0f; 
     private float rend_grav_real = 0.0f; 
@@ -745,6 +746,20 @@ public class ControleEstoquePrincipal {
      */
     public void setIdade_corte3(float idade_corte3) {
         this.idade_corte3 = idade_corte3;
+    }
+
+    /**
+     * @return the carvao_praca
+     */
+    public float getCarvao_praca() {
+        return carvao_praca;
+    }
+
+    /**
+     * @param carvao_praca the carvao_praca to set
+     */
+    public void setCarvao_praca(float carvao_praca) {
+        this.carvao_praca = carvao_praca;
     }
 
 }

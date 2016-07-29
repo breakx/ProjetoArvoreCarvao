@@ -42,9 +42,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -273,7 +275,8 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     
     private void PreencherTabelaFiltrada(){  
         //JOptionPane.showMessageDialog(null, "Size! " + jListFiltrar.getSelectedIndices().length + jListFiltrar.getModel().getSize());
-        DecimalFormat decformat = new DecimalFormat("0.00");
+        Locale brasil = new Locale ("pt", "BR");
+        DecimalFormat decformat = new DecimalFormat ("#,##0.00", new DecimalFormatSymbols (brasil));
         ConexaoBD con = ConexaoBD.getConexao(0);
         String query;
         ResultSet rs;
@@ -501,6 +504,8 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                     //System.out.println("Add Dados ["+i+"]: "+coluna[i]);
                 }
                 
+                //coluna[31] = decformat.format(rs.getString("vol_mad_estimado"));
+                //System.out.println("Add Dados ["+31+"]: "+coluna[31]);
                 //area total
                 if(rs.getString("area")!=null){
                     areaTotal += Float.valueOf(rs.getString("area"));
@@ -528,7 +533,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                 }
                 
                 //Volumes totais de madeira
-                if(rs.getString("vol_mad_estimado")!=null){
+                if(rs.getString("vol_mad_estimado")!=null){     
                     vol_mad_estTotal += Float.valueOf(rs.getString("vol_mad_estimado"));
                 }
                 if(rs.getString("vol_mad_transp")!=null){
@@ -1420,7 +1425,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
 
         jLabelTitulo.setFont(new java.awt.Font("Serif", 1, 36)); // NOI18N
         jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitulo.setText("Relatorio Estoque Principal Basico");
+        jLabelTitulo.setText("Relatorio Estoque");
         jLabelTitulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabelTitulo.setPreferredSize(new java.awt.Dimension(275, 70));
 
