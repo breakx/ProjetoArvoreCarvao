@@ -53,14 +53,16 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
     }
     
     private void CarregarEstoque() throws SQLException{
-        String query = "Select municipio, fazenda, talhao, upc, densidade_carvao, mdc_estimado, mdc_prod, mdc_balanco, carv_ton_estimado, carv_ton_prod, carv_ton_balanco, madeira_praca, carvao_praca, madeira_forno, mad_ton_transp, rend_grav_real, mdc_transp, carv_ton_transp "
+        String query = "Select municipio, fazenda, talhao, upc, vol_mad_transp, densidade_madeira, densidade_carvao, mdc_estimado, mdc_prod, mdc_balanco, carv_ton_estimado, carv_ton_prod, carv_ton_balanco, madeira_praca, carvao_praca, madeira_forno, mad_ton_transp, rend_grav_real, mdc_transp, carv_ton_transp "
                 + "from estoque_principal where id_estoque_p = "+ControlePrincipal.id_estoque_principal;
         ConexaoBD con = ConexaoBD.getConexao(0);
         
         ResultSet rs = con.consultaSql(query);
         //JOptionPane.showMessageDialog(null, "CarregarEstoque: "+query);
         while(rs.next()){ 
+            ControlePrincipal.vol_mad_transp = Float.parseFloat(rs.getString("vol_mad_transp"));
             ControlePrincipal.densidade_carvao = Float.parseFloat(rs.getString("densidade_carvao"));
+            ControlePrincipal.densidade_madeira = Float.parseFloat(rs.getString("densidade_madeira"));
             ControlePrincipal.mdc_estimado = Float.parseFloat(rs.getString("mdc_estimado"));
             ControlePrincipal.mdc_prod = Float.parseFloat(rs.getString("mdc_prod"));
             ControlePrincipal.mdc_balanco = Float.parseFloat(rs.getString("mdc_balanco"));
@@ -99,11 +101,19 @@ public class Alterar_RetirarCarvaoForno extends javax.swing.JFrame {
         
         ControlePrincipal.madeira_forno -= madeira;
         
-        ControlePrincipal.rend_grav_real = ControlePrincipal.mad_ton_transp/ControlePrincipal.carv_ton_prod;
-        
+        //ControlePrincipal.rend_grav_real = ControlePrincipal.mad_ton_transp/ControlePrincipal.carv_ton_prod;
+        //ControlePrincipal.rend_grav_real = (ControlePrincipal.vol_mad_transp-(ControlePrincipal.madeira_praca+ControlePrincipal.madeira_forno))/ControlePrincipal.mdc_prod;
+        ControlePrincipal.rend_grav_real = ((ControlePrincipal.vol_mad_transp-(ControlePrincipal.madeira_praca+ControlePrincipal.madeira_forno))*ControlePrincipal.densidade_madeira)/(ControlePrincipal.mdc_prod*ControlePrincipal.densidade_carvao);
+        System.out.println("Info mad proc : "+(ControlePrincipal.vol_mad_transp-(ControlePrincipal.madeira_praca+ControlePrincipal.madeira_forno))+ " m³");
+        System.out.println("Info carv prod : "+(ControlePrincipal.mdc_prod)+ " m³");
+        //System.out.println("Info rend_grav_real: "+ControlePrincipal.rend_grav_real);
+        System.out.println("Densidade m: "+ControlePrincipal.densidade_madeira+" c: "+ControlePrincipal.densidade_carvao);
+        System.out.println("Peso m: "+((ControlePrincipal.vol_mad_transp-(ControlePrincipal.madeira_praca+ControlePrincipal.madeira_forno))*ControlePrincipal.densidade_madeira)+" c: "+(ControlePrincipal.mdc_prod*ControlePrincipal.densidade_carvao));
+        System.out.println("Info coeficiente de Conversão: "+ControlePrincipal.rend_grav_real);
         rend_grav_forno = madeira/(float) jSpinnerVolumeCarvao.getValue();
         jLabelRendimentoForno.setText("Rendimento forno: "+rend_grav_forno);  
         ControlePrincipal.atualizarDados = "carvao";
+        JOptionPane.showMessageDialog(null, "Coeficiente de Conversão: "+ControlePrincipal.rend_grav_real);
         RegistrarCarvaoForno();
     }    
     

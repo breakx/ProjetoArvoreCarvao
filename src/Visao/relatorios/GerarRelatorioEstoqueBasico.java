@@ -82,6 +82,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private float vol_carv_pracaTotal;
     private float vol_mad_estTotal;
     private float vol_mad_transpTotal;
+    private float vol_mad_procTotal;
     private float mad_ton_estTotal;
     private float mad_ton_transpTotal;
     private float mdc_estTotal;
@@ -91,7 +92,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private float carv_ton_prodTotal;
     private float carv_ton_transpTotal;
     //private float madeira_pracaTotal;
-    //private float madeira_fornoTotal;
+    private float madeira_fornoTotal;
     //private float mad_ton_totTotal;
     //private float carv_ton_totTotal;   
     //private float rend_gravMediaPonderada;
@@ -303,6 +304,9 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         if(!dado.contains("carvao_praca")){
             dado+= ", carvao_praca";
         }
+        if(!dado.contains("madeira_forno")){
+            dado+= ", madeira_forno";
+        }
         //-----------madeira
         if(!dado.contains("vol_mad_estimado")){
             dado+= ", vol_mad_estimado";
@@ -480,6 +484,8 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         vol_carv_pracaTotal=0;
         vol_mad_estTotal=0;
         vol_mad_transpTotal=0;
+        vol_mad_procTotal=0;
+        madeira_fornoTotal=0;
         mad_ton_estTotal=0;
         mad_ton_transpTotal=0;
         mdc_estTotal=0;
@@ -539,6 +545,9 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                 if(rs.getString("vol_mad_transp")!=null){
                     vol_mad_transpTotal += Float.valueOf(rs.getString("vol_mad_transp"));
                 }
+                if(rs.getString("madeira_forno")!=null){
+                    madeira_fornoTotal += Float.valueOf(rs.getString("madeira_forno"));
+                }
                 
                 //Toneladas totais de madeira
                 if(rs.getString("mad_ton_estimado")!=null){
@@ -594,8 +603,10 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                 mdc_haMedia = mdc_haMedia/areaTotal;
             }else{
                 mdc_haMedia = 0;
-            }
-                
+            }                
+            
+            vol_mad_procTotal = vol_mad_transpTotal-(vol_mad_pracaTotal+madeira_fornoTotal);
+                    
             jLabelAreaTotal.setText("Area total: "+decformat.format(areaTotal)+" ha");
             jLabelM3_ha.setText("Media geral m³/ha: "+decformat.format(m3_haMedia));
             jLabelMDC_ha.setText("Media ponderada mdc/ha: "+decformat.format(mdc_haMedia));
@@ -604,6 +615,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                         
             jLabelVolumeMadeiraEstTotal.setText("Volume madeira estimada total: "+decformat.format(vol_mad_estTotal)+" m³");
             jLabelVolumeMadeiraTranspTotal.setText("Volume madeira transportada total: "+decformat.format(vol_mad_transpTotal)+" m³");
+            jLabelVolumeMadeiraProcTotal.setText("Volume madeira processada total: "+decformat.format(vol_mad_procTotal)+" m³");
             jLabelToneladaMadeiraEstTotal.setText("Toneladas de madeira estimada totais: "+decformat.format(mad_ton_estTotal));
             jLabelToneladaMadeiraTranspTotal.setText("Toneladas de madeira transportada totais: "+decformat.format(mad_ton_transpTotal));
             
@@ -1401,6 +1413,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jLabelInfo3 = new javax.swing.JLabel();
         jLabelVolumeCarvaoTranspTotal = new javax.swing.JLabel();
         jLabelToneladaCarvaoTranspTotal = new javax.swing.JLabel();
+        jLabelVolumeMadeiraProcTotal = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuPrincipal = new javax.swing.JMenu();
         jMenuItemGerarPDF = new javax.swing.JMenuItem();
@@ -1724,6 +1737,11 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jLabelToneladaCarvaoTranspTotal.setText("Toneladas de carvão transportado total: 0");
         jLabelToneladaCarvaoTranspTotal.setPreferredSize(new java.awt.Dimension(250, 15));
 
+        jLabelVolumeMadeiraProcTotal.setFont(jLabelVolumeMadeiraProcTotal.getFont());
+        jLabelVolumeMadeiraProcTotal.setText("Volume madeira transportada total: 0 m³");
+        jLabelVolumeMadeiraProcTotal.setMaximumSize(new java.awt.Dimension(100, 15));
+        jLabelVolumeMadeiraProcTotal.setPreferredSize(new java.awt.Dimension(250, 15));
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -1750,7 +1768,8 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                     .addComponent(jLabelVolumeMadeiraEstTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabelVolumeMadeiraTranspTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabelToneladaMadeiraEstTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelInfo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabelInfo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelVolumeMadeiraProcTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelToneladaCarvaoProdTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
@@ -1766,34 +1785,39 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelInfo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelAreaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelVolumeMadeiraEstTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelVolumeCarvaoEstTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelM3_ha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelVolumeMadeiraTranspTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelVolumeCarvaoProdTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelMDC_ha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelToneladaMadeiraEstTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelVolumeCarvaoTranspTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelTotalMadeiraPraca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelToneladaMadeiraTranspTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelToneladaCarvaoEstTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelTotalCarvaoPraca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelToneladaCarvaoProdTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelInfo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelAreaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelVolumeMadeiraEstTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelVolumeCarvaoEstTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelM3_ha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelVolumeMadeiraTranspTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelVolumeCarvaoProdTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelMDC_ha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelVolumeCarvaoTranspTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelVolumeMadeiraProcTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelTotalMadeiraPraca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelToneladaCarvaoEstTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelTotalCarvaoPraca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelToneladaCarvaoProdTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabelToneladaMadeiraEstTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabelToneladaMadeiraTranspTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addComponent(jLabelToneladaCarvaoTranspTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
@@ -2220,6 +2244,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelVolumeCarvaoProdTotal;
     private javax.swing.JLabel jLabelVolumeCarvaoTranspTotal;
     private javax.swing.JLabel jLabelVolumeMadeiraEstTotal;
+    private javax.swing.JLabel jLabelVolumeMadeiraProcTotal;
     private javax.swing.JLabel jLabelVolumeMadeiraTranspTotal;
     private javax.swing.JList jListFiltrar;
     private javax.swing.JMenuBar jMenuBar1;

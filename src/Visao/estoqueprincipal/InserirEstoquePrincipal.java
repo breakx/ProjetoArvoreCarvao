@@ -69,7 +69,7 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
     }
     
     private void GerarDensidadeMadeira(String codigo){
-        JOptionPane.showMessageDialog(null, "Material Genetico: "+codigo); 
+        //JOptionPane.showMessageDialog(null, "Material Genetico: "+codigo); 
         if(codigo.equals("1270")){
             estoque_principal.setDensidade_madeira(0.486f);
         }else if(codigo.equals("2486")){
@@ -156,11 +156,16 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
         ControlePrincipal.upc = (Integer)jSpinnerUpc.getValue() ;
         ControlePrincipal.material_genetico = jTextFieldMaterialGenetico.getText();
         
-        InserirEstoquePrincipalCtrl inserir = new InserirEstoquePrincipalCtrl(estoque_principal);      
+        if((float)jSpinnerArea.getValue()>0){
+            InserirEstoquePrincipalCtrl inserir = new InserirEstoquePrincipalCtrl(estoque_principal);      
         
-        new InserirEstoquePrincipal().setVisible(true);
-        this.setVisible(false);
-        dispose();
+            new InserirEstoquePrincipal().setVisible(true);
+            this.setVisible(false);
+            dispose();
+        }else{
+            JOptionPane.showMessageDialog(null, "Valor incorreto no campo area!");
+        }
+        
     }
     
     private void GerenciarEstoque(){
@@ -366,7 +371,7 @@ public class InserirEstoquePrincipal extends javax.swing.JFrame {
         jSpinnerUpc.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerArea.setFont(jSpinnerArea.getFont().deriveFont(jSpinnerArea.getFont().getSize()+1f));
-        jSpinnerArea.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(0.1f)));
+        jSpinnerArea.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(60.0f), Float.valueOf(0.1f)));
         jSpinnerArea.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jTextFieldMaterialGenetico.setFont(jTextFieldMaterialGenetico.getFont().deriveFont(jTextFieldMaterialGenetico.getFont().getSize()+1f));
