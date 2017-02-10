@@ -27,13 +27,14 @@ public class ConexaoBD {
         //System.err.println("ConexaoBD: "+ index);
         switch(index){
             case 0:
-                BDSecundario();
+                //BDSecundario();
                 //BDPrincipal();
-                //BDLocal();
+                BDLocal();
                 break;
             case 1:                
-                BDSecundario();
-                //BDLocal();
+                //BDSecundario();
+                //BDPrincipal();
+                BDLocal();
                 break;
             case 2:
                 BDLocal();
@@ -66,7 +67,7 @@ public class ConexaoBD {
     private void BDLocal(){
         hostname ="localhost";
         host ="localhost/";
-        database = "appmadeira";
+        database = "crserver";
         url = "jdbc:mysql://"+host+database;
         usuario_bd = "root";
         senha_bd = "";

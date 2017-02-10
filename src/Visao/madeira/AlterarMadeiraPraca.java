@@ -406,7 +406,7 @@ public class AlterarMadeiraPraca extends javax.swing.JFrame {
         jSpinnerTranporteT_Comprimento.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteT_Largura.setFont(jSpinnerTranporteT_Largura.getFont().deriveFont(jSpinnerTranporteT_Largura.getFont().getSize()+1f));
-        jSpinnerTranporteT_Largura.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteT_Largura.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(3.3f), Float.valueOf(0.01f)));
         jSpinnerTranporteT_Largura.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteT_Peso.setFont(jSpinnerTranporteT_Peso.getFont().deriveFont(jSpinnerTranporteT_Peso.getFont().getSize()+1f));
@@ -434,7 +434,7 @@ public class AlterarMadeiraPraca extends javax.swing.JFrame {
         jSpinnerTranporteBT_Comprimento.setPreferredSize(new java.awt.Dimension(200, 25));
 
         jSpinnerTranporteBT_Largura.setFont(jSpinnerTranporteBT_Largura.getFont().deriveFont(jSpinnerTranporteBT_Largura.getFont().getSize()+1f));
-        jSpinnerTranporteBT_Largura.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinnerTranporteBT_Largura.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(3.3f), Float.valueOf(0.01f)));
         jSpinnerTranporteBT_Largura.setEnabled(false);
         jSpinnerTranporteBT_Largura.setPreferredSize(new java.awt.Dimension(200, 25));
 

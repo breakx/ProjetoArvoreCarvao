@@ -61,5 +61,14 @@ public class ControlePrincipal {
     public static String atualizarDados;
     public static String validade;    
     public static String condicao_carvao;
-    //public static String forno;
+    public static String condicao_forno;
+    public static String id_forno_usado;
+    public static String desbrota;
+    public static String tipo_estoque;
+    
+    //Dados para grafico
+    public static float valor_grafico[];
+    public static String info_grafico[];
+    public static String tipo_grafico;
+    public static String descricao;
 }

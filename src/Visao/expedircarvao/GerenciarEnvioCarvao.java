@@ -125,7 +125,25 @@ public class GerenciarEnvioCarvao extends javax.swing.JFrame {
                 }
             });*/ 
         con.fecharConexao();
-    }    
+        RenomearColunas();
+    }
+    
+    private void RenomearColunas(){
+        /*for(int i=0;i<colunas.length;i++){
+            System.out.println("Indice: "+i+" - "+ colunas[i]);
+        }*/
+        jTableExpedirCarvao.getColumnModel().getColumn(0).setHeaderValue("UPC");
+        jTableExpedirCarvao.getColumnModel().getColumn(1).setHeaderValue("Talhão");
+        jTableExpedirCarvao.getColumnModel().getColumn(2).setHeaderValue("Peso Tranportado(t)");
+        jTableExpedirCarvao.getColumnModel().getColumn(3).setHeaderValue("Vol. Tranportado(m³)");
+        jTableExpedirCarvao.getColumnModel().getColumn(4).setHeaderValue("Destino");
+        jTableExpedirCarvao.getColumnModel().getColumn(5).setHeaderValue("Placa Veiculo");
+        jTableExpedirCarvao.getColumnModel().getColumn(6).setHeaderValue("NºEstoque");
+        jTableExpedirCarvao.getColumnModel().getColumn(7).setHeaderValue("Operario");        
+        jTableExpedirCarvao.getColumnModel().getColumn(8).setHeaderValue("Data Envio");  
+        jTableExpedirCarvao.getColumnModel().getColumn(9).setHeaderValue("Material Genetico");  
+        jTableExpedirCarvao.getColumnModel().getColumn(10).setHeaderValue("Numero");
+    }
     
     /*private void AlterarInfo(){
         if(jTableExpedirCarvao.getSelectedRow()>=0)//verifica se a linha a ser alterada esta marcada

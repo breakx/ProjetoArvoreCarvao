@@ -4,7 +4,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Visao/carvao/Alterar_RetirarCarvaoForno.java</file>
+            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Visao/relatorios/GerarRelatorioEstoqueBasico.java</file>
+            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Visao/grafico/Grafico.java</file>
+            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Modelo/ConexaoBD.java</file>
+            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Visao/grafico/GraficoRelatorioEstoque.java</file>
+            <file>file:/E:/Java%20Projects/AppMadeiraCarvao/src/Controle/ControlePrincipal.java</file>
         </group>
     </open-files>
 </project-private>

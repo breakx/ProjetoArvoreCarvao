@@ -7,6 +7,7 @@
 package Controle.estoqueprincipal;
 
 import Controle.ControleEstoquePrincipal;
+import Controle.ControlePrincipal;
 import Modelo.ExecutarSql;
 
 /**
@@ -16,7 +17,9 @@ import Modelo.ExecutarSql;
 public class AlterarEstoquePrincipalCtrl {
 
     public AlterarEstoquePrincipalCtrl(ControleEstoquePrincipal estoque) {
-        String query = "UPDATE `estoque_principal` SET "
+        String query="";
+        if(ControlePrincipal.desbrota!="Ok"){                        
+            query = "UPDATE `estoque_principal` SET "
                 //+ "`estado` = 'mg"
                 //+ "', `bloco` = 'sul"
                 //+ "', `municipio` = 'rio branco"
@@ -63,6 +66,11 @@ public class AlterarEstoquePrincipalCtrl {
                 + "', `rend_grav_real` = '"+estoque.getRend_grav_real()
                 + "', `fator_empilalhemto` = '"+estoque.getFator_empilalhemto()
                 + "' WHERE `id_estoque_p` = "+estoque.getId_estoque_p(); 
+        }else{
+            query = "UPDATE `estoque_principal` SET "                
+                + "`conducao` = '"+ControlePrincipal.desbrota                
+                + "' WHERE `id_estoque_p` = "+estoque.getId_estoque_p(); 
+        }
         
         ExecutarSql execut = new ExecutarSql();
         execut.executar(query);

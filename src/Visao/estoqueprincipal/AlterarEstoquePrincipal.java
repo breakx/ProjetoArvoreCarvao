@@ -102,24 +102,24 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         }else{
             jCheckBoxExaurida.setSelected(false);
         }
-        jSpinnerIMA.setValue(Integer.parseInt(coluna[24]));//ima               
-        jLabelMDC_HA.setText("MDC/HA: "+coluna[25]);//mdc_ha 
-        jSpinnerDensidadeMadeira.setValue(Float.parseFloat(coluna[26]));//densidade_madeira     
-        jSpinnerDensidadeCarvao.setValue(Float.parseFloat(coluna[27]));//densidade_carvao
-        jLabelMadeiraTonHA.setText("Madeira Tonelada HA: "+coluna[28]);//mad_ton_ha
-        jLabelCarvaoTonHA.setText("Carvão Tonelada HA: "+coluna[29]);//carv_ton_ha
+        jSpinnerIMA.setValue(Integer.parseInt(coluna[25]));//ima               
+        jLabelMDC_HA.setText("MDC/HA: "+coluna[26]);//mdc_ha 
+        jSpinnerDensidadeMadeira.setValue(Float.parseFloat(coluna[27]));//densidade_madeira     
+        jSpinnerDensidadeCarvao.setValue(Float.parseFloat(coluna[28]));//densidade_carvao
+        jLabelMadeiraTonHA.setText("Madeira Tonelada HA: "+coluna[29]);//mad_ton_ha
+        jLabelCarvaoTonHA.setText("Carvão Tonelada HA: "+coluna[30]);//carv_ton_ha
 //        jTextFieldIdOperario.setText(coluna[30]);//id_operario                  
 //        jTextFieldDataEstoque.setText(coluna[31]);//data_estoque           
-        jLabelVolumeEstimado.setText("Volume Madeira Estimado: "+coluna[32]);//vol_mad_estimado       
+        jLabelVolumeEstimado.setText("Volume Madeira Estimado: "+coluna[33]);//vol_mad_estimado       
 //        jTextFieldVolumeEstimado.setText(coluna[33]);//vol_mad_transp
 //        jTextFieldMadeiraTalhao.setText(coluna[34]);//vol_mad_balanco
-        jLabelMDCEstimado.setText("MDC Estimado: "+coluna[35]);//mdc_estimado               
+        jLabelMDCEstimado.setText("MDC Estimado: "+coluna[36]);//mdc_estimado               
 //        jTextFieldMadeiraForno.setText(coluna[36]);//mdc_prod                   
 //        jTextFieldMadeiraForno.setText(coluna[37]);//mdc_balanco
-        jLabelMadeiraTonEst.setText("Madeira Tonelada Estimada: "+coluna[38]);//mad_ton_estimado
+        jLabelMadeiraTonEst.setText("Madeira Tonelada Estimada: "+coluna[39]);//mad_ton_estimado
 //        jTextFieldMadeiraForno.setText(coluna[39]);//mad_ton_transp                   
 //        jTextFieldMadeiraForno.setText(coluna[40]);//mad_ton_balanco
-        jLabelCarvaoTonEst.setText("Carvão Tonelada Estimada: "+coluna[41]);//carv_ton_estimado
+        jLabelCarvaoTonEst.setText("Carvão Tonelada Estimada: "+coluna[42]);//carv_ton_estimado
 //        jTextFieldMadeiraForno.setText(coluna[42]);//carv_ton_prod                 
 //        jTextFieldMadeiraForno.setText(coluna[43]);//carv_ton_balanco                 
 //        jTextFieldMadeiraForno.setText(coluna[44]);//madeira_praca                  
@@ -127,9 +127,9 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
 //        jTextFieldMadeiraForno.setText(coluna[46]);//madeira_forno          
 //        jTextFieldMadeiraForno.setText(coluna[47]);//mdc_transp       
 //        jTextFieldMadeiraForno.setText(coluna[48]);//carvao_ton_transp 
-        jSpinnerRendimentoGravimetricoEstimado.setValue(Float.parseFloat(coluna[49]));//rend_grav_estimado        
+        jSpinnerRendimentoGravimetricoEstimado.setValue(Float.parseFloat(coluna[50]));//rend_grav_estimado        
         //jTextFieldRendimentoGravimetricoEstimado.setText(coluna[50]);//rend_grav_real 
-        jSpinnerFatorEmpilhamento.setValue(Float.parseFloat(coluna[51]));//fator_empilalhemto
+        jSpinnerFatorEmpilhamento.setValue(Float.parseFloat(coluna[52]));//fator_empilalhemto
         //CalcularMadeiraTotal();
     }   
     
@@ -197,7 +197,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
             Logger.getLogger(AlterarEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        //idade hj
+        /*//idade hj
         Calendar c1 = Calendar.getInstance();
         c1.setTime(plantio);
         int w1 = c1.get(Calendar.DAY_OF_WEEK);
@@ -206,7 +206,7 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         Calendar c2 = Calendar.getInstance();
         c2.setTime(fim);
         int w2 = c2.get(Calendar.DAY_OF_WEEK);
-        c2.add(Calendar.DAY_OF_WEEK, -w2);
+        c2.add(Calendar.DAY_OF_WEEK, -w2);*/
         
         //idade c1
         Calendar c3 = Calendar.getInstance();
@@ -217,18 +217,18 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         Calendar c4 = Calendar.getInstance();
         c4.setTime(corte1);
         int w4 = c4.get(Calendar.DAY_OF_WEEK);
-        c2.add(Calendar.DAY_OF_WEEK, -w4);
+        c4.add(Calendar.DAY_OF_WEEK, -w4);
         
         //idade c2
         Calendar c5 = Calendar.getInstance();
         c5.setTime(corte1);
         int w5 = c5.get(Calendar.DAY_OF_WEEK);
-        c1.add(Calendar.DAY_OF_WEEK, -w5);
+        c5.add(Calendar.DAY_OF_WEEK, -w5);
 
         Calendar c6 = Calendar.getInstance();
         c6.setTime(corte2);
         int w6 = c6.get(Calendar.DAY_OF_WEEK);
-        c2.add(Calendar.DAY_OF_WEEK, -w6);
+        c6.add(Calendar.DAY_OF_WEEK, -w6);
         
         //idade c3
         Calendar c7 = Calendar.getInstance();
@@ -240,11 +240,38 @@ public class AlterarEstoquePrincipal extends javax.swing.JFrame {
         c8.setTime(corte3);
         int w8 = c8.get(Calendar.DAY_OF_WEEK);
         c8.add(Calendar.DAY_OF_WEEK, -w8);
-
-        float dias1 = (c2.getTimeInMillis()-c1.getTimeInMillis())/(60*60*24*365);
+        
         float dias2 = (c4.getTimeInMillis()-c3.getTimeInMillis())/(60*60*24*365);
         float dias3 = (c6.getTimeInMillis()-c5.getTimeInMillis())/(60*60*24*365);
         float dias4 = (c8.getTimeInMillis()-c7.getTimeInMillis())/(60*60*24*365);
+        
+        //idade hj
+        Calendar c1 = Calendar.getInstance();
+        int w1 = c1.get(Calendar.DAY_OF_WEEK);
+        Calendar c2 = Calendar.getInstance();
+        int w2 = c2.get(Calendar.DAY_OF_WEEK);
+        //System.out.println("plantio: "+plantio+" corte1: "+dias2+" corte2: "+dias3+" corte3: "+dias4);
+        if(dias2<0){
+            c1.setTime(plantio);
+            c1.add(Calendar.DAY_OF_WEEK, -w1);
+
+            c2.setTime(fim);
+            c2.add(Calendar.DAY_OF_WEEK, -w2);
+        }else if(dias3<0){
+            c1.setTime(corte1);
+            c1.add(Calendar.DAY_OF_WEEK, -w1);
+
+            c2.setTime(fim);
+            c2.add(Calendar.DAY_OF_WEEK, -w2);
+        }else if(dias4<0){
+            c1.setTime(corte2);
+            c1.add(Calendar.DAY_OF_WEEK, -w1);
+
+            c2.setTime(fim);
+            c2.add(Calendar.DAY_OF_WEEK, -w2);
+        }
+        
+        float dias1 = (c2.getTimeInMillis()-c1.getTimeInMillis())/(60*60*24*365);
         idade_hoje = dias1/1000;
         idade_corte1 = dias2/1000;
         idade_corte2 = dias3/1000;

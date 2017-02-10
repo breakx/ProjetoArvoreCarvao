@@ -70,7 +70,7 @@ public class Login extends javax.swing.JFrame {
             }
             con.fecharConexao();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Usuario Invalido! "+ex);                    
+            JOptionPane.showMessageDialog(null, "Empresa Invalida! "+ex);                    
         }
     }
     
@@ -255,10 +255,8 @@ public class Login extends javax.swing.JFrame {
     * @param args the command line arguments
     */
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {               
-                new Login().setVisible(true); 
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
         });
     }
 

@@ -12,6 +12,7 @@ import Visao.carvao.GerenciarCarvaoForno;
 import Visao.estoqueprincipal.GerenciarEstoquePrincipal;
 import Visao.expedircarvao.GerenciarEnvioCarvao;
 import Visao.fazenda.GerenciarFazenda;
+import Visao.forno.GerenciarForno;
 import Visao.login.Login;
 import Visao.madeira.GerenciarMadeiraPraca;
 import Visao.usuario.GerenciarUsuarios;
@@ -70,6 +71,7 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
                 jMenuItemGerenciarMadeiraPraça.setVisible(false);
                 jMenuItemGerenciarExpedirCarvao.setVisible(false);
                 jMenuItemGerenciarUsuarios.setVisible(false);
+                jMenuItemGerenciarForno.setVisible(false);
             }
         }
         ChangeName();
@@ -525,6 +527,7 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
         jMenuItemRelatorioMadeiraPraca = new javax.swing.JMenuItem();
         jMenuItemRelatorioCarvao = new javax.swing.JMenuItem();
         jMenuItemRelatorioCarvaoExpedido = new javax.swing.JMenuItem();
+        jMenuItemRelatorioFornos = new javax.swing.JMenuItem();
         jMenuGerenciar = new javax.swing.JMenu();
         jMenuItemGerenciarUsuarios = new javax.swing.JMenuItem();
         jMenuItemGerenciarFazendas = new javax.swing.JMenuItem();
@@ -532,6 +535,7 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
         jMenuItemGerenciarCarvaoForno = new javax.swing.JMenuItem();
         jMenuItemGerenciarExpedirCarvao = new javax.swing.JMenuItem();
         jMenuItemGerenciarEstoque = new javax.swing.JMenuItem();
+        jMenuItemGerenciarForno = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -663,39 +667,36 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabelData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabelData1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(10, 10, 10)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldDataF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldDataI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(10, 10, 10)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jSpinnerUPC, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jComboBoxDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabelData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabelData1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(10, 10, 10)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextFieldDataF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jTextFieldDataI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(10, 10, 10)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jSpinnerTalhao, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jSpinnerUPC, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jComboBoxDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jComboBoxUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jComboBoxPlacaVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jComboBoxPlacaVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(jComboBoxMaterialGenetico, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -867,6 +868,14 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
         });
         jMenuRelatorio.add(jMenuItemRelatorioCarvaoExpedido);
 
+        jMenuItemRelatorioFornos.setText("Fornos");
+        jMenuItemRelatorioFornos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRelatorioFornosActionPerformed(evt);
+            }
+        });
+        jMenuRelatorio.add(jMenuItemRelatorioFornos);
+
         jMenuBar1.add(jMenuRelatorio);
 
         jMenuGerenciar.setText("Gerenciar");
@@ -918,6 +927,14 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
             }
         });
         jMenuGerenciar.add(jMenuItemGerenciarEstoque);
+
+        jMenuItemGerenciarForno.setText("Fornos");
+        jMenuItemGerenciarForno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGerenciarFornoActionPerformed(evt);
+            }
+        });
+        jMenuGerenciar.add(jMenuItemGerenciarForno);
 
         jMenuBar1.add(jMenuGerenciar);
 
@@ -1047,6 +1064,7 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
     private void jMenuItemGerenciarMadeiraPraçaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerenciarMadeiraPraçaActionPerformed
         try {
             new GerenciarMadeiraPraca().setVisible(true);
+            ControlePrincipal.tipo_estoque="madeira";
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1057,6 +1075,7 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
     private void jMenuItemGerenciarCarvaoFornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerenciarCarvaoFornoActionPerformed
         try {
             new GerenciarCarvaoForno().setVisible(true);
+            ControlePrincipal.tipo_estoque="carvao";
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1067,6 +1086,7 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
     private void jMenuItemGerenciarExpedirCarvaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerenciarExpedirCarvaoActionPerformed
         try {
             new GerenciarEnvioCarvao().setVisible(true);
+            ControlePrincipal.tipo_estoque="carvao";
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1093,6 +1113,17 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
         this.setVisible(false);
         dispose();
     }//GEN-LAST:event_jMenuItemRelatorioEstoqueActionPerformed
+
+    private void jMenuItemRelatorioFornosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRelatorioFornosActionPerformed
+        new GerarRelatorioForno().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItemRelatorioFornosActionPerformed
+
+    private void jMenuItemGerenciarFornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerenciarFornoActionPerformed
+        new GerenciarForno().setVisible(true);
+        this.setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jMenuItemGerenciarFornoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1160,12 +1191,14 @@ public class GerarRelatorioCarvaoExpedido extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemGerenciarEstoque;
     private javax.swing.JMenuItem jMenuItemGerenciarExpedirCarvao;
     private javax.swing.JMenuItem jMenuItemGerenciarFazendas;
+    private javax.swing.JMenuItem jMenuItemGerenciarForno;
     private javax.swing.JMenuItem jMenuItemGerenciarMadeiraPraça;
     private javax.swing.JMenuItem jMenuItemGerenciarUsuarios;
     private javax.swing.JMenuItem jMenuItemLogout;
     private javax.swing.JMenuItem jMenuItemRelatorioCarvao;
     private javax.swing.JMenuItem jMenuItemRelatorioCarvaoExpedido;
     private javax.swing.JMenuItem jMenuItemRelatorioEstoque;
+    private javax.swing.JMenuItem jMenuItemRelatorioFornos;
     private javax.swing.JMenuItem jMenuItemRelatorioMadeiraPraca;
     private javax.swing.JMenuItem jMenuItemValidade;
     private javax.swing.JMenu jMenuPrincipal;

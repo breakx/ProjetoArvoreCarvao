@@ -5,7 +5,9 @@
  */
 package Visao.estoqueprincipal;
 
+import Controle.ControleEstoquePrincipal;
 import Controle.ControlePrincipal;
+import Controle.estoqueprincipal.AlterarEstoquePrincipalCtrl;
 import Modelo.ConexaoBD;
 import Modelo.GerarTabela;
 import Visao.login.Login;
@@ -16,7 +18,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -115,6 +121,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             "Conducao",
             "Categoria",
             "Situacao",
+            "Dias_Secagem",
             "IMA",
             "MdC/ha",
             "Dens_Md",
@@ -218,6 +225,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         int tamanho = 0;       
         ConexaoBD con = ConexaoBD.getConexao(0);        
         ResultSet rs = con.consultaSql(query);
+        float dias_secagem;
         
         try {
             while(rs.next()){
@@ -245,7 +253,8 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                     rs.getString("idade_hoje"),
                     rs.getString("conducao"),
                     rs.getString("categoria"),
-                    rs.getString("situacao"),
+                    rs.getString("situacao"),                    
+                    dias_secagem = CalcularDiasSecagem(rs.getString("data_rotacao_1"),rs.getString("data_rotacao_2"),rs.getString("data_rotacao_3")),
                     rs.getString("ima"),
                     rs.getString("mdc_ha"),
                     rs.getString("densidade_madeira"),
@@ -313,7 +322,133 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                 }
             }); 
         con.fecharConexao();
+        //RenomearColunas();
     }
+    
+    private void RenomearColunas(){
+        /*for(int i=0;i<colunas.length;i++){
+            System.out.println("Indice: "+i+" - "+ colunas[i]);
+        }*/
+        jTableEstoquePrincipal.getColumnModel().getColumn(0).setHeaderValue("Estado");
+        jTableEstoquePrincipal.getColumnModel().getColumn(1).setHeaderValue("Bloco");
+        jTableEstoquePrincipal.getColumnModel().getColumn(2).setHeaderValue("Municipio");
+        jTableEstoquePrincipal.getColumnModel().getColumn(3).setHeaderValue("Fazenda");
+        jTableEstoquePrincipal.getColumnModel().getColumn(4).setHeaderValue("Projeto");
+        jTableEstoquePrincipal.getColumnModel().getColumn(5).setHeaderValue("UPC");
+        jTableEstoquePrincipal.getColumnModel().getColumn(6).setHeaderValue("Talhão");
+        jTableEstoquePrincipal.getColumnModel().getColumn(7).setHeaderValue("Área");
+        jTableEstoquePrincipal.getColumnModel().getColumn(8).setHeaderValue("Material Genetico");
+        jTableEstoquePrincipal.getColumnModel().getColumn(9).setHeaderValue("M³ por Ha.");
+        jTableEstoquePrincipal.getColumnModel().getColumn(10).setHeaderValue("Talhadia");
+        jTableEstoquePrincipal.getColumnModel().getColumn(11).setHeaderValue("Ano Rotação");
+        jTableEstoquePrincipal.getColumnModel().getColumn(12).setHeaderValue("Data Plantio");
+        jTableEstoquePrincipal.getColumnModel().getColumn(13).setHeaderValue("Data 1ª Rotação");
+        jTableEstoquePrincipal.getColumnModel().getColumn(14).setHeaderValue("Data 2ª Rotação");
+        jTableEstoquePrincipal.getColumnModel().getColumn(15).setHeaderValue("Data 3ª Rotação");
+        jTableEstoquePrincipal.getColumnModel().getColumn(16).setHeaderValue("Idade 1º Corte");
+        jTableEstoquePrincipal.getColumnModel().getColumn(17).setHeaderValue("Idade 2º Corte");
+        jTableEstoquePrincipal.getColumnModel().getColumn(18).setHeaderValue("Idade 3º Corte");
+        jTableEstoquePrincipal.getColumnModel().getColumn(19).setHeaderValue("Idade Hoje");
+        jTableEstoquePrincipal.getColumnModel().getColumn(20).setHeaderValue("Desbrota");
+        jTableEstoquePrincipal.getColumnModel().getColumn(21).setHeaderValue("Categoria");
+        jTableEstoquePrincipal.getColumnModel().getColumn(22).setHeaderValue("Situação");
+        jTableEstoquePrincipal.getColumnModel().getColumn(23).setHeaderValue("Dias de Secagem");
+        jTableEstoquePrincipal.getColumnModel().getColumn(24).setHeaderValue("IMA");
+        jTableEstoquePrincipal.getColumnModel().getColumn(25).setHeaderValue("MDC por Ha.");
+        jTableEstoquePrincipal.getColumnModel().getColumn(26).setHeaderValue("Densidade da Madeira");
+        jTableEstoquePrincipal.getColumnModel().getColumn(27).setHeaderValue("Densidade do Carvão");
+        jTableEstoquePrincipal.getColumnModel().getColumn(28).setHeaderValue("Madeira(t/ha)");
+        jTableEstoquePrincipal.getColumnModel().getColumn(29).setHeaderValue("Carvão(t/ha)");
+        jTableEstoquePrincipal.getColumnModel().getColumn(30).setHeaderValue("Id Operario");
+        jTableEstoquePrincipal.getColumnModel().getColumn(31).setHeaderValue("Data Estoque");
+        jTableEstoquePrincipal.getColumnModel().getColumn(32).setHeaderValue("Vol. Mad. Estimada");
+        jTableEstoquePrincipal.getColumnModel().getColumn(33).setHeaderValue("Vol. Mad. Transportada");
+        jTableEstoquePrincipal.getColumnModel().getColumn(34).setHeaderValue("Vol. Mad. Balanço");
+        jTableEstoquePrincipal.getColumnModel().getColumn(35).setHeaderValue("MDC Estimado");
+        jTableEstoquePrincipal.getColumnModel().getColumn(36).setHeaderValue("MDC Produzido");
+        jTableEstoquePrincipal.getColumnModel().getColumn(37).setHeaderValue("MDC Balanço");
+        jTableEstoquePrincipal.getColumnModel().getColumn(38).setHeaderValue("Madeira(t) Estimada");
+        jTableEstoquePrincipal.getColumnModel().getColumn(39).setHeaderValue("Madeira(t) Transportada");
+        jTableEstoquePrincipal.getColumnModel().getColumn(40).setHeaderValue("Madeira(t) Balanço");
+        jTableEstoquePrincipal.getColumnModel().getColumn(41).setHeaderValue("Carvão(t) Estimado");
+        jTableEstoquePrincipal.getColumnModel().getColumn(42).setHeaderValue("Carvão(t) Produzido");
+        jTableEstoquePrincipal.getColumnModel().getColumn(43).setHeaderValue("Carvão(t) Balanço");
+        jTableEstoquePrincipal.getColumnModel().getColumn(44).setHeaderValue("Madeira(m³) em Praça");
+        jTableEstoquePrincipal.getColumnModel().getColumn(45).setHeaderValue("Carvão(m³) Praça");
+        jTableEstoquePrincipal.getColumnModel().getColumn(46).setHeaderValue("Madeira(m³) Enfornada");
+        jTableEstoquePrincipal.getColumnModel().getColumn(47).setHeaderValue("MDC Transportado");
+        jTableEstoquePrincipal.getColumnModel().getColumn(48).setHeaderValue("Carvão(t) Transportado");
+        jTableEstoquePrincipal.getColumnModel().getColumn(49).setHeaderValue("Rend. Volumétrico Estimado");
+        jTableEstoquePrincipal.getColumnModel().getColumn(50).setHeaderValue("Rend. Volumétrico Real");
+        jTableEstoquePrincipal.getColumnModel().getColumn(51).setHeaderValue("Fator de Empilalhemto");
+    }
+    
+    private float CalcularDiasSecagem(String data_r1, String data_r2, String data_r3){
+        DateFormat dataformato = new SimpleDateFormat ("dd/MM/yyyy");
+        //df.setLenient(false);
+        long dt = 0;
+        DateFormat novoFormatoData = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        String dataConvertida;
+
+        if(data_r1!="00/00/0000"){
+            try 
+            { 
+                date = dataformato.parse(data_r1);
+                //System.out.println ("Data Format: "+date);
+                dataConvertida = novoFormatoData.format(date);
+                //System.out.println ("Data novo Format: "+dataConvertida);
+                Date d1 = novoFormatoData.parse(dataConvertida);
+                //System.out.println ("Data I: "+d1);
+                Date hoje = new Date(); 
+                //System.out.println ("Data hj: "+hoje);
+                dt = (hoje.getTime() - d1.getTime()) + (60*60*1000); //3600000 tempo(milisegundos) 1 hora para compensar horário de verão
+            } 
+            catch (java.text.ParseException evt ) {
+                System.out.println ("Erro: "+evt);
+            }        
+
+            float diasDiferenca = dt / (60*60*24*1000);//86400000 tempo(milisegundos) em dias
+            //System.out.println ("Diferenca: "+diasDiferenca);
+            return diasDiferenca;
+        }else if(data_r2!="00/00/0000"){            
+            try 
+            { 
+                date = dataformato.parse(data_r2);
+                dataConvertida = novoFormatoData.format(date);
+                //System.out.println ("Data Format: "+dataConvertida);
+                Date d1 = dataformato.parse(dataConvertida);
+                //System.out.println ("Data I: "+d1);
+                Date hoje = new Date(); 
+                //System.out.println ("Data hj: "+hoje);
+                dt = (hoje.getTime() - d1.getTime()) + (60*60*1000); //3600000 tempo(milisegundos) 1 hora para compensar horário de verão
+            } 
+            catch (java.text.ParseException evt ) {}        
+
+            float diasDiferenca = dt / (60*60*24*1000);//86400000 tempo(milisegundos) em dias
+            //System.out.println ("Diferenca: "+diasDiferenca);
+            return diasDiferenca;
+        }else if(data_r3!="00/00/0000"){
+            try 
+            { 
+                date = dataformato.parse(data_r3);
+                dataConvertida = novoFormatoData.format(date);
+                //System.out.println ("Data Format: "+dataConvertida);
+                Date d1 = dataformato.parse(dataConvertida);
+                //System.out.println ("Data I: "+d1);
+                Date hoje = new Date(); 
+                //System.out.println ("Data hj: "+hoje);
+                dt = (hoje.getTime() - d1.getTime()) + (60*60*1000); //3600000 tempo(milisegundos) 1 hora para compensar horário de verão
+            } 
+            catch (java.text.ParseException evt ) {}        
+
+            float diasDiferenca = dt / (60*60*24*1000);//86400000 tempo(milisegundos) em dias
+            //System.out.println ("Diferenca: "+diasDiferenca);
+            return diasDiferenca;
+        }else{
+            return 0;
+        }        
+    } 
         
     private void AlterarInfo(){
         if(jTableEstoquePrincipal.getSelectedRow()>=0)//verifica se a linha a ser alterada esta marcada
@@ -442,6 +577,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         jSpinnerTalhao = new javax.swing.JSpinner();
         jLabel9 = new javax.swing.JLabel();
         jButtonFiltrar = new javax.swing.JButton();
+        jButtonDesbrota = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableEstoquePrincipal = new javax.swing.JTable();
@@ -570,6 +706,14 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButtonDesbrota.setFont(jButtonDesbrota.getFont().deriveFont(jButtonDesbrota.getFont().getSize()+1f));
+        jButtonDesbrota.setText("Desbrota");
+        jButtonDesbrota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDesbrotaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -578,10 +722,6 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButtonAtualizar, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                        .addGap(10, 10, 10)
-                        .addComponent(jButtonRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -600,12 +740,17 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                                 .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jComboBoxProjeto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBoxFazenda, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jComboBoxFazenda, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                            .addComponent(jButtonExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jButtonDesbrota, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jButtonAtualizar, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .addGap(10, 10, 10)
+                            .addComponent(jButtonRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(10, 10, 10))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButtonExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonAtualizar, jButtonExcluir});
@@ -631,13 +776,15 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
                     .addComponent(jComboBoxProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
-                .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonDesbrota, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
                 .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -746,6 +893,32 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
         PreencherTabela();
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
+    private void jButtonDesbrotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDesbrotaActionPerformed
+        if(jTableEstoquePrincipal.getSelectedRow()>=0){//verifica se a linha a ser alterada esta marcada
+            int linha = jTableEstoquePrincipal.getSelectedRow();
+            /*for(int i=0; i<jTableEstoquePrincipal.getColumnCount(); i++){
+                //cols[i]=jTableEstoquePrincipal.getValueAt(linha, i).toString();
+                System.out.println("Indice: "+i+" - "+ jTableEstoquePrincipal.getValueAt(linha, i).toString());
+            }*/
+            System.out.print("Teste: "+(Float.parseFloat(jTableEstoquePrincipal.getValueAt(linha, 17).toString())>0.5));
+            if(Float.parseFloat(jTableEstoquePrincipal.getValueAt(linha, 19).toString())>0.5||Float.parseFloat(jTableEstoquePrincipal.getValueAt(linha, 18).toString())>0.5||Float.parseFloat(jTableEstoquePrincipal.getValueAt(linha, 17).toString())>0.5){
+                ControlePrincipal.desbrota="Ok";
+                ControleEstoquePrincipal estoque_principal = new ControleEstoquePrincipal();
+                String id_estoque = jTableEstoquePrincipal.getValueAt(linha, 0).toString();
+                estoque_principal.setId_estoque_p(id_estoque);
+                AlterarEstoquePrincipalCtrl alterar = new AlterarEstoquePrincipalCtrl(estoque_principal);
+
+                try {
+                    new GerenciarEstoquePrincipal().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AlterarEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                this.setVisible(false);
+                dispose();
+            }
+        }
+    }//GEN-LAST:event_jButtonDesbrotaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -788,6 +961,7 @@ public class GerenciarEstoquePrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAtualizar;
+    private javax.swing.JButton jButtonDesbrota;
     private javax.swing.JButton jButtonExcluir;
     private javax.swing.JButton jButtonFiltrar;
     private javax.swing.JButton jButtonLogout;

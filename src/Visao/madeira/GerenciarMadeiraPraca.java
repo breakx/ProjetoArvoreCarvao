@@ -151,7 +151,34 @@ public class GerenciarMadeiraPraca extends javax.swing.JFrame {
                 }); 
         }*/
         con.fecharConexao();
-    }      
+        RenomearColunas();
+    }
+    
+    private void RenomearColunas(){
+        /*for(int i=0;i<colunas.length;i++){
+            System.out.println("Indice: "+i+" - "+ colunas[i]);
+        }*/
+        jTableMadeira.getColumnModel().getColumn(0).setHeaderValue("UPC");
+        jTableMadeira.getColumnModel().getColumn(1).setHeaderValue("Talhão");
+        jTableMadeira.getColumnModel().getColumn(2).setHeaderValue("Vol. Madeira m.e.");
+        jTableMadeira.getColumnModel().getColumn(3).setHeaderValue("Vol. Madeira m³");
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Altura 1(m)");
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Altura 2(m)");
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Altura 3(m)");        
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Comprimento(m)");  
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Largura(m)");  
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Peso(t)");
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Altura 1(m)BT");
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Altura 2(m)BT");
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Altura 3(m)BT");        
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Comprimento(m)BT");  
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Largura(m)BT");  
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Peso(t)BT");
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Data Entrega");
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Numero");
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Nº Estoque");        
+        jTableMadeira.getColumnModel().getColumn(4).setHeaderValue("Operario");
+    }
     
     private void AlterarInfo(){
         String[] info = new String[colunas.length];

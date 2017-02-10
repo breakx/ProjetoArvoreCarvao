@@ -17,6 +17,9 @@ import Visao.carvao.InserirMadeiraForno;
 import Visao.estoqueprincipal.GerenciarEstoquePrincipal;
 import Visao.expedircarvao.GerenciarEnvioCarvao;
 import Visao.fazenda.GerenciarFazenda;
+import Visao.forno.GerenciarForno;
+import Visao.grafico.Grafico;
+import Visao.grafico.GraficoRelatorioEstoque;
 import Visao.login.Login;
 import Visao.madeira.GerenciarMadeiraPraca;
 import Visao.madeira.InserirMadeiraPraca;
@@ -91,6 +94,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private float carv_ton_estTotal;
     private float carv_ton_prodTotal;
     private float carv_ton_transpTotal;
+    private float media_idades;
     //private float madeira_pracaTotal;
     private float madeira_fornoTotal;
     //private float mad_ton_totTotal;
@@ -103,6 +107,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private Border border;      
     private int barra=0;
     private String dado;
+    private int cont;
     
     private String filtro_upc;
     private String filtro_cat;
@@ -111,6 +116,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private String filtro_proj;
     private String filtro_faz;
     private String filtro_anorot;
+    private Object[] coluna;
     
     /**
      * Creates new form GerarRelatorioEstoquePrincipal
@@ -133,6 +139,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                 jMenuItemGerenciarMadeiraPraça.setVisible(false);
                 jMenuItemGerenciarExpedirCarvao.setVisible(false);
                 jMenuItemGerenciarUsuarios.setVisible(false);
+                jMenuItemGerenciarForno.setVisible(false);
             }
         }
         
@@ -494,21 +501,32 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         carv_ton_estTotal=0;
         carv_ton_prodTotal=0;
         carv_ton_transpTotal=0;
+        media_idades=0;
         ArrayList val = new ArrayList();
         ArrayList prod = new ArrayList();
         int cntr = 0;
-        int cont=0;
+        cont=0;
         try {            
             while(rs.next()){
                 //cria um objeto coluna de acordo com as colunas selecionadas para cada linha encontrada na consulta
-                Object[] coluna = new Object[tamanho];
+                coluna = new Object[tamanho];
                 
                 //carrega em cada coluna seu respectivo valor do banco de dados referente a sua coluna.
                 for(int i = 0; i < tamanho; i++)
-                {
+                {                      
+                    if(i==23){
+                        //coluna[i] = 123.4;
+                        coluna[i] = CalcularDiasSecagem(rs.getString("data_rotacao_1"),rs.getString("data_rotacao_2"),rs.getString("data_rotacao_3"));  
+                        i++;
+                    }
+                    
                     coluna[i] = rs.getString(colunas[i]);
-                    //System.out.println("Add Dados ["+i+"]: "+coluna[i]);
+                    System.out.println("Add Dados ["+i+"]: "+coluna[i]); 
                 }
+                
+                /*if(!rs.getString("data_rotacao_1").equals("Ok")){
+                    coluna[i]
+                }*/
                 
                 //coluna[31] = decformat.format(rs.getString("vol_mad_estimado"));
                 //System.out.println("Add Dados ["+31+"]: "+coluna[31]);
@@ -519,8 +537,9 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                 
                 //media aritmetica  m3/ha
                 if(rs.getString("m3_ha")!=null && Float.valueOf(rs.getString("m3_ha"))>0){
-                    m3_haMedia += Float.valueOf(rs.getString("m3_ha"));
-                    cont++;
+                    //m3_haMedia += Float.valueOf(rs.getString("m3_ha"));
+                    m3_haMedia += Float.valueOf(rs.getString("m3_ha")) * Float.valueOf(rs.getString("area"));
+                    //cont++;
                 }
                 
                 //media ponderada mdc/ha
@@ -577,9 +596,15 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                 } 
                 if(rs.getString("carv_ton_transp")!=null){
                     carv_ton_transpTotal += Float.valueOf(rs.getString("carv_ton_transp"));
-                }              
+                }           
                 
-                //System.out.printf("\nCalculo m3ha: "+ m3_haMedia); 
+                
+                if(rs.getString("idade_hoje")!=null){
+                    media_idades += Float.valueOf(rs.getString("idade_hoje"));
+                    cont++;
+                } 
+                
+                //System.out.printf("\nCalculo m3ha: "+ media_idades); 
                 //adiciona a cada linha os valores de cada objeto coluna
                 linhas.add(coluna);
             }
@@ -595,15 +620,20 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             //m3_haMedia = m3_haMedia/linhas.size();
             
             if(cont>0){
-                m3_haMedia = m3_haMedia/cont;
+                //m3_haMedia = m3_haMedia/cont;
+                media_idades=media_idades/cont;
+                //System.out.printf("Idade media: "+ media_idades); 
             }else{
-                m3_haMedia = 0;
+                //m3_haMedia = 0;
+                media_idades=0;
             }
             if(areaTotal>0){
                 mdc_haMedia = mdc_haMedia/areaTotal;
+                m3_haMedia = m3_haMedia/areaTotal;
             }else{
                 mdc_haMedia = 0;
-            }                
+                m3_haMedia = 0;
+            }                  
             
             vol_mad_procTotal = vol_mad_transpTotal-(vol_mad_pracaTotal+madeira_fornoTotal);
                     
@@ -646,11 +676,12 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             if(colunas[i].length()<=8){                
                 jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*12);
             }else if(colunas[i].length()>8 && colunas[i].length()<=15){
-                jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*10);
+                jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*11);
             }else{
-                jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*8);
+                jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*9);
             }
             jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setResizable(false);
+            //jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(i).setHeaderValue("");
             //System.out.println("Indice: "+i+" - "+ colunas[i]);
         }
         jTableRelatorioEstoquePrincipal.getTableHeader().setReorderingAllowed(false);
@@ -659,7 +690,207 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         //Organiza tabela de acordo com a coluna.
         /*TableRowSorter<TableModel> sorter;
         sorter = new TableRowSorter<TableModel>(modelo);
-        jTableRelatorioEstoquePrincipal.setRowSorter(sorter);	*/
+        jTableRelatorioEstoquePrincipal.setRowSorter(sorter);*/
+        //RenomearColunas();
+    }
+    
+    private void RenomearColunas(){
+        //System.out.println("Colunas totais: "+colunas.length);
+//        for(int i=0;i<colunas.length;i++){
+//            System.out.println("Indice: "+i+" - "+ colunas[i]);
+//        }
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(0).setHeaderValue("Estado");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(1).setHeaderValue("Bloco");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(2).setHeaderValue("Municipio");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(3).setHeaderValue("Fazenda");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(4).setHeaderValue("Projeto");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(5).setHeaderValue("UPC");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(6).setHeaderValue("Talhão");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(7).setHeaderValue("Área");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(8).setHeaderValue("Material Genetico");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(9).setHeaderValue("M³ por Ha.");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(10).setHeaderValue("Talhadia");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(11).setHeaderValue("Ano Rotação");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(12).setHeaderValue("Data Plantio");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(13).setHeaderValue("Data 1ª Rotação");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(14).setHeaderValue("Data 2ª Rotação");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(15).setHeaderValue("Data 3ª Rotação");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(16).setHeaderValue("Idade 1º Corte");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(17).setHeaderValue("Idade 2º Corte");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(18).setHeaderValue("Idade 3º Corte");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(19).setHeaderValue("Idade Hoje");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(20).setHeaderValue("Desbrota");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(21).setHeaderValue("Categoria");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(22).setHeaderValue("Situação");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(23).setHeaderValue("Dias de Secagem");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(24).setHeaderValue("IMA");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(25).setHeaderValue("MDC por Ha.");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(26).setHeaderValue("Densidade da Madeira");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(27).setHeaderValue("Densidade do Carvão");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(28).setHeaderValue("Madeira(t/ha)");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(29).setHeaderValue("Carvão(t/ha)");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(30).setHeaderValue("Id Operario");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(31).setHeaderValue("Data Estoque");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(32).setHeaderValue("Vol. Mad. Estimada");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(33).setHeaderValue("Vol. Mad. Transportada");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(34).setHeaderValue("Vol. Mad. Balanço");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(35).setHeaderValue("MDC Estimado");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(36).setHeaderValue("MDC Produzido");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(37).setHeaderValue("MDC Balanço");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(38).setHeaderValue("Madeira(t) Estimada");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(39).setHeaderValue("Madeira(t) Transportada");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(40).setHeaderValue("Madeira(t) Balanço");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(41).setHeaderValue("Carvão(t) Estimado");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(42).setHeaderValue("Carvão(t) Produzido");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(43).setHeaderValue("Carvão(t) Balanço");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(44).setHeaderValue("Madeira(m³) em Praça");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(45).setHeaderValue("Carvão(m³) Praça");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(46).setHeaderValue("Madeira(m³) Enfornada");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(47).setHeaderValue("MDC Transportado");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(48).setHeaderValue("Carvão(t) Transportado");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(49).setHeaderValue("Rend. Volumétrico Estimado");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(50).setHeaderValue("Rend. Volumétrico Real");
+        jTableRelatorioEstoquePrincipal.getColumnModel().getColumn(51).setHeaderValue("Fator de Empilalhemto");
+    }
+    
+    private float CalcularDiasSecagem(String data_r1, String data_r2, String data_r3){
+        DateFormat dataformato = new SimpleDateFormat ("dd/MM/yyyy");
+        //df.setLenient(false);
+        long dt = 0;
+        DateFormat novoFormatoData = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        String dataConvertida;
+        //System.out.println ("Data3: "+data_r3+" data2: "+data_r2+" data1: "+data_r1);
+        if(!data_r1.equals("00/00/0000") && data_r2.equals("00/00/0000") && data_r3.equals("00/00/0000")) {            
+            try
+            {
+                date = dataformato.parse(data_r1);
+                //System.out.println ("Data Format: "+date);
+                dataConvertida = novoFormatoData.format(date);
+                //System.out.println ("Data novo Format: "+dataConvertida);
+                Date d1 = novoFormatoData.parse(dataConvertida);
+                //System.out.println ("Data I: "+d1);
+                Date hoje = new Date(); 
+                //System.out.println ("Data hj: "+hoje);
+                dt = (hoje.getTime() - d1.getTime()) + (60*60*1000); //3600000 tempo(milisegundos) 1 hora para compensar horário de verão
+            }
+            catch (java.text.ParseException evt ) {
+                //System.out.println ("Erro: "+evt);
+            }
+            
+            float diasDiferenca = dt / (60*60*24*1000);//86400000 tempo(milisegundos) em dias
+            //System.out.println ("Diferenca1: "+diasDiferenca);
+            return diasDiferenca;
+        }else if(!data_r1.equals("00/00/0000") && !data_r2.equals("00/00/0000") && data_r3.equals("00/00/0000")){
+            try
+            {
+                date = dataformato.parse(data_r2);
+                //System.out.println ("Data Format: "+date);
+                dataConvertida = novoFormatoData.format(date);
+                //System.out.println ("Data novo Format: "+dataConvertida);
+                Date d1 = novoFormatoData.parse(dataConvertida);
+                //System.out.println ("Data I: "+d1);
+                Date hoje = new Date(); 
+                //System.out.println ("Data hj: "+hoje);
+                dt = (hoje.getTime() - d1.getTime()) + (60*60*1000); //3600000 tempo(milisegundos) 1 hora para compensar horário de verão
+            }
+            catch (java.text.ParseException evt ) {}
+            
+            float diasDiferenca = dt / (60*60*24*1000);//86400000 tempo(milisegundos) em dias
+            //System.out.println ("Diferenca2: "+diasDiferenca);
+            return diasDiferenca;
+        }else if(!data_r1.equals("00/00/0000") && !data_r2.equals("00/00/0000") && !data_r3.equals("00/00/0000")){
+            try
+            {
+                date = dataformato.parse(data_r3);
+                //System.out.println ("Data Format: "+date);
+                dataConvertida = novoFormatoData.format(date);
+                //System.out.println ("Data novo Format: "+dataConvertida);
+                Date d1 = novoFormatoData.parse(dataConvertida);
+                //System.out.println ("Data I: "+d1);
+                Date hoje = new Date(); 
+                //System.out.println ("Data hj: "+hoje);
+                dt = (hoje.getTime() - d1.getTime()) + (60*60*1000); //3600000 tempo(milisegundos) 1 hora para compensar horário de verão
+            }
+            catch (java.text.ParseException evt ) {}
+            
+            float diasDiferenca = dt / (60*60*24*1000);//86400000 tempo(milisegundos) em dias
+            //System.out.println ("Diferenca3: "+diasDiferenca);
+            return diasDiferenca;
+        }else{
+            return 0;
+        }        
+    }
+    
+    private String VerificarConducao(String data_r1, String data_r2, String data_r3){
+        DateFormat dataformato = new SimpleDateFormat ("dd/MM/yyyy");
+        //df.setLenient(false);
+        long dt = 0;
+        DateFormat novoFormatoData = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        String dataConvertida;
+        float diasDiferenca = 0;
+        //System.out.println ("Data3: "+data_r3+" data2: "+data_r2+" data1: "+data_r1);
+        if(!data_r1.equals("00/00/0000") && data_r2.equals("00/00/0000") && data_r3.equals("00/00/0000")) {            
+            try
+            {
+                date = dataformato.parse(data_r1);
+                //System.out.println ("Data Format: "+date);
+                dataConvertida = novoFormatoData.format(date);
+                //System.out.println ("Data novo Format: "+dataConvertida);
+                Date d1 = novoFormatoData.parse(dataConvertida);
+                //System.out.println ("Data I: "+d1);
+                Date hoje = new Date(); 
+                //System.out.println ("Data hj: "+hoje);
+                dt = (hoje.getTime() - d1.getTime()) + (60*60*1000); //3600000 tempo(milisegundos) 1 hora para compensar horário de verão
+            }
+            catch (java.text.ParseException evt ) {
+                //System.out.println ("Erro: "+evt);
+            }
+            
+            diasDiferenca = dt / (60*60*24*1000);//86400000 tempo(milisegundos) em dias
+            //System.out.println ("Diferenca1: "+diasDiferenca);
+        }else if(!data_r1.equals("00/00/0000") && !data_r2.equals("00/00/0000") && data_r3.equals("00/00/0000")){
+            try
+            {
+                date = dataformato.parse(data_r2);
+                //System.out.println ("Data Format: "+date);
+                dataConvertida = novoFormatoData.format(date);
+                //System.out.println ("Data novo Format: "+dataConvertida);
+                Date d1 = novoFormatoData.parse(dataConvertida);
+                //System.out.println ("Data I: "+d1);
+                Date hoje = new Date(); 
+                //System.out.println ("Data hj: "+hoje);
+                dt = (hoje.getTime() - d1.getTime()) + (60*60*1000); //3600000 tempo(milisegundos) 1 hora para compensar horário de verão
+            }
+            catch (java.text.ParseException evt ) {}
+            
+            diasDiferenca = dt / (60*60*24*1000);//86400000 tempo(milisegundos) em dias
+            //System.out.println ("Diferenca2: "+diasDiferenca);
+        }else if(!data_r1.equals("00/00/0000") && !data_r2.equals("00/00/0000") && !data_r3.equals("00/00/0000")){
+            try
+            {
+                date = dataformato.parse(data_r3);
+                //System.out.println ("Data Format: "+date);
+                dataConvertida = novoFormatoData.format(date);
+                //System.out.println ("Data novo Format: "+dataConvertida);
+                Date d1 = novoFormatoData.parse(dataConvertida);
+                //System.out.println ("Data I: "+d1);
+                Date hoje = new Date(); 
+                //System.out.println ("Data hj: "+hoje);
+                dt = (hoje.getTime() - d1.getTime()) + (60*60*1000); //3600000 tempo(milisegundos) 1 hora para compensar horário de verão
+            }
+            catch (java.text.ParseException evt ) {}
+            
+            diasDiferenca = dt / (60*60*24*1000);//86400000 tempo(milisegundos) em dias
+            //System.out.println ("Diferenca3: "+diasDiferenca);
+        }
+        if(diasDiferenca<=180){
+            return "-";
+        }else{
+            return "Realizar";
+        }
+        //ok, ja foi realizado
     }
     
     private void CarregarEstoqueExcel() throws BiffException, IOException{      
@@ -1356,6 +1587,47 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         }else JOptionPane.showMessageDialog(null, "Selecione uma linha!");
         //this.setVisible(false);
     }    
+    
+    private void PrepararGrafico(String graf){
+        //Grafico
+        ControlePrincipal.valor_grafico = new float[cont];
+        ControlePrincipal.info_grafico = new String[cont];
+        
+        int tipo = 0;
+        switch (graf){
+            case "Area_total":
+                tipo = 3;//coluna
+                ControlePrincipal.tipo_grafico = "Area_total";
+                break;
+            case "M3_ha":
+                tipo = 9;
+                ControlePrincipal.tipo_grafico = "M³_ha";
+                break;
+            case "MDC_ha":
+                tipo = 25;
+                ControlePrincipal.tipo_grafico = "MDC_ha";
+                break;
+            default:
+                tipo = 0;
+                break;
+        }
+        
+        ControlePrincipal.descricao = "Fazenda:"+filtro_faz+"     Projeto:"+filtro_proj+"     Material:"+filtro_matgen+"\nIdade (anos):"+media_idades+"     Área(ha):"+areaTotal;
+        
+        for (int i=0; i<cont; i++){            
+            //System.out.println("Grafico:  "+ ControlePrincipal.valor_grafico.length);
+            //System.out.println("Tabela Fazenda:  "+ jTableRelatorioGrafico.getValueAt(i, 1)+" - "+jTableRelatorioGrafico.getValueAt(i,2));
+            //System.out.println("Tabela Area:  "+ jTableRelatorioGrafico.getValueAt(i, 3));            
+            ControlePrincipal.valor_grafico[i]=Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(i, tipo).toString()) ;
+            //ControlePrincipal.info_grafico[i]=(String) jTableRelatorioEstoquePrincipal.getValueAt(i, 5)+" - "+jTableRelatorioEstoquePrincipal.getValueAt(i,2);
+            ControlePrincipal.info_grafico[i]="T"+jTableRelatorioEstoquePrincipal.getValueAt(i, 6);
+        }         
+
+        Grafico gr = new Grafico();
+        gr.criaGrafico();
+        gr.setVisible(true);
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1426,13 +1698,18 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jMenuItemRelatorioMadeiraPraca = new javax.swing.JMenuItem();
         jMenuItemRelatorioCarvao = new javax.swing.JMenuItem();
         jMenuItemRelatorioCarvaoExpedido = new javax.swing.JMenuItem();
+        jMenuItemRelatorioFornos = new javax.swing.JMenuItem();
         jMenuGerenciar = new javax.swing.JMenu();
         jMenuItemGerenciarUsuarios = new javax.swing.JMenuItem();
         jMenuItemGerenciarFazendas = new javax.swing.JMenuItem();
+        jMenuItemGerenciarForno = new javax.swing.JMenuItem();
         jMenuItemGerenciarMadeiraPraça = new javax.swing.JMenuItem();
         jMenuItemGerenciarCarvaoForno = new javax.swing.JMenuItem();
         jMenuItemGerenciarExpedirCarvao = new javax.swing.JMenuItem();
         jMenuItemGerenciarEstoque = new javax.swing.JMenuItem();
+        jMenuGraficos = new javax.swing.JMenu();
+        jMenuItemGraficoM3_ha = new javax.swing.JMenuItem();
+        jMenuItemGraficosMDC_ha = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -1529,7 +1806,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
 
         jListFiltrar.setFont(jListFiltrar.getFont().deriveFont(jListFiltrar.getFont().getSize()+1f));
         jListFiltrar.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "-", "estado", "bloco", "municipio", "fazenda", "projeto", "upc", "talhao", "area", "material_genetico", "m3_ha", "talhadia", "ano_rotacao", "data_plantio", "data_rotacao_1", "data_rotacao_2", "data_rotacao_3", "idade_corte1", "idade_corte2", "idade_corte3", "idade_hoje", "conducao", "categoria", "situacao", "ima", "mdc_ha", "densidade_madeira", "densidade_carvao", "mad_ton_ha", "carv_ton_ha", "id_operario", "data_estoque", "vol_mad_estimado", "vol_mad_transp", "vol_mad_balanco", "mdc_estimado", "mdc_prod", "mdc_balanco", "mad_ton_estimado", "mad_ton_transp", "mad_ton_balanco", "carv_ton_estimado", "carv_ton_prod", "carv_ton_balanco", "madeira_praca", "carvao_praca", "madeira_forno", "mdc_transp", "carv_ton_transp", "rend_grav_estimado", "rend_grav_real", "fator_empilalhemto" };
+            String[] strings = { "-", "estado", "bloco", "municipio", "fazenda", "projeto", "upc", "talhao", "area", "material_genetico", "m3_ha", "talhadia", "ano_rotacao", "data_plantio", "data_rotacao_1", "data_rotacao_2", "data_rotacao_3", "idade_corte1", "idade_corte2", "idade_corte3", "idade_hoje", "conducao", "categoria", "situacao", "dias_secagem", "ima", "mdc_ha", "densidade_madeira", "densidade_carvao", "mad_ton_ha", "carv_ton_ha", "id_operario", "data_estoque", "vol_mad_estimado", "vol_mad_transp", "vol_mad_balanco", "mdc_estimado", "mdc_prod", "mdc_balanco", "mad_ton_estimado", "mad_ton_transp", "mad_ton_balanco", "carv_ton_estimado", "carv_ton_prod", "carv_ton_balanco", "madeira_praca", "carvao_praca", "madeira_forno", "mdc_transp", "carv_ton_transp", "rend_grav_estimado", "rend_grav_real", "fator_empilalhemto" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -1901,6 +2178,14 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         });
         jMenuRelatorio.add(jMenuItemRelatorioCarvaoExpedido);
 
+        jMenuItemRelatorioFornos.setText("Fornos");
+        jMenuItemRelatorioFornos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRelatorioFornosActionPerformed(evt);
+            }
+        });
+        jMenuRelatorio.add(jMenuItemRelatorioFornos);
+
         jMenuBar1.add(jMenuRelatorio);
 
         jMenuGerenciar.setText("Gerenciar");
@@ -1920,6 +2205,14 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             }
         });
         jMenuGerenciar.add(jMenuItemGerenciarFazendas);
+
+        jMenuItemGerenciarForno.setText("Fornos");
+        jMenuItemGerenciarForno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGerenciarFornoActionPerformed(evt);
+            }
+        });
+        jMenuGerenciar.add(jMenuItemGerenciarForno);
 
         jMenuItemGerenciarMadeiraPraça.setText("Madeira/Praça");
         jMenuItemGerenciarMadeiraPraça.addActionListener(new java.awt.event.ActionListener() {
@@ -1954,6 +2247,26 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jMenuGerenciar.add(jMenuItemGerenciarEstoque);
 
         jMenuBar1.add(jMenuGerenciar);
+
+        jMenuGraficos.setText("Graficos");
+
+        jMenuItemGraficoM3_ha.setText("M3_ha");
+        jMenuItemGraficoM3_ha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficoM3_haActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficoM3_ha);
+
+        jMenuItemGraficosMDC_ha.setText("MDC_ha");
+        jMenuItemGraficosMDC_ha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficosMDC_haActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficosMDC_ha);
+
+        jMenuBar1.add(jMenuGraficos);
 
         setJMenuBar(jMenuBar1);
 
@@ -2072,6 +2385,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private void jMenuItemRelatorioMadeiraPracaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRelatorioMadeiraPracaActionPerformed
         try {
             new GerarRelatorioMadeiraPraca().setVisible(true);
+            ControlePrincipal.tipo_estoque="madeira";
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2082,6 +2396,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private void jMenuItemRelatorioCarvaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRelatorioCarvaoActionPerformed
         try {
             new GerarRelatorioCarvao().setVisible(true);
+            ControlePrincipal.tipo_estoque="madeira";
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2122,6 +2437,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private void jMenuItemGerenciarMadeiraPraçaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerenciarMadeiraPraçaActionPerformed
         try {
             new GerenciarMadeiraPraca().setVisible(true);
+            ControlePrincipal.tipo_estoque="madeira";
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2132,6 +2448,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private void jMenuItemGerenciarCarvaoFornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerenciarCarvaoFornoActionPerformed
         try {
             new GerenciarCarvaoForno().setVisible(true);
+            ControlePrincipal.tipo_estoque="carvao";
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2147,6 +2464,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private void jMenuItemGerenciarExpedirCarvaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerenciarExpedirCarvaoActionPerformed
         try {
             new GerenciarEnvioCarvao().setVisible(true);
+            ControlePrincipal.tipo_estoque="carvao";
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2157,6 +2475,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private void jMenuItemRelatorioCarvaoExpedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRelatorioCarvaoExpedidoActionPerformed
         try {
             new GerarRelatorioCarvaoExpedido().setVisible(true);
+            ControlePrincipal.tipo_estoque="madeira";
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioMadeiraPraca.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2167,6 +2486,25 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private void jMenuItemRelatorioEstoqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRelatorioEstoqueActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemRelatorioEstoqueActionPerformed
+
+    private void jMenuItemGerenciarFornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerenciarFornoActionPerformed
+        new GerenciarForno().setVisible(true);
+        this.setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jMenuItemGerenciarFornoActionPerformed
+
+    private void jMenuItemRelatorioFornosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRelatorioFornosActionPerformed
+        new GerarRelatorioForno().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItemRelatorioFornosActionPerformed
+
+    private void jMenuItemGraficoM3_haActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficoM3_haActionPerformed
+        PrepararGrafico("M3_ha");
+    }//GEN-LAST:event_jMenuItemGraficoM3_haActionPerformed
+
+    private void jMenuItemGraficosMDC_haActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficosMDC_haActionPerformed
+        PrepararGrafico("MDC_ha");
+    }//GEN-LAST:event_jMenuItemGraficosMDC_haActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2249,6 +2587,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private javax.swing.JList jListFiltrar;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuGerenciar;
+    private javax.swing.JMenu jMenuGraficos;
     private javax.swing.JMenuItem jMenuItemCarregarEstoqueExcel;
     private javax.swing.JMenuItem jMenuItemCarregarFazendaExcel;
     private javax.swing.JMenuItem jMenuItemGerarPDF;
@@ -2256,12 +2595,16 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemGerenciarEstoque;
     private javax.swing.JMenuItem jMenuItemGerenciarExpedirCarvao;
     private javax.swing.JMenuItem jMenuItemGerenciarFazendas;
+    private javax.swing.JMenuItem jMenuItemGerenciarForno;
     private javax.swing.JMenuItem jMenuItemGerenciarMadeiraPraça;
     private javax.swing.JMenuItem jMenuItemGerenciarUsuarios;
+    private javax.swing.JMenuItem jMenuItemGraficoM3_ha;
+    private javax.swing.JMenuItem jMenuItemGraficosMDC_ha;
     private javax.swing.JMenuItem jMenuItemLogout;
     private javax.swing.JMenuItem jMenuItemRelatorioCarvao;
     private javax.swing.JMenuItem jMenuItemRelatorioCarvaoExpedido;
     private javax.swing.JMenuItem jMenuItemRelatorioEstoque;
+    private javax.swing.JMenuItem jMenuItemRelatorioFornos;
     private javax.swing.JMenuItem jMenuItemRelatorioMadeiraPraca;
     private javax.swing.JMenuItem jMenuItemValidade;
     private javax.swing.JMenu jMenuPrincipal;

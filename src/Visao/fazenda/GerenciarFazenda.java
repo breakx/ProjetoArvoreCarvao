@@ -157,7 +157,20 @@ public class GerenciarFazenda extends javax.swing.JFrame {
                 }
             }); 
         con.fecharConexao();
+        RenomearColunas();
     } 
+    
+    private void RenomearColunas(){
+        /*for(int i=0;i<colunas.length;i++){
+            System.out.println("Indice: "+i+" - "+ colunas[i]);
+        }*/
+        jTableFazenda.getColumnModel().getColumn(0).setHeaderValue("Estado");
+        jTableFazenda.getColumnModel().getColumn(1).setHeaderValue("Bloco");
+        jTableFazenda.getColumnModel().getColumn(2).setHeaderValue("Municipio");
+        jTableFazenda.getColumnModel().getColumn(3).setHeaderValue("Fazenda");
+        jTableFazenda.getColumnModel().getColumn(4).setHeaderValue("Projeto");        
+        jTableFazenda.getColumnModel().getColumn(5).setHeaderValue("Numero");
+    }
     
     private void InserirInfo(){
         new InserirFazenda().setVisible(true);

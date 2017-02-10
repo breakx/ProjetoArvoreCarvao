@@ -109,6 +109,18 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                 }
             }); 
         con.fecharConexao();
+        RenomearColunas();
+    }
+    
+    private void RenomearColunas(){
+        /*for(int i=0;i<colunas.length;i++){
+            System.out.println("Indice: "+i+" - "+ colunas[i]);
+        }*/
+        jTableUsuario.getColumnModel().getColumn(0).setHeaderValue("Numero");
+        jTableUsuario.getColumnModel().getColumn(1).setHeaderValue("Login");
+        jTableUsuario.getColumnModel().getColumn(2).setHeaderValue("Tipo");
+        jTableUsuario.getColumnModel().getColumn(3).setHeaderValue("UPC");
+        jTableUsuario.getColumnModel().getColumn(4).setHeaderValue("Nome");
     }
     
     private void InserirInfo(){

@@ -88,6 +88,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemRelatorioCarvaoExpedidoActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemRelatorioFornos">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Fornos"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemRelatorioFornosActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenuGerenciar">
@@ -109,6 +117,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGerenciarFazendasActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGerenciarForno">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Fornos"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGerenciarFornoActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGerenciarMadeiraPra&#xe7;a">
@@ -141,6 +157,29 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGerenciarEstoqueActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenuGraficos">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Graficos"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficoM3_ha">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="M3_ha"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficoM3_haActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficosMDC_ha">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="MDC_ha"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficosMDC_haActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -558,7 +597,7 @@
                   </FontInfo>
                 </Property>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="52">
+                  <StringArray count="53">
                     <StringItem index="0" value="-"/>
                     <StringItem index="1" value="estado"/>
                     <StringItem index="2" value="bloco"/>
@@ -583,34 +622,35 @@
                     <StringItem index="21" value="conducao"/>
                     <StringItem index="22" value="categoria"/>
                     <StringItem index="23" value="situacao"/>
-                    <StringItem index="24" value="ima"/>
-                    <StringItem index="25" value="mdc_ha"/>
-                    <StringItem index="26" value="densidade_madeira"/>
-                    <StringItem index="27" value="densidade_carvao"/>
-                    <StringItem index="28" value="mad_ton_ha"/>
-                    <StringItem index="29" value="carv_ton_ha"/>
-                    <StringItem index="30" value="id_operario"/>
-                    <StringItem index="31" value="data_estoque"/>
-                    <StringItem index="32" value="vol_mad_estimado"/>
-                    <StringItem index="33" value="vol_mad_transp"/>
-                    <StringItem index="34" value="vol_mad_balanco"/>
-                    <StringItem index="35" value="mdc_estimado"/>
-                    <StringItem index="36" value="mdc_prod"/>
-                    <StringItem index="37" value="mdc_balanco"/>
-                    <StringItem index="38" value="mad_ton_estimado"/>
-                    <StringItem index="39" value="mad_ton_transp"/>
-                    <StringItem index="40" value="mad_ton_balanco"/>
-                    <StringItem index="41" value="carv_ton_estimado"/>
-                    <StringItem index="42" value="carv_ton_prod"/>
-                    <StringItem index="43" value="carv_ton_balanco"/>
-                    <StringItem index="44" value="madeira_praca"/>
-                    <StringItem index="45" value="carvao_praca"/>
-                    <StringItem index="46" value="madeira_forno"/>
-                    <StringItem index="47" value="mdc_transp"/>
-                    <StringItem index="48" value="carv_ton_transp"/>
-                    <StringItem index="49" value="rend_grav_estimado"/>
-                    <StringItem index="50" value="rend_grav_real"/>
-                    <StringItem index="51" value="fator_empilalhemto"/>
+                    <StringItem index="24" value="dias_secagem"/>
+                    <StringItem index="25" value="ima"/>
+                    <StringItem index="26" value="mdc_ha"/>
+                    <StringItem index="27" value="densidade_madeira"/>
+                    <StringItem index="28" value="densidade_carvao"/>
+                    <StringItem index="29" value="mad_ton_ha"/>
+                    <StringItem index="30" value="carv_ton_ha"/>
+                    <StringItem index="31" value="id_operario"/>
+                    <StringItem index="32" value="data_estoque"/>
+                    <StringItem index="33" value="vol_mad_estimado"/>
+                    <StringItem index="34" value="vol_mad_transp"/>
+                    <StringItem index="35" value="vol_mad_balanco"/>
+                    <StringItem index="36" value="mdc_estimado"/>
+                    <StringItem index="37" value="mdc_prod"/>
+                    <StringItem index="38" value="mdc_balanco"/>
+                    <StringItem index="39" value="mad_ton_estimado"/>
+                    <StringItem index="40" value="mad_ton_transp"/>
+                    <StringItem index="41" value="mad_ton_balanco"/>
+                    <StringItem index="42" value="carv_ton_estimado"/>
+                    <StringItem index="43" value="carv_ton_prod"/>
+                    <StringItem index="44" value="carv_ton_balanco"/>
+                    <StringItem index="45" value="madeira_praca"/>
+                    <StringItem index="46" value="carvao_praca"/>
+                    <StringItem index="47" value="madeira_forno"/>
+                    <StringItem index="48" value="mdc_transp"/>
+                    <StringItem index="49" value="carv_ton_transp"/>
+                    <StringItem index="50" value="rend_grav_estimado"/>
+                    <StringItem index="51" value="rend_grav_real"/>
+                    <StringItem index="52" value="fator_empilalhemto"/>
                   </StringArray>
                 </Property>
               </Properties>

@@ -13,6 +13,7 @@ public class ControleCarvao {
     private String id_controle_carvao;
     private String id_operario;
     private String id_estoque;
+    private String id_forno;
     private int upc_c;
     private int talhao;
     private String forno;
@@ -22,6 +23,10 @@ public class ControleCarvao {
     private String data_saida_carvao;
     private float rend_grav_forno;
     private String material_gen;
+    private float umidade;
+    private String data_ignicao;
+    private String data_fim_carbonizacao;
+    private String estimativa_mdc;
 
     /**
      * @return the id_controle_carvao
@@ -189,5 +194,75 @@ public class ControleCarvao {
      */
     public void setMaterial_gen(String material_gen) {
         this.material_gen = material_gen;
+    }
+
+    /**
+     * @return the umidade
+     */
+    public float getUmidade() {
+        return umidade;
+    }
+
+    /**
+     * @param umidade the umidade to set
+     */
+    public void setUmidade(float umidade) {
+        this.umidade = umidade;
+    }
+
+    /**
+     * @return the data_ignicao
+     */
+    public String getData_ignicao() {
+        return data_ignicao;
+    }
+
+    /**
+     * @param data_ignicao the data_ignicao to set
+     */
+    public void setData_ignicao(String data_ignicao) {
+        this.data_ignicao = data_ignicao;
+    }
+
+    /**
+     * @return the data_fim_carbonizacao
+     */
+    public String getData_fim_carbonizacao() {
+        return data_fim_carbonizacao;
+    }
+
+    /**
+     * @param data_fim_carbonizacao the data_fim_carbonizacao to set
+     */
+    public void setData_fim_carbonizacao(String data_fim_carbonizacao) {
+        this.data_fim_carbonizacao = data_fim_carbonizacao;
+    }
+
+    /**
+     * @return the estimativa_mdc
+     */
+    public String getEstimativa_mdc() {
+        return estimativa_mdc;
+    }
+
+    /**
+     * @param estimativa_mdc the estimativa_mdc to set
+     */
+    public void setEstimativa_mdc(String estimativa_mdc) {
+        this.estimativa_mdc = estimativa_mdc;
+    }
+
+    /**
+     * @return the id_forno
+     */
+    public String getId_forno() {
+        return id_forno;
+    }
+
+    /**
+     * @param id_forno the id_forno to set
+     */
+    public void setId_forno(String id_forno) {
+        this.id_forno = id_forno;
     }
 }

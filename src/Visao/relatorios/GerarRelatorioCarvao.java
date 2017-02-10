@@ -12,6 +12,7 @@ import Visao.carvao.GerenciarCarvaoForno;
 import Visao.estoqueprincipal.GerenciarEstoquePrincipal;
 import Visao.expedircarvao.GerenciarEnvioCarvao;
 import Visao.fazenda.GerenciarFazenda;
+import Visao.forno.GerenciarForno;
 import Visao.login.Login;
 import Visao.madeira.GerenciarMadeiraPraca;
 import Visao.usuario.GerenciarUsuarios;
@@ -73,6 +74,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
                 jMenuItemGerenciarMadeiraPraça.setVisible(false);
                 jMenuItemGerenciarExpedirCarvao.setVisible(false);
                 jMenuItemGerenciarUsuarios.setVisible(false);
+                jMenuItemGerenciarForno.setVisible(false);
             }
         }
         ChangeName();
@@ -367,7 +369,31 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         jTableRelatorioCarvao.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTableRelatorioCarvao.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         con.fecharConexao();
-    }  
+        RenomearColunas();
+    }
+    
+    private void RenomearColunas(){
+        /*for(int i=0;i<colunas.length;i++){
+            System.out.println("Indice: "+i+" - "+ colunas[i]);
+        }*/
+        jTableRelatorioCarvao.getColumnModel().getColumn(0).setHeaderValue("Nº Estoque");
+        jTableRelatorioCarvao.getColumnModel().getColumn(1).setHeaderValue("Operario");
+        jTableRelatorioCarvao.getColumnModel().getColumn(2).setHeaderValue("UPC");
+        jTableRelatorioCarvao.getColumnModel().getColumn(3).setHeaderValue("Talhão");
+        jTableRelatorioCarvao.getColumnModel().getColumn(4).setHeaderValue("Nome Forno");
+        jTableRelatorioCarvao.getColumnModel().getColumn(5).setHeaderValue("Capacidade Forno(m.e)");
+        jTableRelatorioCarvao.getColumnModel().getColumn(6).setHeaderValue("Data Fechamento Forno");
+        jTableRelatorioCarvao.getColumnModel().getColumn(7).setHeaderValue("Vol. Carvão");
+        jTableRelatorioCarvao.getColumnModel().getColumn(8).setHeaderValue("Data Abertura Forno");
+        jTableRelatorioCarvao.getColumnModel().getColumn(9).setHeaderValue("Rendimento");
+        jTableRelatorioCarvao.getColumnModel().getColumn(10).setHeaderValue("Material Genetico");
+        /*jTableRelatorioCarvao.getColumnModel().getColumn(11).setHeaderValue("Data Saida Carvão Forno");
+        jTableRelatorioCarvao.getColumnModel().getColumn(12).setHeaderValue("Nº Estoque");
+        jTableRelatorioCarvao.getColumnModel().getColumn(13).setHeaderValue("Operario");
+        jTableRelatorioCarvao.getColumnModel().getColumn(14).setHeaderValue("Rend. Grav. Forno");
+        jTableRelatorioCarvao.getColumnModel().getColumn(15).setHeaderValue("Numero");
+        jTableRelatorioCarvao.getColumnModel().getColumn(16).setHeaderValue("Nº Forno");*/
+    }
     
     private void GerarPDF() throws DocumentException, FileNotFoundException {
         try {
@@ -479,6 +505,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         jMenuItemRelatorioMadeiraPraca = new javax.swing.JMenuItem();
         jMenuItemRelatorioCarvao = new javax.swing.JMenuItem();
         jMenuItemRelatorioCarvaoExpedido = new javax.swing.JMenuItem();
+        jMenuItemRelatorioFornos = new javax.swing.JMenuItem();
         jMenuGerenciar = new javax.swing.JMenu();
         jMenuItemGerenciarUsuarios = new javax.swing.JMenuItem();
         jMenuItemGerenciarFazendas = new javax.swing.JMenuItem();
@@ -486,6 +513,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         jMenuItemGerenciarCarvaoForno = new javax.swing.JMenuItem();
         jMenuItemGerenciarExpedirCarvao = new javax.swing.JMenuItem();
         jMenuItemGerenciarEstoque = new javax.swing.JMenuItem();
+        jMenuItemGerenciarForno = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -809,6 +837,14 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         });
         jMenuRelatorio.add(jMenuItemRelatorioCarvaoExpedido);
 
+        jMenuItemRelatorioFornos.setText("Fornos");
+        jMenuItemRelatorioFornos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRelatorioFornosActionPerformed(evt);
+            }
+        });
+        jMenuRelatorio.add(jMenuItemRelatorioFornos);
+
         jMenuBar1.add(jMenuRelatorio);
 
         jMenuGerenciar.setText("Gerenciar");
@@ -861,6 +897,14 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         });
         jMenuGerenciar.add(jMenuItemGerenciarEstoque);
 
+        jMenuItemGerenciarForno.setText("Fornos");
+        jMenuItemGerenciarForno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGerenciarFornoActionPerformed(evt);
+            }
+        });
+        jMenuGerenciar.add(jMenuItemGerenciarForno);
+
         jMenuBar1.add(jMenuGerenciar);
 
         setJMenuBar(jMenuBar1);
@@ -895,7 +939,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
                         .addGap(10, 10, 10)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
                         .addGap(10, 10, 10)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(10, 10, 10))
@@ -959,6 +1003,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     private void jMenuItemGerenciarMadeiraPraçaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerenciarMadeiraPraçaActionPerformed
         try {
             new GerenciarMadeiraPraca().setVisible(true);
+            ControlePrincipal.tipo_estoque="madeira";
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -969,6 +1014,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     private void jMenuItemGerenciarCarvaoFornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerenciarCarvaoFornoActionPerformed
         try {
             new GerenciarCarvaoForno().setVisible(true);
+            ControlePrincipal.tipo_estoque="carvao";
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -979,6 +1025,7 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     private void jMenuItemGerenciarExpedirCarvaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerenciarExpedirCarvaoActionPerformed
         try {
             new GerenciarEnvioCarvao().setVisible(true);
+            ControlePrincipal.tipo_estoque="carvao";
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoqueBasico.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1035,6 +1082,17 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
         this.setVisible(false);
         dispose();
     }//GEN-LAST:event_jMenuItemRelatorioEstoqueActionPerformed
+
+    private void jMenuItemRelatorioFornosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRelatorioFornosActionPerformed
+        new GerarRelatorioForno().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItemRelatorioFornosActionPerformed
+
+    private void jMenuItemGerenciarFornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGerenciarFornoActionPerformed
+        new GerenciarForno().setVisible(true);
+        this.setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jMenuItemGerenciarFornoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1100,12 +1158,14 @@ public class GerarRelatorioCarvao extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemGerenciarEstoque;
     private javax.swing.JMenuItem jMenuItemGerenciarExpedirCarvao;
     private javax.swing.JMenuItem jMenuItemGerenciarFazendas;
+    private javax.swing.JMenuItem jMenuItemGerenciarForno;
     private javax.swing.JMenuItem jMenuItemGerenciarMadeiraPraça;
     private javax.swing.JMenuItem jMenuItemGerenciarUsuarios;
     private javax.swing.JMenuItem jMenuItemLogout;
     private javax.swing.JMenuItem jMenuItemRelatorioCarvao;
     private javax.swing.JMenuItem jMenuItemRelatorioCarvaoExpedido;
     private javax.swing.JMenuItem jMenuItemRelatorioEstoque;
+    private javax.swing.JMenuItem jMenuItemRelatorioFornos;
     private javax.swing.JMenuItem jMenuItemRelatorioMadeiraPraca;
     private javax.swing.JMenuItem jMenuItemValidade;
     private javax.swing.JMenu jMenuPrincipal;

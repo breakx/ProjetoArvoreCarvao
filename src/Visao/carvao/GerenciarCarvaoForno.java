@@ -5,18 +5,28 @@
  */
 package Visao.carvao;
 
+import Controle.ControleCarvao;
 import Controle.ControlePrincipal;
+import Controle.carvao.AlterarCarvaoCtrl;
 import Modelo.ConexaoBD;
 import Modelo.GerarTabela;
 import Visao.expedircarvao.GerenciarEnvioCarvao;
 import Visao.login.Login;
 import Visao.relatorios.GerarRelatorioEstoqueBasico;
 import Visao.relatorios.GerarRelatorioEstoquePrincipal;
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -28,6 +38,9 @@ import javax.swing.ListSelectionModel;
  */
 public class GerenciarCarvaoForno extends javax.swing.JFrame {
     
+    private float dias_resfriando;
+    private float dias_carbonizando;
+    private float PERIODO_RESFRIAMENTO = 7;
     /**
      * Creates new form Carvao
      * @throws java.sql.SQLException
@@ -49,24 +62,30 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
     private void PreencherTabela(){
         ArrayList dados = new ArrayList();
         String[] colunas = new String[] { 
-            "upc_c", 
-            "talhao", 
-            "forno", 
-            "volume_madeira", 
-            "volume_carvao", 
-            "data_entrada_madeira_forno",  
-            "data_saida_carvao_forno", 
-            "id_controle_carvao", 
-            "id_estoque_p", 
-            "id_operario", 
-            "rend_grav_forno"
+            "upc_c", //0
+            "talhao", //1
+            "forno", //2
+            "volume_madeira",//3 
+            "volume_carvao", //4
+            "umidade",//5
+            "data_ignicao",//6
+            "dias_carbonizando",//7
+            "data_fim_carbonizacao",//8
+            "dias_resfriando",//9
+            "data_entrada_madeira_forno",//10  
+            "data_saida_carvao_forno", //11
+            "id_estoque_p", //12
+            "id_operario", //13
+            "rend_grav_forno", //14
+            "id_controle_carvao",//15
+            "id_forno"//16
         };
         String query;
         int tamanho = 0;
         if(ControlePrincipal.tipo_u.equals("op_ger")){
-            query = "Select * from controle_carvao";
+            query = "Select * from controle_carvao order by id_controle_carvao desc";
         }else{
-            query = "Select * from controle_carvao where id_operario = '" +ControlePrincipal.id_op+"'";
+            query = "Select * from controle_carvao where id_operario = '" +ControlePrincipal.id_op+"' order by id_controle_carvao desc";
         }
         
         ConexaoBD con = ConexaoBD.getConexao(0);
@@ -80,12 +99,18 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
                         rs.getString("forno"),//2
                         rs.getString("volume_madeira"),//3              
                         rs.getString("volume_carvao"),//4
-                        rs.getString("data_entrada_madeira_forno"),//5
-                        rs.getString("data_saida_carvao_forno"),//6
-                        rs.getString("id_estoque_p"),//7
-                        rs.getString("id_operario"),//8
-                        rs.getString("rend_grav_forno"),//9
-                        rs.getString("id_controle_carvao")//10
+                        rs.getString("umidade"),//5
+                        rs.getString("data_ignicao"),//6
+                        dias_carbonizando = CalcularDias(rs.getTimestamp("data_ignicao"), rs.getTimestamp("data_fim_carbonizacao")),//7
+                        rs.getString("data_fim_carbonizacao"),//8
+                        dias_resfriando = CalcularDias(rs.getTimestamp("data_fim_carbonizacao"), rs.getTimestamp("data_saida_carvao_forno")),//9
+                        rs.getString("data_entrada_madeira_forno"),//10
+                        rs.getString("data_saida_carvao_forno"),//11
+                        rs.getString("id_estoque_p"),//12
+                        rs.getString("id_operario"),//13
+                        rs.getString("rend_grav_forno"),//14
+                        rs.getString("id_controle_carvao"),//15
+                        rs.getString("id_forno")//16                            
                     });
                     //System.out.println("Data carvão: "+rs.getTimestamp("data_entrada_madeira_forno"));
                     tamanho++;
@@ -105,8 +130,8 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
                 jTableCarvao.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*10);
             }else{
                 jTableCarvao.getColumnModel().getColumn(i).setPreferredWidth(colunas[i].length()*8);
-            }
-            if(i>4 && !ControlePrincipal.tipo_u.equals("op_ger")){
+            }  
+            if(i>9 && !ControlePrincipal.tipo_u.equals("op_ger")){
                 jTableCarvao.getColumnModel().getColumn(i).setMinWidth(0);     
                 jTableCarvao.getColumnModel().getColumn(i).setPreferredWidth(0);  
                 jTableCarvao.getColumnModel().getColumn(i).setMaxWidth(0);
@@ -117,6 +142,7 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
         jTableCarvao.getTableHeader().setReorderingAllowed(false);
         jTableCarvao.setAutoResizeMode(jTableCarvao.AUTO_RESIZE_OFF);
         jTableCarvao.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTableCarvao.setSelectionBackground(Color.green);
         
         //duplo click
         jTableCarvao.addMouseListener(new MouseAdapter(){
@@ -128,41 +154,189 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
                 }
             }); 
         con.fecharConexao();
-    }    
+        RenomearColunas();
+    }
+    
+    private void RenomearColunas(){
+        /*for(int i=0;i<colunas.length;i++){
+            System.out.println("Indice: "+i+" - "+ colunas[i]);
+        }*/
+        jTableCarvao.getColumnModel().getColumn(0).setHeaderValue("UPC");
+        jTableCarvao.getColumnModel().getColumn(1).setHeaderValue("Talhao");
+        jTableCarvao.getColumnModel().getColumn(2).setHeaderValue("Forno");
+        jTableCarvao.getColumnModel().getColumn(3).setHeaderValue("Vol. Madeira m³");
+        jTableCarvao.getColumnModel().getColumn(4).setHeaderValue("Vol. Carvão m³");
+        jTableCarvao.getColumnModel().getColumn(5).setHeaderValue("Umidade");
+        jTableCarvao.getColumnModel().getColumn(6).setHeaderValue("Data Ignicao");
+        jTableCarvao.getColumnModel().getColumn(7).setHeaderValue("Dias Carbonizando");
+        jTableCarvao.getColumnModel().getColumn(8).setHeaderValue("Data Fim Carbonização");
+        jTableCarvao.getColumnModel().getColumn(9).setHeaderValue("Dias Resfriando");
+        jTableCarvao.getColumnModel().getColumn(10).setHeaderValue("Data Entrada Madeira Forno");
+        jTableCarvao.getColumnModel().getColumn(11).setHeaderValue("Data Saida Carvão Forno");
+        jTableCarvao.getColumnModel().getColumn(12).setHeaderValue("Nº Estoque");
+        jTableCarvao.getColumnModel().getColumn(13).setHeaderValue("Operario");
+        jTableCarvao.getColumnModel().getColumn(14).setHeaderValue("Rend. Grav. Forno");
+        jTableCarvao.getColumnModel().getColumn(15).setHeaderValue("Numero");
+        jTableCarvao.getColumnModel().getColumn(16).setHeaderValue("Nº Forno");
+    }
+        
     
     private void AlterarInfo(){
+        System.out.println("Erro!");
         if(jTableCarvao.getSelectedRow()>=0)//verifica se a linha a ser alterada esta marcada
         {
             int linha = jTableCarvao.getSelectedRow();
-            String id_controle_carvao = jTableCarvao.getValueAt(linha, 10).toString();
-            String id_estoque = jTableCarvao.getValueAt(linha, 7).toString();
+            
+            /*for(int i=0; i<10;i++){                
+                System.out.println("coluna["+i+"]: "+jTableCarvao.getValueAt(linha, i).toString());
+            }*/
+            
+            String id_controle_carvao = jTableCarvao.getValueAt(linha, 15).toString();
+            String id_estoque = jTableCarvao.getValueAt(linha, 12).toString();
             //String talhao = jTableCarvao.getValueAt(linha, 0).toString();
             //String forno = jTableCarvao.getValueAt(linha, 1).toString();
             String volume_madeira = jTableCarvao.getValueAt(linha, 3).toString();
             //String data_entrada_madeira_forno = jTableCarvao.getValueAt(linha, 6).toString();
-            String id_operario = jTableCarvao.getValueAt(linha, 8).toString();
+            String id_operario = jTableCarvao.getValueAt(linha, 13).toString();
             String volume_carvao = jTableCarvao.getValueAt(linha, 4).toString();
-            String data_saida_carvao_forno = jTableCarvao.getValueAt(linha, 6).toString();
+            String data_saida_carvao_forno = jTableCarvao.getValueAt(linha, 11).toString();
             //String rend_grav_forno = jTableCarvao.getValueAt(linha, 10).toString();
-                        
-            /*for(int i=0; i<10;i++){                
-                System.out.println("coluna["+i+"]: "+jTableCarvao.getValueAt(linha, i).toString());
-            }*/
-            if(volume_carvao.equals("0")){
-                try {
-                    new Alterar_RetirarCarvaoForno(id_controle_carvao, id_estoque, volume_madeira).setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(GerenciarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
-                }          
-                this.setVisible(false);
-                dispose();
+            String id_forno = jTableCarvao.getValueAt(linha, 16).toString();
+            float dias_resf = 0;
+            System.out.println("dias_resf: "+dias_resf);
+            dias_resf =  Float.parseFloat(jTableCarvao.getValueAt(linha, 9).toString());
+            if(dias_resf>PERIODO_RESFRIAMENTO){
+                if(volume_carvao.equals("0")){
+                    try {
+                        new Alterar_RetirarCarvaoForno(id_controle_carvao, id_estoque, id_forno, volume_madeira).setVisible(true);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(GerenciarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
+                    }          
+                    this.setVisible(false);
+                    dispose();
+                }else{
+                    JOptionPane.showMessageDialog(null, "Processo de carbonização finalizado!");
+                }
             }else{
-                JOptionPane.showMessageDialog(null, "Processo de carbonização finalizado!");
-            }
+                int res = JOptionPane.showConfirmDialog(  
+                        null,
+                        "Abrir o forno antes do periodo de "+PERIODO_RESFRIAMENTO+" dias pode comprometer a produção!"
+                                + "\nDeseja abrir assim mesmo?" ,
+                        "",
+                        JOptionPane.YES_NO_OPTION);
+
+                if(res == JOptionPane.YES_OPTION)
+                {
+                    JOptionPane.showMessageDialog(null, "Forno aberto  "+(PERIODO_RESFRIAMENTO-dias_resfriando) +" antes do recomendado!");
+                    if(volume_carvao.equals("0")){
+                    try {
+                        new Alterar_RetirarCarvaoForno(id_controle_carvao, id_estoque, id_forno, volume_madeira).setVisible(true);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(GerenciarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
+                    }          
+                    this.setVisible(false);
+                    dispose();
+                }else{
+                    JOptionPane.showMessageDialog(null, "Processo de carbonização finalizado!");
+                }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Atividade cancelada!");
+                }            
+            }            
         }else{
             JOptionPane.showMessageDialog(null, "Selecione uma linha!");
         }
     }
+    
+    private void IgnicaoForno_FinalizarCarbonizacao(){
+        DateFormat data_forno = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        if(jTableCarvao.getSelectedRow()>=0)//verifica se a linha a ser alterada esta marcada
+        {
+            int linha = jTableCarvao.getSelectedRow();
+            ControleCarvao carvao = new ControleCarvao();
+            //System.out.println("Situacao data: "+jTableCarvao.getValueAt(linha, 16));
+            if(jTableCarvao.getValueAt(linha, 6)==null){//ignicao                
+                carvao.setId_controle_carvao(jTableCarvao.getValueAt(linha, 15).toString());
+                carvao.setId_operario(ControlePrincipal.id_op);
+                carvao.setData_ignicao(data_forno.format(date));
+                ControlePrincipal.condicao_forno="Carbonizando";
+                ControlePrincipal.id_forno_usado = jTableCarvao.getValueAt(linha, 16).toString();
+                //JOptionPane.showMessageDialog(null, "id: "+ControlePrincipal.id_estoque_principal+"Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_transp+" carv: "+ControlePrincipal.volume_carvao_transp);
+                //System.out.println("Ignição id forno: "+ControlePrincipal.id_forno_usado);
+                AlterarCarvaoCtrl alterar = new AlterarCarvaoCtrl(carvao);
+                try {
+                    new GerenciarCarvaoForno().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Alterar_RetirarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                this.setVisible(false);
+                dispose();
+            
+            }else if(jTableCarvao.getValueAt(linha, 8)==null){//fim carbonização
+                carvao.setId_controle_carvao(jTableCarvao.getValueAt(linha, 15).toString());
+                carvao.setId_operario(ControlePrincipal.id_op);
+                carvao.setData_fim_carbonizacao(data_forno.format(date));
+                ControlePrincipal.condicao_forno="Resfriando";
+                ControlePrincipal.id_forno_usado = jTableCarvao.getValueAt(linha, 16).toString();
+                //JOptionPane.showMessageDialog(null, "id: "+ControlePrincipal.id_estoque_principal+"Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_transp+" carv: "+ControlePrincipal.volume_carvao_transp);
+                System.out.println("Ignição id forno: "+ControlePrincipal.id_forno_usado);
+                AlterarCarvaoCtrl alterar = new AlterarCarvaoCtrl(carvao);
+                try {
+                    new GerenciarCarvaoForno().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Alterar_RetirarCarvaoForno.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                this.setVisible(false);
+                dispose();
+            }else{
+                JOptionPane.showMessageDialog(null, "Periodo de carbonização finalizado, confira o forno!");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Selecione uma linha!");
+        }
+    }     
+        
+    private float CalcularDias(Timestamp data_princ, Timestamp data_ctrl){
+        //1970-01-01 00:00:00
+        float diasDiferenca=0;
+        if(data_princ!=null && data_ctrl==null){//dias carbonizando = hj-prin
+            DateFormat df = new SimpleDateFormat ("yyyy-MM-dd");
+            df.setLenient(false);
+            long dt = 0;
+            try 
+            { 
+                Date d1 = df.parse (data_princ.toString());
+                //System.out.println ("Data I: "+d1);
+                Date hoje = new Date(); 
+                //System.out.println ("Data hj: "+hoje);
+                dt = (hoje.getTime() - d1.getTime()) + (60*60*1000); //3600000 tempo(milisegundos) 1 hora para compensar horário de verão
+            } 
+            catch (java.text.ParseException evt ) {}        
+
+            diasDiferenca = dt / (60*60*24*1000);//86400000 tempo(milisegundos) em dias
+            //System.out.println ("Diferenca: "+diasDiferenca);
+            //return diasDiferenca;
+        }else if(data_princ!=null && data_ctrl!=null){//fim carb = ctrl - prin
+            DateFormat df = new SimpleDateFormat ("yyyy-MM-dd");
+            df.setLenient(false);
+            long dt = 0;
+            try 
+            { 
+                Date d1 = df.parse (data_princ.toString());
+                //System.out.println ("Data II: "+d1);
+                //Date hoje = new Date(); 
+                //System.out.println ("Data hj: "+hoje);
+                dt = (data_ctrl.getTime() - d1.getTime()) + (60*60*1000); //3600000 tempo(milisegundos) 1 hora para compensar horário de verão
+            } 
+            catch (java.text.ParseException evt ) {}        
+
+            diasDiferenca = dt / (60*60*24*1000);//86400000 tempo(milisegundos) em dias
+            //System.out.println ("Diferenca: "+diasDiferenca);
+            //return diasDiferenca;
+        }       
+        return diasDiferenca;
+    }   
 
     private void InserirInfo(){
         new InserirMadeiraForno().setVisible(true);
@@ -206,6 +380,7 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
         jButtonBuscarEstoque = new javax.swing.JButton();
         jButtonRelatorio = new javax.swing.JButton();
         jButtonGerenciarEnvioCarvao = new javax.swing.JButton();
+        jButtonIgnicao_FimCarbonizacao = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableCarvao = new javax.swing.JTable();
@@ -316,6 +491,15 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
             }
         });
 
+        jButtonIgnicao_FimCarbonizacao.setFont(jButtonIgnicao_FimCarbonizacao.getFont().deriveFont(jButtonIgnicao_FimCarbonizacao.getFont().getSize()+1f));
+        jButtonIgnicao_FimCarbonizacao.setText("<html>Inicio/Fim<br>Carbonizacao</html>");
+        jButtonIgnicao_FimCarbonizacao.setPreferredSize(new java.awt.Dimension(100, 60));
+        jButtonIgnicao_FimCarbonizacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonIgnicao_FimCarbonizacaoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -326,11 +510,12 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
                     .addComponent(jButtonLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButtonBuscarEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonGerenciarEnvioCarvao, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                        .addComponent(jButtonIgnicao_FimCarbonizacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButtonRetirarCarvaoForno, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -352,7 +537,9 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
                     .addComponent(jButtonRetirarCarvaoForno, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
-                .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonIgnicao_FimCarbonizacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addComponent(jButtonLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -378,7 +565,7 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -462,6 +649,15 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButtonGerenciarEnvioCarvaoActionPerformed
 
+    private void jButtonIgnicao_FimCarbonizacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIgnicao_FimCarbonizacaoActionPerformed
+        int linha = jTableCarvao.getSelectedRow();
+        if(jTableCarvao.getValueAt(linha, 4).toString().equals("0")){
+            IgnicaoForno_FinalizarCarbonizacao(); 
+        }else{
+            JOptionPane.showMessageDialog(null, "Processo de carbonização finalizado!");
+        }                           
+    }//GEN-LAST:event_jButtonIgnicao_FimCarbonizacaoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -508,6 +704,7 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
     private javax.swing.JButton jButtonBuscarEstoque;
     private javax.swing.JButton jButtonExcluir;
     private javax.swing.JButton jButtonGerenciarEnvioCarvao;
+    private javax.swing.JButton jButtonIgnicao_FimCarbonizacao;
     private javax.swing.JButton jButtonLogout;
     private javax.swing.JButton jButtonRelatorio;
     private javax.swing.JButton jButtonRetirarCarvaoForno;
