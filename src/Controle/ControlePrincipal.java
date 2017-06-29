@@ -65,6 +65,8 @@ public class ControlePrincipal {
     public static String id_forno_usado;
     public static String desbrota;
     public static String tipo_estoque;
+    public static float vol_carv_fornos;
+    public static float rend_grav_fornos;
     
     //Dados para grafico
     public static float valor_grafico[];

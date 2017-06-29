@@ -33,7 +33,7 @@ public class AlterarCarvaoCtrl {
                 + "', `rend_grav_forno` = '"+carvao.getRend_grav_forno()
                 + "' WHERE id_controle_carvao = "+carvao.getId_controle_carvao();
         }
-        System.out.println("query: "+query);
+        //System.out.println("query: "+query);
         ExecutarSql execut = new ExecutarSql();
         execut.executar(query);
     }    

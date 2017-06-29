@@ -182,6 +182,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficosMDC_haActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficosMDC_ha1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Estoques"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficosMDC_ha1ActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
       </SubComponents>
@@ -918,7 +926,7 @@
                 <Font component="jLabelVolumeCarvaoProdTotal" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Volume carv&#xe3;o produzido total: 0 m&#xb3;"/>
+            <Property name="text" type="java.lang.String" value="Volume carv&#xe3;o produzido total: 0 mdc"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[250, 15]"/>
             </Property>
@@ -1018,7 +1026,7 @@
                 <Font component="jLabelVolumeCarvaoEstTotal" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Volume carv&#xe3;o estimado total: 0 m&#xb3;"/>
+            <Property name="text" type="java.lang.String" value="Volume carv&#xe3;o estimado total: 0 mdc"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[250, 15]"/>
             </Property>
@@ -1057,7 +1065,7 @@
                 <Font component="jLabelTotalCarvaoPraca" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Volume carvao pra&#xe7;a total: 0 m&#xb3;"/>
+            <Property name="text" type="java.lang.String" value="Volume carvao pra&#xe7;a total: 0 mdc"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[200, 15]"/>
             </Property>
@@ -1122,7 +1130,7 @@
                 <Font component="jLabelVolumeCarvaoTranspTotal" property="font" relativeSize="true" size="0"/>
               </FontInfo>
             </Property>
-            <Property name="text" type="java.lang.String" value="Volume carv&#xe3;o transportado total: 0 m&#xb3;"/>
+            <Property name="text" type="java.lang.String" value="Volume carv&#xe3;o transportado total: 0 mdc"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[250, 15]"/>
             </Property>

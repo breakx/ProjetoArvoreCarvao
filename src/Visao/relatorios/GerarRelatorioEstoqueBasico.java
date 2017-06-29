@@ -521,7 +521,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                     }
                     
                     coluna[i] = rs.getString(colunas[i]);
-                    System.out.println("Add Dados ["+i+"]: "+coluna[i]); 
+                    //System.out.println("Add Dados ["+i+"]: "+coluna[i]); 
                 }
                 
                 /*if(!rs.getString("data_rotacao_1").equals("Ok")){
@@ -641,7 +641,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             jLabelM3_ha.setText("Media geral m³/ha: "+decformat.format(m3_haMedia));
             jLabelMDC_ha.setText("Media ponderada mdc/ha: "+decformat.format(mdc_haMedia));
             jLabelTotalMadeiraPraca.setText("Volume madeira praça total: "+decformat.format(vol_mad_pracaTotal)+" m³");
-            jLabelTotalCarvaoPraca.setText("Volume carvao praça total: "+decformat.format(vol_carv_pracaTotal)+" m³");
+            jLabelTotalCarvaoPraca.setText("Volume carvao praça total: "+decformat.format(vol_carv_pracaTotal)+" mdc");
                         
             jLabelVolumeMadeiraEstTotal.setText("Volume madeira estimada total: "+decformat.format(vol_mad_estTotal)+" m³");
             jLabelVolumeMadeiraTranspTotal.setText("Volume madeira transportada total: "+decformat.format(vol_mad_transpTotal)+" m³");
@@ -649,9 +649,9 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
             jLabelToneladaMadeiraEstTotal.setText("Toneladas de madeira estimada totais: "+decformat.format(mad_ton_estTotal));
             jLabelToneladaMadeiraTranspTotal.setText("Toneladas de madeira transportada totais: "+decformat.format(mad_ton_transpTotal));
             
-            jLabelVolumeCarvaoEstTotal.setText("Volume carvão estimado total: "+decformat.format(mdc_estTotal)+" m³"); 
-            jLabelVolumeCarvaoProdTotal.setText("Volume carvão produzido total: "+decformat.format(mdc_prodTotal)+" m³");
-            jLabelVolumeCarvaoTranspTotal.setText("Volume carvão transportado total: "+decformat.format(mdc_transpTotal)+" m³");
+            jLabelVolumeCarvaoEstTotal.setText("Volume carvão estimado total: "+decformat.format(mdc_estTotal)+" mdc"); 
+            jLabelVolumeCarvaoProdTotal.setText("Volume carvão produzido total: "+decformat.format(mdc_prodTotal)+" mdc");
+            jLabelVolumeCarvaoTranspTotal.setText("Volume carvão transportado total: "+decformat.format(mdc_transpTotal)+" mdc");
             jLabelToneladaCarvaoEstTotal.setText("Toneladas de carvão estimado total: "+decformat.format(carv_ton_estTotal));         
             jLabelToneladaCarvaoProdTotal.setText("Toneladas de carvão produzido total: "+decformat.format(carv_ton_prodTotal));    
             jLabelToneladaCarvaoTranspTotal.setText("Toneladas de carvão transportado total: "+decformat.format(carv_ton_transpTotal));
@@ -1710,6 +1710,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jMenuGraficos = new javax.swing.JMenu();
         jMenuItemGraficoM3_ha = new javax.swing.JMenuItem();
         jMenuItemGraficosMDC_ha = new javax.swing.JMenuItem();
+        jMenuItemGraficosMDC_ha1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -1944,7 +1945,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jLabelAreaTotal.setPreferredSize(new java.awt.Dimension(200, 15));
 
         jLabelVolumeCarvaoProdTotal.setFont(jLabelVolumeCarvaoProdTotal.getFont());
-        jLabelVolumeCarvaoProdTotal.setText("Volume carvão produzido total: 0 m³");
+        jLabelVolumeCarvaoProdTotal.setText("Volume carvão produzido total: 0 mdc");
         jLabelVolumeCarvaoProdTotal.setPreferredSize(new java.awt.Dimension(250, 15));
 
         jLabelM3_ha.setFont(jLabelM3_ha.getFont());
@@ -1975,7 +1976,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jLabelVolumeMadeiraEstTotal.setPreferredSize(new java.awt.Dimension(250, 15));
 
         jLabelVolumeCarvaoEstTotal.setFont(jLabelVolumeCarvaoEstTotal.getFont());
-        jLabelVolumeCarvaoEstTotal.setText("Volume carvão estimado total: 0 m³");
+        jLabelVolumeCarvaoEstTotal.setText("Volume carvão estimado total: 0 mdc");
         jLabelVolumeCarvaoEstTotal.setPreferredSize(new java.awt.Dimension(250, 15));
 
         jLabelToneladaMadeiraEstTotal.setFont(jLabelToneladaMadeiraEstTotal.getFont());
@@ -1987,7 +1988,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jLabelToneladaCarvaoEstTotal.setPreferredSize(new java.awt.Dimension(250, 15));
 
         jLabelTotalCarvaoPraca.setFont(jLabelTotalCarvaoPraca.getFont());
-        jLabelTotalCarvaoPraca.setText("Volume carvao praça total: 0 m³");
+        jLabelTotalCarvaoPraca.setText("Volume carvao praça total: 0 mdc");
         jLabelTotalCarvaoPraca.setPreferredSize(new java.awt.Dimension(200, 15));
 
         jLabelTotalMadeiraPraca.setFont(jLabelTotalMadeiraPraca.getFont());
@@ -2007,7 +2008,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jLabelInfo3.setPreferredSize(new java.awt.Dimension(250, 15));
 
         jLabelVolumeCarvaoTranspTotal.setFont(jLabelVolumeCarvaoTranspTotal.getFont());
-        jLabelVolumeCarvaoTranspTotal.setText("Volume carvão transportado total: 0 m³");
+        jLabelVolumeCarvaoTranspTotal.setText("Volume carvão transportado total: 0 mdc");
         jLabelVolumeCarvaoTranspTotal.setPreferredSize(new java.awt.Dimension(250, 15));
 
         jLabelToneladaCarvaoTranspTotal.setFont(jLabelToneladaCarvaoTranspTotal.getFont());
@@ -2266,6 +2267,14 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         });
         jMenuGraficos.add(jMenuItemGraficosMDC_ha);
 
+        jMenuItemGraficosMDC_ha1.setText("Estoques");
+        jMenuItemGraficosMDC_ha1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficosMDC_ha1ActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficosMDC_ha1);
+
         jMenuBar1.add(jMenuGraficos);
 
         setJMenuBar(jMenuBar1);
@@ -2506,6 +2515,11 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         PrepararGrafico("MDC_ha");
     }//GEN-LAST:event_jMenuItemGraficosMDC_haActionPerformed
 
+    private void jMenuItemGraficosMDC_ha1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficosMDC_ha1ActionPerformed
+        new GraficoRelatorioEstoque().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItemGraficosMDC_ha1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2600,6 +2614,7 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemGerenciarUsuarios;
     private javax.swing.JMenuItem jMenuItemGraficoM3_ha;
     private javax.swing.JMenuItem jMenuItemGraficosMDC_ha;
+    private javax.swing.JMenuItem jMenuItemGraficosMDC_ha1;
     private javax.swing.JMenuItem jMenuItemLogout;
     private javax.swing.JMenuItem jMenuItemRelatorioCarvao;
     private javax.swing.JMenuItem jMenuItemRelatorioCarvaoExpedido;

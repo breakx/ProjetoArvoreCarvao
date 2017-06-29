@@ -117,7 +117,7 @@ public class ExecutarSql {
                 break;
         }
         
-        //System.out.println("SQL= "+query);
+        System.out.println("SQL= "+query);
         //JOptionPane.showMessageDialog(null, "Executar Talhao: "+query);
         
         try {

@@ -80,6 +80,8 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
             "id_controle_carvao",//15
             "id_forno"//16
         };
+        float soma_rend_grav = 0;
+        float soma_vol_carv = 0;
         String query;
         int tamanho = 0;
         if(ControlePrincipal.tipo_u.equals("op_ger")){
@@ -112,9 +114,17 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
                         rs.getString("id_controle_carvao"),//15
                         rs.getString("id_forno")//16                            
                     });
+                    if(!rs.getString("volume_carvao").equals("0")){
+                        soma_vol_carv += Float.parseFloat(rs.getString("volume_carvao"));
+                        soma_rend_grav += Float.parseFloat(rs.getString("rend_grav_forno"))*Float.parseFloat(rs.getString("volume_carvao"));                        
+                    }
                     //System.out.println("Data carvão: "+rs.getTimestamp("data_entrada_madeira_forno"));
                     tamanho++;
                 }
+                ControlePrincipal.vol_carv_fornos=soma_vol_carv;
+                ControlePrincipal.rend_grav_fornos=soma_rend_grav;
+                //ControlePrincipal.rend_grav_real = soma_rend_grav/soma_vol_carv;
+                //System.out.println("Coeficiente de Conversão: "+ControlePrincipal.rend_grav_real);
             }
         } catch (SQLException ex) {
             Logger.getLogger(GerarRelatorioEstoquePrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -182,7 +192,7 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
         
     
     private void AlterarInfo(){
-        System.out.println("Erro!");
+        //System.out.println("Erro!");
         if(jTableCarvao.getSelectedRow()>=0)//verifica se a linha a ser alterada esta marcada
         {
             int linha = jTableCarvao.getSelectedRow();
