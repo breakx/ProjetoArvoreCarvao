@@ -208,7 +208,7 @@ public class InserirMadeiraForno extends javax.swing.JFrame {
                     ControlePrincipal.madeira_praca -= vol_mad_forno;//m³
                     ControlePrincipal.atualizarDados = "carvao";
                     ControlePrincipal.condicao_forno = "Cheio";
-                    ControlePrincipal.id_forno_usado = jTableForno.getValueAt(linha, 1).toString();
+                    ControlePrincipal.id_forno_usado = jTableForno.getValueAt(linha, 3).toString();
                     //jLabelVolumeMadeiraForno.setText("Volume total de madeira enfornada: "+vol_mad_forno+" m³");
                     InserirCarvaoCtrl inserir = new InserirCarvaoCtrl(carvao);
 

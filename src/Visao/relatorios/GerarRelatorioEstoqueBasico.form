@@ -166,12 +166,20 @@
             <Property name="text" type="java.lang.String" value="Graficos"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficoM3_ha">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficosMDC_ha1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="M3_ha"/>
+                <Property name="text" type="java.lang.String" value="Estoques"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficoM3_haActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficosMDC_ha1ActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficoArea">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Area"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficoAreaActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficosMDC_ha">
@@ -182,12 +190,100 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficosMDC_haActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficosMDC_ha1">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficoM3_ha">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Estoques"/>
+                <Property name="text" type="java.lang.String" value="M3_ha"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficosMDC_ha1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficoM3_haActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficosVol_Mad_Praca">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Vol_Mad_Praca"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficosVol_Mad_PracaActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficoVol_Carv_Praca">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Vol_Carv_Praca"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficoVol_Carv_PracaActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficosVol_Mad_Transportada">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Vol_Mad_Transportada"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficosVol_Mad_TransportadaActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficoMadeira_Forno">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Madeira_Forno"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficoMadeira_FornoActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficosMad_Ton_Estimada">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Mad_Ton_Estimada"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficosMad_Ton_EstimadaActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficosMad_Ton_Transportada">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Mad_Ton_Transportada"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficosMad_Ton_TransportadaActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficosMDC_Estimado">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="MDC_Estimado"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficosMDC_EstimadoActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficoMDC_Estimado">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="MDC_Produzido"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficoMDC_EstimadoActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficoMDC_Transportado">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="MDC_Transportado"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficoMDC_TransportadoActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficosCarv_Ton_Estimado">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Carv_Ton_Estimado"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficosCarv_Ton_EstimadoActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGraficoCarv_Ton_Transportado">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Carv_Ton_Transportado"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGraficoCarv_Ton_TransportadoActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>

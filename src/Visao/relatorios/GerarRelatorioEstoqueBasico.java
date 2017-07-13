@@ -314,6 +314,9 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         if(!dado.contains("madeira_forno")){
             dado+= ", madeira_forno";
         }
+        if(!dado.contains("idade_hj")){
+            dado+= ", idade_hoje";
+        }
         //-----------madeira
         if(!dado.contains("vol_mad_estimado")){
             dado+= ", vol_mad_estimado";
@@ -1595,9 +1598,9 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         
         int tipo = 0;
         switch (graf){
-            case "Area_total":
-                tipo = 3;//coluna
-                ControlePrincipal.tipo_grafico = "Area_total";
+            case "Area":
+                tipo = 7;//coluna
+                ControlePrincipal.tipo_grafico = "Area";
                 break;
             case "M3_ha":
                 tipo = 9;
@@ -1607,6 +1610,71 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
                 tipo = 25;
                 ControlePrincipal.tipo_grafico = "MDC_ha";
                 break;
+                
+            case "Vol_Mad_Praca":
+                tipo = 44;
+                ControlePrincipal.tipo_grafico = "Vol_Mad_Praca";
+                break;
+                
+            case "Vol_Carv_Praca":
+                tipo = 45;
+                ControlePrincipal.tipo_grafico = "Vol_Carv_Praca";
+                break;
+                    
+            case "Vol_Mad_Estimada":
+                tipo = 32;
+                ControlePrincipal.tipo_grafico = "Vol_Mad_Estimada";
+                break;
+                
+            case "Vol_Mad_Transportada":
+                tipo = 33;
+                ControlePrincipal.tipo_grafico = "Vol_Mad_Transportada";
+                break;
+                                
+            case "Madeira_Forno":
+                tipo = 46;
+                ControlePrincipal.tipo_grafico = "Madeira_Forno";
+                break;
+                    
+            case "Mad_Ton_Estimada":
+                tipo = 38;
+                ControlePrincipal.tipo_grafico = "Mad_Ton_Estimada";
+                break;
+                
+            case "Mad_Ton_Transportada":
+                tipo = 39;
+                ControlePrincipal.tipo_grafico = "Mad_Ton_Transportada";
+                break;
+                
+            case "MDC_Estimado":
+                tipo = 35;
+                ControlePrincipal.tipo_grafico = "MDC_Estimado";
+                break;
+                
+            case "MDC_Produzido":
+                tipo = 36;
+                ControlePrincipal.tipo_grafico = "MDC_Produzido";
+                break;
+                    
+            case "MDC_Transportado":
+                tipo = 47;
+                ControlePrincipal.tipo_grafico = "MDC_Transportado";
+                break;
+                
+            case "Carv_Ton_Estimado":
+                tipo = 41;
+                ControlePrincipal.tipo_grafico = "Carv_Ton_Estimado";
+                break;
+                
+            case "Carv_Ton_Produzido":
+                tipo = 42;
+                ControlePrincipal.tipo_grafico = "Carv_Ton_Produzido";
+                break;
+                
+            case "Carv_Ton_Transportado":
+                tipo = 48;
+                ControlePrincipal.tipo_grafico = "Carv_Ton_Transportado";
+                break;
             default:
                 tipo = 0;
                 break;
@@ -1614,10 +1682,10 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         
         ControlePrincipal.descricao = "Fazenda:"+filtro_faz+"     Projeto:"+filtro_proj+"     Material:"+filtro_matgen+"\nIdade (anos):"+media_idades+"     Área(ha):"+areaTotal;
         
-        for (int i=0; i<cont; i++){            
+        for (int i=0; i<ControlePrincipal.valor_grafico.length; i++){            
             //System.out.println("Grafico:  "+ ControlePrincipal.valor_grafico.length);
-            //System.out.println("Tabela Fazenda:  "+ jTableRelatorioGrafico.getValueAt(i, 1)+" - "+jTableRelatorioGrafico.getValueAt(i,2));
-            //System.out.println("Tabela Area:  "+ jTableRelatorioGrafico.getValueAt(i, 3));            
+            //System.out.println("Tabela Fazenda:  "+ jTableRelatorioEstoquePrincipal.getValueAt(i, 1)+" - "+jTableRelatorioGrafico.getValueAt(i,2));
+            //System.out.println("Tabela Area:  "+ jTableRelatorioEstoquePrincipal.getValueAt(i, tipo));            
             ControlePrincipal.valor_grafico[i]=Float.parseFloat(jTableRelatorioEstoquePrincipal.getValueAt(i, tipo).toString()) ;
             //ControlePrincipal.info_grafico[i]=(String) jTableRelatorioEstoquePrincipal.getValueAt(i, 5)+" - "+jTableRelatorioEstoquePrincipal.getValueAt(i,2);
             ControlePrincipal.info_grafico[i]="T"+jTableRelatorioEstoquePrincipal.getValueAt(i, 6);
@@ -1708,9 +1776,21 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         jMenuItemGerenciarExpedirCarvao = new javax.swing.JMenuItem();
         jMenuItemGerenciarEstoque = new javax.swing.JMenuItem();
         jMenuGraficos = new javax.swing.JMenu();
-        jMenuItemGraficoM3_ha = new javax.swing.JMenuItem();
-        jMenuItemGraficosMDC_ha = new javax.swing.JMenuItem();
         jMenuItemGraficosMDC_ha1 = new javax.swing.JMenuItem();
+        jMenuItemGraficoArea = new javax.swing.JMenuItem();
+        jMenuItemGraficosMDC_ha = new javax.swing.JMenuItem();
+        jMenuItemGraficoM3_ha = new javax.swing.JMenuItem();
+        jMenuItemGraficosVol_Mad_Praca = new javax.swing.JMenuItem();
+        jMenuItemGraficoVol_Carv_Praca = new javax.swing.JMenuItem();
+        jMenuItemGraficosVol_Mad_Transportada = new javax.swing.JMenuItem();
+        jMenuItemGraficoMadeira_Forno = new javax.swing.JMenuItem();
+        jMenuItemGraficosMad_Ton_Estimada = new javax.swing.JMenuItem();
+        jMenuItemGraficosMad_Ton_Transportada = new javax.swing.JMenuItem();
+        jMenuItemGraficosMDC_Estimado = new javax.swing.JMenuItem();
+        jMenuItemGraficoMDC_Estimado = new javax.swing.JMenuItem();
+        jMenuItemGraficoMDC_Transportado = new javax.swing.JMenuItem();
+        jMenuItemGraficosCarv_Ton_Estimado = new javax.swing.JMenuItem();
+        jMenuItemGraficoCarv_Ton_Transportado = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -2251,13 +2331,21 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
 
         jMenuGraficos.setText("Graficos");
 
-        jMenuItemGraficoM3_ha.setText("M3_ha");
-        jMenuItemGraficoM3_ha.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemGraficosMDC_ha1.setText("Estoques");
+        jMenuItemGraficosMDC_ha1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemGraficoM3_haActionPerformed(evt);
+                jMenuItemGraficosMDC_ha1ActionPerformed(evt);
             }
         });
-        jMenuGraficos.add(jMenuItemGraficoM3_ha);
+        jMenuGraficos.add(jMenuItemGraficosMDC_ha1);
+
+        jMenuItemGraficoArea.setText("Area");
+        jMenuItemGraficoArea.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficoAreaActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficoArea);
 
         jMenuItemGraficosMDC_ha.setText("MDC_ha");
         jMenuItemGraficosMDC_ha.addActionListener(new java.awt.event.ActionListener() {
@@ -2267,13 +2355,101 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         });
         jMenuGraficos.add(jMenuItemGraficosMDC_ha);
 
-        jMenuItemGraficosMDC_ha1.setText("Estoques");
-        jMenuItemGraficosMDC_ha1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemGraficoM3_ha.setText("M3_ha");
+        jMenuItemGraficoM3_ha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemGraficosMDC_ha1ActionPerformed(evt);
+                jMenuItemGraficoM3_haActionPerformed(evt);
             }
         });
-        jMenuGraficos.add(jMenuItemGraficosMDC_ha1);
+        jMenuGraficos.add(jMenuItemGraficoM3_ha);
+
+        jMenuItemGraficosVol_Mad_Praca.setText("Vol_Mad_Praca");
+        jMenuItemGraficosVol_Mad_Praca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficosVol_Mad_PracaActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficosVol_Mad_Praca);
+
+        jMenuItemGraficoVol_Carv_Praca.setText("Vol_Carv_Praca");
+        jMenuItemGraficoVol_Carv_Praca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficoVol_Carv_PracaActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficoVol_Carv_Praca);
+
+        jMenuItemGraficosVol_Mad_Transportada.setText("Vol_Mad_Transportada");
+        jMenuItemGraficosVol_Mad_Transportada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficosVol_Mad_TransportadaActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficosVol_Mad_Transportada);
+
+        jMenuItemGraficoMadeira_Forno.setText("Madeira_Forno");
+        jMenuItemGraficoMadeira_Forno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficoMadeira_FornoActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficoMadeira_Forno);
+
+        jMenuItemGraficosMad_Ton_Estimada.setText("Mad_Ton_Estimada");
+        jMenuItemGraficosMad_Ton_Estimada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficosMad_Ton_EstimadaActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficosMad_Ton_Estimada);
+
+        jMenuItemGraficosMad_Ton_Transportada.setText("Mad_Ton_Transportada");
+        jMenuItemGraficosMad_Ton_Transportada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficosMad_Ton_TransportadaActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficosMad_Ton_Transportada);
+
+        jMenuItemGraficosMDC_Estimado.setText("MDC_Estimado");
+        jMenuItemGraficosMDC_Estimado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficosMDC_EstimadoActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficosMDC_Estimado);
+
+        jMenuItemGraficoMDC_Estimado.setText("MDC_Produzido");
+        jMenuItemGraficoMDC_Estimado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficoMDC_EstimadoActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficoMDC_Estimado);
+
+        jMenuItemGraficoMDC_Transportado.setText("MDC_Transportado");
+        jMenuItemGraficoMDC_Transportado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficoMDC_TransportadoActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficoMDC_Transportado);
+
+        jMenuItemGraficosCarv_Ton_Estimado.setText("Carv_Ton_Estimado");
+        jMenuItemGraficosCarv_Ton_Estimado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficosCarv_Ton_EstimadoActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficosCarv_Ton_Estimado);
+
+        jMenuItemGraficoCarv_Ton_Transportado.setText("Carv_Ton_Transportado");
+        jMenuItemGraficoCarv_Ton_Transportado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGraficoCarv_Ton_TransportadoActionPerformed(evt);
+            }
+        });
+        jMenuGraficos.add(jMenuItemGraficoCarv_Ton_Transportado);
 
         jMenuBar1.add(jMenuGraficos);
 
@@ -2507,9 +2683,9 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuItemRelatorioFornosActionPerformed
 
-    private void jMenuItemGraficoM3_haActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficoM3_haActionPerformed
-        PrepararGrafico("M3_ha");
-    }//GEN-LAST:event_jMenuItemGraficoM3_haActionPerformed
+    private void jMenuItemGraficoAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficoAreaActionPerformed
+        PrepararGrafico("Area");
+    }//GEN-LAST:event_jMenuItemGraficoAreaActionPerformed
 
     private void jMenuItemGraficosMDC_haActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficosMDC_haActionPerformed
         PrepararGrafico("MDC_ha");
@@ -2519,6 +2695,54 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
         new GraficoRelatorioEstoque().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItemGraficosMDC_ha1ActionPerformed
+
+    private void jMenuItemGraficoM3_haActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficoM3_haActionPerformed
+        PrepararGrafico("M3_ha");
+    }//GEN-LAST:event_jMenuItemGraficoM3_haActionPerformed
+
+    private void jMenuItemGraficosVol_Mad_PracaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficosVol_Mad_PracaActionPerformed
+        PrepararGrafico("Vol_Mad_Praca");
+    }//GEN-LAST:event_jMenuItemGraficosVol_Mad_PracaActionPerformed
+
+    private void jMenuItemGraficoVol_Carv_PracaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficoVol_Carv_PracaActionPerformed
+        PrepararGrafico("Vol_Carv_Praca");
+    }//GEN-LAST:event_jMenuItemGraficoVol_Carv_PracaActionPerformed
+
+    private void jMenuItemGraficosVol_Mad_TransportadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficosVol_Mad_TransportadaActionPerformed
+        PrepararGrafico("Vol_Mad_Transportada");
+    }//GEN-LAST:event_jMenuItemGraficosVol_Mad_TransportadaActionPerformed
+
+    private void jMenuItemGraficoMadeira_FornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficoMadeira_FornoActionPerformed
+        PrepararGrafico("Madeira_Forno");
+    }//GEN-LAST:event_jMenuItemGraficoMadeira_FornoActionPerformed
+
+    private void jMenuItemGraficosMad_Ton_EstimadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficosMad_Ton_EstimadaActionPerformed
+        PrepararGrafico("Mad_Ton_Estimada");
+    }//GEN-LAST:event_jMenuItemGraficosMad_Ton_EstimadaActionPerformed
+
+    private void jMenuItemGraficosMad_Ton_TransportadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficosMad_Ton_TransportadaActionPerformed
+        PrepararGrafico("Mad_Ton_Transportada");
+    }//GEN-LAST:event_jMenuItemGraficosMad_Ton_TransportadaActionPerformed
+
+    private void jMenuItemGraficosMDC_EstimadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficosMDC_EstimadoActionPerformed
+        PrepararGrafico("MDC_Estimado");
+    }//GEN-LAST:event_jMenuItemGraficosMDC_EstimadoActionPerformed
+
+    private void jMenuItemGraficoMDC_EstimadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficoMDC_EstimadoActionPerformed
+        PrepararGrafico("MDC_Estimado");
+    }//GEN-LAST:event_jMenuItemGraficoMDC_EstimadoActionPerformed
+
+    private void jMenuItemGraficoMDC_TransportadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficoMDC_TransportadoActionPerformed
+        PrepararGrafico("MDC_Transportado");
+    }//GEN-LAST:event_jMenuItemGraficoMDC_TransportadoActionPerformed
+
+    private void jMenuItemGraficosCarv_Ton_EstimadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficosCarv_Ton_EstimadoActionPerformed
+        PrepararGrafico("Carv_Ton_Estimado");
+    }//GEN-LAST:event_jMenuItemGraficosCarv_Ton_EstimadoActionPerformed
+
+    private void jMenuItemGraficoCarv_Ton_TransportadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGraficoCarv_Ton_TransportadoActionPerformed
+        PrepararGrafico("Carv_Ton_Transportado");
+    }//GEN-LAST:event_jMenuItemGraficoCarv_Ton_TransportadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2612,9 +2836,21 @@ public class GerarRelatorioEstoqueBasico extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemGerenciarForno;
     private javax.swing.JMenuItem jMenuItemGerenciarMadeiraPraça;
     private javax.swing.JMenuItem jMenuItemGerenciarUsuarios;
+    private javax.swing.JMenuItem jMenuItemGraficoArea;
+    private javax.swing.JMenuItem jMenuItemGraficoCarv_Ton_Transportado;
     private javax.swing.JMenuItem jMenuItemGraficoM3_ha;
+    private javax.swing.JMenuItem jMenuItemGraficoMDC_Estimado;
+    private javax.swing.JMenuItem jMenuItemGraficoMDC_Transportado;
+    private javax.swing.JMenuItem jMenuItemGraficoMadeira_Forno;
+    private javax.swing.JMenuItem jMenuItemGraficoVol_Carv_Praca;
+    private javax.swing.JMenuItem jMenuItemGraficosCarv_Ton_Estimado;
+    private javax.swing.JMenuItem jMenuItemGraficosMDC_Estimado;
     private javax.swing.JMenuItem jMenuItemGraficosMDC_ha;
     private javax.swing.JMenuItem jMenuItemGraficosMDC_ha1;
+    private javax.swing.JMenuItem jMenuItemGraficosMad_Ton_Estimada;
+    private javax.swing.JMenuItem jMenuItemGraficosMad_Ton_Transportada;
+    private javax.swing.JMenuItem jMenuItemGraficosVol_Mad_Praca;
+    private javax.swing.JMenuItem jMenuItemGraficosVol_Mad_Transportada;
     private javax.swing.JMenuItem jMenuItemLogout;
     private javax.swing.JMenuItem jMenuItemRelatorioCarvao;
     private javax.swing.JMenuItem jMenuItemRelatorioCarvaoExpedido;

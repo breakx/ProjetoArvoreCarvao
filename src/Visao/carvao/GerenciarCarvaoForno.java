@@ -40,6 +40,8 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
     
     private float dias_resfriando;
     private float dias_carbonizando;
+    private String data_resfriamento;
+    private String data_carbonizacao;
     private float PERIODO_RESFRIAMENTO = 7;
     /**
      * Creates new form Carvao
@@ -84,14 +86,19 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
         float soma_vol_carv = 0;
         String query;
         int tamanho = 0;
+        
         if(ControlePrincipal.tipo_u.equals("op_ger")){
             query = "Select * from controle_carvao order by id_controle_carvao desc";
         }else{
             query = "Select * from controle_carvao where id_operario = '" +ControlePrincipal.id_op+"' order by id_controle_carvao desc";
         }
-        
+        //System.out.println(query);
         ConexaoBD con = ConexaoBD.getConexao(0);
         ResultSet rs = con.consultaSql(query);
+        
+        DateFormat data_forno = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.s");
+        Timestamp hj = new Timestamp(System.currentTimeMillis());
+        
         try {
             if(rs != null) {
                 while(rs.next()){
@@ -103,9 +110,12 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
                         rs.getString("volume_carvao"),//4
                         rs.getString("umidade"),//5
                         rs.getString("data_ignicao"),//6
+                        //data_carbonizacao = rs.getTimestamp("data_ignicao").toString(),//6
                         dias_carbonizando = CalcularDias(rs.getTimestamp("data_ignicao"), rs.getTimestamp("data_fim_carbonizacao")),//7
                         rs.getString("data_fim_carbonizacao"),//8
-                        dias_resfriando = CalcularDias(rs.getTimestamp("data_fim_carbonizacao"), rs.getTimestamp("data_saida_carvao_forno")),//9
+                        //dias_resfriando = CalcularDias(rs.getTimestamp("data_fim_carbonizacao"), rs.getTimestamp("data_saida_carvao_forno")),//9
+                        //data_resfriamento = rs.getTimestamp("data_fim_carbonizacao").toString(),//9
+                        dias_resfriando = CalcularDias(rs.getTimestamp("data_fim_carbonizacao"), hj),//9
                         rs.getString("data_entrada_madeira_forno"),//10
                         rs.getString("data_saida_carvao_forno"),//11
                         rs.getString("id_estoque_p"),//12
@@ -213,8 +223,8 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
             //String rend_grav_forno = jTableCarvao.getValueAt(linha, 10).toString();
             String id_forno = jTableCarvao.getValueAt(linha, 16).toString();
             float dias_resf = 0;
-            System.out.println("dias_resf: "+dias_resf);
             dias_resf =  Float.parseFloat(jTableCarvao.getValueAt(linha, 9).toString());
+            //System.out.println("dias_resf: "+dias_resf);
             if(dias_resf>PERIODO_RESFRIAMENTO){
                 if(volume_carvao.equals("0")){
                     try {
@@ -237,7 +247,11 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
 
                 if(res == JOptionPane.YES_OPTION)
                 {
-                    JOptionPane.showMessageDialog(null, "Forno aberto  "+(PERIODO_RESFRIAMENTO-dias_resfriando) +" antes do recomendado!");
+                    System.out.println(PERIODO_RESFRIAMENTO);
+                    System.out.println(dias_resfriando);
+                    JOptionPane.showMessageDialog(null, "Forno aberto  "+(PERIODO_RESFRIAMENTO-(float)jTableCarvao.getValueAt(linha, 9)) +" antes do recomendado!");
+                    //JOptionPane.showMessageDialog(null, "Forno aberto  "+(PERIODO_RESFRIAMENTO-CalcularDias(rs.getTimestamp("data_fim_carbonizacao"), hj)) +" antes do recomendado!");
+                    
                     if(volume_carvao.equals("0")){
                     try {
                         new Alterar_RetirarCarvaoForno(id_controle_carvao, id_estoque, id_forno, volume_madeira).setVisible(true);
@@ -291,6 +305,7 @@ public class GerenciarCarvaoForno extends javax.swing.JFrame {
                 ControlePrincipal.id_forno_usado = jTableCarvao.getValueAt(linha, 16).toString();
                 //JOptionPane.showMessageDialog(null, "id: "+ControlePrincipal.id_estoque_principal+"Talhao: "+ControlePrincipal.volume_madeira_talhao+" praca: "+ControlePrincipal.volume_madeira_praca+" forno: "+ControlePrincipal.volume_madeira_forno+" mad: "+ControlePrincipal.volume_madeira_transp+" carv: "+ControlePrincipal.volume_carvao_transp);
                 System.out.println("Ignição id forno: "+ControlePrincipal.id_forno_usado);
+                //System.out.println("dias_resf: "+dias_resf);
                 AlterarCarvaoCtrl alterar = new AlterarCarvaoCtrl(carvao);
                 try {
                     new GerenciarCarvaoForno().setVisible(true);
